@@ -1,21 +1,17 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
-
-enum class CellType
-{
-	Empty = 0,
-	Filled
-};
+#include "Cell.h"
+#include "Character.h"
 
 class Map
 {
 public:
-	void Init();
+	void Init(Character& character);
 	void Draw(sf::RenderWindow& window);
+	bool IsAbleToMove(const sf::Vector2f& posAfterMove);
 private:
-	void LoadMap();
-	std::vector<std::vector<sf::RectangleShape>> m_map;
-	std::vector<std::vector<CellType>> m_rawMap;
+	void LoadMap(Character& character);
+	std::vector<std::vector<Cell>> m_map;
 };
 

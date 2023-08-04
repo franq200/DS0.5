@@ -2,9 +2,9 @@
 #include <fstream>
 #include <string>
 
-void Map::Init()
+void Map::Init(Character& character)
 {
-	LoadMap();
+	LoadMap(character);
 }
 
 void Map::Draw(sf::RenderWindow& window)
@@ -18,7 +18,26 @@ void Map::Draw(sf::RenderWindow& window)
 	}
 }
 
-void Map::LoadMap()
+bool Map::IsAbleToMove(const sf::Vector2f& posAfterMove)
+{
+	for (int y = 0; y < m_map.size(); ++y)
+	{
+		for (int x = 0; x < m_map[y].size(); ++x)
+		{
+			if (m_map[y][x].GetState() == CellState::Filled)
+			{
+				sf::Vector2f cellPos = m_map[y][x].getPosition();
+				if (std::abs(posAfterMove.x - cellPos.x) <= 50.f && std::abs(posAfterMove.y - cellPos.y) <= 50.f)
+				{
+					return false;
+				}
+			}
+		}
+	}
+	return true;
+}
+
+void Map::LoadMap(Character& character)
 {
 	std::ifstream file;
 	file.open("maps\\map.txt");
@@ -26,33 +45,26 @@ void Map::LoadMap()
 
 	while (getline(file, line))
 	{
-		std::vector<sf::RectangleShape> row;
-		std::vector<CellType> rawRow;
+		std::vector<Cell> row;
 		float cellHeight = 50.f;
-		float cellWidth = 100.f;
+		float cellWidth = 50.f;
 		for (int i = 0; i < line.size(); ++i)
 		{
 			if (line[i] == '1')
 			{
-				rawRow.push_back(CellType::Filled);
-				sf::RectangleShape cell;
-				cell.setSize({ cellWidth, cellHeight });
-				cell.setFillColor(sf::Color::Red);
-				cell.setPosition(i * cellWidth/2, m_map.size() * cellHeight);
-				row.push_back(cell);
+				row.push_back(Cell({ cellWidth, cellHeight }, {i * cellWidth / 2, m_map.size() * cellHeight}, CellState::Filled));
 			}
 			else if (line[i] == '0')
 			{
-				rawRow.push_back(CellType::Empty);
-				sf::RectangleShape cell;
-				cell.setSize({ cellWidth, cellHeight });
-				cell.setFillColor(sf::Color::Green);
-				cell.setPosition(i * cellWidth/2, m_map.size() * cellHeight);
-				row.push_back(cell);
+				row.push_back(Cell({ cellWidth, cellHeight }, { i * cellWidth / 2, m_map.size() * cellHeight }, CellState::Empty));
+			}
+			else if (line[i] == 'M')
+			{
+				row.push_back(Cell({ cellWidth, cellHeight }, { i * cellWidth / 2, m_map.size() * cellHeight }, CellState::Empty));
+				character.Init({ i * cellWidth / 2, m_map.size() * cellHeight });
 			}
 		}
 
-		m_rawMap.push_back(rawRow);
 		m_map.push_back(row);
 	}
 }
