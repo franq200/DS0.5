@@ -9,9 +9,13 @@ m_state(state)
 	{
 		setFillColor(sf::Color::Green);
 	}
-	else
+	else if (state == CellState::Filled)
 	{
 		setFillColor(sf::Color::Red);
+	}
+	else if (state == CellState::Teleport)
+	{
+		setFillColor(sf::Color::Blue);
 	}
 }
 

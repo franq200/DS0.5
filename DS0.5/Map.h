@@ -7,11 +7,11 @@
 class Map
 {
 public:
-	void Init(Character& character);
 	void Draw(sf::RenderWindow& window);
-	bool IsAbleToMove(const sf::Vector2f& posAfterMove);
-private:
-	void LoadMap(Character& character);
+	bool IsCollisionWithCharacter(sf::Vector2f posAfterMove, CellState cellsToCheck, const float& characterXScale);
+	virtual void LoadMap(Character& character) = 0;
+protected:
+	bool IsCollisionWithCell(const sf::Vector2f& cellPos, const sf::Vector2f& characterPos);
 	std::vector<std::vector<Cell>> m_map;
 };
 

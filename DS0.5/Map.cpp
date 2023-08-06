@@ -1,11 +1,4 @@
 #include "Map.h"
-#include <fstream>
-#include <string>
-
-void Map::Init(Character& character)
-{
-	LoadMap(character);
-}
 
 void Map::Draw(sf::RenderWindow& window)
 {
@@ -18,53 +11,29 @@ void Map::Draw(sf::RenderWindow& window)
 	}
 }
 
-bool Map::IsAbleToMove(const sf::Vector2f& posAfterMove)
+bool Map::IsCollisionWithCharacter(sf::Vector2f posAfterMove, CellState cellsToCheck, const float& characterXScale)
 {
+	if (characterXScale < 0.f)
+	{
+		posAfterMove.x -= 50.f;
+	}
 	for (int y = 0; y < m_map.size(); ++y)
 	{
 		for (int x = 0; x < m_map[y].size(); ++x)
 		{
-			if (m_map[y][x].GetState() == CellState::Filled)
+			if (m_map[y][x].GetState() == cellsToCheck)
 			{
-				sf::Vector2f cellPos = m_map[y][x].getPosition();
-				if (std::abs(posAfterMove.x - cellPos.x) <= 50.f && std::abs(posAfterMove.y - cellPos.y) <= 50.f)
+				if (IsCollisionWithCell(m_map[y][x].getPosition(), posAfterMove))
 				{
-					return false;
+					return true;
 				}
 			}
 		}
 	}
-	return true;
+	return false;
 }
 
-void Map::LoadMap(Character& character)
+bool Map::IsCollisionWithCell(const sf::Vector2f& cellPos, const sf::Vector2f& characterPos)
 {
-	std::ifstream file;
-	file.open("maps\\map.txt");
-	std::string line;
-
-	while (getline(file, line))
-	{
-		std::vector<Cell> row;
-		float cellHeight = 50.f;
-		float cellWidth = 50.f;
-		for (int i = 0; i < line.size(); ++i)
-		{
-			if (line[i] == '1')
-			{
-				row.push_back(Cell({ cellWidth, cellHeight }, {i * cellWidth / 2, m_map.size() * cellHeight}, CellState::Filled));
-			}
-			else if (line[i] == '0')
-			{
-				row.push_back(Cell({ cellWidth, cellHeight }, { i * cellWidth / 2, m_map.size() * cellHeight }, CellState::Empty));
-			}
-			else if (line[i] == 'M')
-			{
-				row.push_back(Cell({ cellWidth, cellHeight }, { i * cellWidth / 2, m_map.size() * cellHeight }, CellState::Empty));
-				character.Init({ i * cellWidth / 2, m_map.size() * cellHeight });
-			}
-		}
-
-		m_map.push_back(row);
-	}
+	return (std::abs(characterPos.x - cellPos.x) <= 50.f && std::abs(characterPos.y - cellPos.y) <= 50.f);
 }

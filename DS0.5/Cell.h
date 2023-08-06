@@ -1,10 +1,11 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-enum class CellState
+enum class CellState : uint8_t
 {
 	Empty = 0,
-	Filled
+	Filled,
+	Teleport
 };
 
 class Cell : public sf::RectangleShape

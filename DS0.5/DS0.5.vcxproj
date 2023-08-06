@@ -147,17 +147,21 @@
   <ItemGroup>
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="Dungeon.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Village.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Character.h" />
+    <ClInclude Include="Dungeon.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="Village.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
