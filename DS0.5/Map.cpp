@@ -33,6 +33,16 @@ bool Map::IsCollisionWithCharacter(sf::Vector2f posAfterMove, CellState cellsToC
 	return false;
 }
 
+void Map::SetSpawnPosition(Character& character)
+{
+	character.setPosition(m_spawnPosition);
+}
+
+void Map::SetGoblinPosition(Goblin& goblin)
+{
+	goblin.setPosition(m_goblinSpawnPos);
+}
+
 bool Map::IsCollisionWithCell(const sf::Vector2f& cellPos, const sf::Vector2f& characterPos)
 {
 	return (std::abs(characterPos.x - cellPos.x) <= 50.f && std::abs(characterPos.y - cellPos.y) <= 50.f);

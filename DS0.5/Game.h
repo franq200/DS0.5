@@ -3,6 +3,7 @@
 #include "Character.h"
 #include "Village.h"
 #include "Dungeon.h"
+#include "Goblin.h"
 #include <SFML/Graphics.hpp>
 
 enum class CurrentMap : uint8_t
@@ -29,6 +30,7 @@ private:
 	Dungeon m_dungeonMap;
 	sf::CircleShape shape;
 	Character m_character;
+	Goblin m_goblin;
 	sf::Clock m_moveClock;
 	CurrentMap m_currentMap = CurrentMap::village;
 };

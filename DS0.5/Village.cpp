@@ -23,10 +23,15 @@ void Village::LoadMap(Character& character)
 			{
 				row.push_back(Cell({ cellWidth, cellHeight }, { i * cellWidth / 2, m_map.size() * cellHeight }, CellState::Empty));
 			}
-			else if (line[i] == 'M')
+			else if (line[i] == 'S')
 			{
 				row.push_back(Cell({ cellWidth, cellHeight }, { i * cellWidth / 2, m_map.size() * cellHeight }, CellState::Empty));
 				character.setPosition({ i * cellWidth / 2, m_map.size() * cellHeight });
+			}
+			else if (line[i] == 'M')
+			{
+				row.push_back(Cell({ cellWidth, cellHeight }, { i * cellWidth / 2, m_map.size() * cellHeight }, CellState::Empty));
+				m_spawnPosition = { i * cellWidth / 2, m_map.size() * cellHeight };
 			}
 			else if (line[i] == 'D')
 			{

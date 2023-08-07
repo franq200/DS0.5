@@ -149,8 +149,10 @@
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Dungeon.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Goblin.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Moveable.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Village.cpp" />
   </ItemGroup>
@@ -159,9 +161,15 @@
     <ClInclude Include="Character.h" />
     <ClInclude Include="Dungeon.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Goblin.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="Moveable.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Village.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DS0.5.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

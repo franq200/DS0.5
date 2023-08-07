@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Moveable.h"
 
-class Character : public Moveable
+class Goblin : public Moveable
 {
 public:
 	void Init();
