@@ -20,3 +20,11 @@ namespace speed
 {
 	extern float character;
 }
+
+namespace position
+{
+	std::pair<std::size_t, std::size_t> GetMapIndexesFromPosition(const sf::Vector2f&);
+	sf::Vector2f GetPositionFromMapIndexes(const std::pair<std::size_t, std::size_t>&);
+
+	double CalculateDistance(std::pair<size_t, size_t> start, std::pair<size_t, size_t> end);
+}

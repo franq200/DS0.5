@@ -24,6 +24,9 @@ private:
 	void CheckCurrentMapAndTryMoveCharacter();
 	void TryMoveCharacter(Map* map);
 	void TryChangeMap();
+	void TryAttackWithCharacter();
+	void MakeGoblinMove();
+	bool IsAttackSuccessful();
 
 	sf::RenderWindow m_window;
 	Village m_villageMap;
@@ -31,6 +34,6 @@ private:
 	sf::CircleShape shape;
 	Character m_character;
 	Goblin m_goblin;
-	sf::Clock m_moveClock;
 	CurrentMap m_currentMap = CurrentMap::village;
+	bool m_isAbleToAttack = true;
 };
