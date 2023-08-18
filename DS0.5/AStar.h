@@ -2,7 +2,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <optional>
-#include "Map.h"
 
 class AStar
 {

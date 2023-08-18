@@ -6,11 +6,13 @@
 #include "Goblin.h"
 #include <SFML/Graphics.hpp>
 
+
 enum class CurrentMap : uint8_t
 {
 	village = 0,
 	dungeon
 };
+
 
 class Game
 {

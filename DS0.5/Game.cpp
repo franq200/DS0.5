@@ -17,10 +17,14 @@ void Game::Update()
 {
 	while (m_window.isOpen())
 	{
+		if (m_currentMap == CurrentMap::dungeon)
+		{
+			TryAttackWithCharacter();
+			MakeGoblinMove();
+		}
 		Events();
 		CheckCurrentMapAndTryMoveCharacter();
 		TryChangeMap();
-		TryAttackWithCharacter();
 		Draw();
 	}
 }

@@ -51,5 +51,5 @@ void Dungeon::LoadMap(Character& character)
 
 std::vector<std::vector<bool>> Dungeon::GetRawMap() const
 {
-	return std::vector<std::vector<bool>>();
+	return m_rawMap;
 }

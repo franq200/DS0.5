@@ -1,8 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "AStar.h"
-#include "Moveable.h"
 #include "Fightable.h"
+#include "Moveable.h"
+#include "AStar.h"
 
 class Goblin : public sf::Sprite, public Moveable
 {
@@ -17,10 +17,8 @@ private:
 	float m_hp = 100.f;
 	sf::RectangleShape m_hpBarBackground;
 	sf::RectangleShape m_hpBar;
-
 	sf::Clock m_moveClock;
 	int m_movesCounter = 0;
 	std::vector<sf::Vector2f> m_path;
 	AStar m_aStar;
 };
-
