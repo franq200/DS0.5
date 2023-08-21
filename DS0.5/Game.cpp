@@ -6,6 +6,7 @@
 void Game::Init()
 {
 	m_window.create(sf::VideoMode(1500, 750), "SFML works!");
+	m_window.setView(m_view);
 	LoadTextures();
 	m_character.Init();
 	m_goblin.Init();
@@ -91,6 +92,7 @@ void Game::TryMoveCharacter(Map* map)
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !map->IsCollisionWithCharacter({ characterPos.x, characterPos.y - 10.f }, CellState::Filled, m_character.getScale().x))
 		{
 			m_character.MakeMove({ 0.f, -10.f });
+			m_view.move(0.f, -10.f);
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !map->IsCollisionWithCharacter({ characterPos.x - 10.f, characterPos.y }, CellState::Filled, m_character.getScale().x))
 		{
@@ -100,10 +102,12 @@ void Game::TryMoveCharacter(Map* map)
 				m_character.move(50.f, 0.f);
 			}
 			m_character.MakeMove({ -10.f, 0.f });
+			m_view.move(-10.f, 0.f);
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !map->IsCollisionWithCharacter({ characterPos.x, characterPos.y + 10.f }, CellState::Filled, m_character.getScale().x))
 		{
 			m_character.MakeMove({ 0.f, 10.f });
+			m_view.move(0.f, 10.f);
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !map->IsCollisionWithCharacter({ characterPos.x + 10.f, characterPos.y }, CellState::Filled, m_character.getScale().x))
 		{
@@ -113,6 +117,7 @@ void Game::TryMoveCharacter(Map* map)
 				m_character.move(-50.f, 0.f);
 			}
 			m_character.MakeMove({ 10.f, 0.f });
+			m_view.move(10.f, 0.f);
 		}
 	}
 	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !sf::Keyboard::isKeyPressed(sf::Keyboard::D))

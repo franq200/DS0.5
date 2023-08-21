@@ -7,6 +7,7 @@ void Goblin::Init()
 	setTexture(textures::goblin);
 	setScale(0.5, 0.5);
 	m_walkTextures = { textures::goblin, textures::walkGoblin1, textures::walkGoblin2, textures::walkGoblin3, textures::walkGoblin4 };
+	m_moveClock.restart();
 }
 
 void Goblin::MakeMove(const sf::Vector2f& characterPos, const std::vector<std::vector<bool>>& map)
@@ -15,7 +16,7 @@ void Goblin::MakeMove(const sf::Vector2f& characterPos, const std::vector<std::v
 	{
 		if (m_movesCounter == 0)
 		{
-			m_path = m_aStar.FindShortestPath(position::GetMapIndexesFromPosition(characterPos), position::GetMapIndexesFromPosition(getPosition()), map);
+			m_path = FindShortestPath(position::GetMapIndexesFromPosition(characterPos), position::GetMapIndexesFromPosition(getPosition()), map);
 		}
 		if (!m_path.empty())
 		{

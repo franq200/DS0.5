@@ -1,4 +1,5 @@
 #include "Dungeon.h"
+#include "Helper.h"
 #include <fstream>
 #include <string>
 
@@ -12,35 +13,33 @@ void Dungeon::LoadMap(Character& character)
 	{
 		std::vector<Cell> row;
 		std::vector<bool> rawRow;
-		float cellHeight = 50.f;
-		float cellWidth = 50.f;
 		for (int i = 0; i < line.size(); ++i)
 		{
 			if (line[i] == '1')
 			{
-				row.push_back(Cell({ cellWidth, cellHeight }, { i * cellWidth / 2, m_map.size() * cellHeight }, CellState::Filled));
+				row.push_back(Cell({ size::cellSize, size::cellSize }, { i * size::cellSize / 2, m_map.size() * size::cellSize }, CellState::Filled));
 				rawRow.push_back(false);
 			}
 			else if (line[i] == '0')
 			{
-				row.push_back(Cell({ cellWidth, cellHeight }, { i * cellWidth / 2, m_map.size() * cellHeight }, CellState::Empty));
+				row.push_back(Cell({ size::cellSize, size::cellSize }, { i * size::cellSize / 2, m_map.size() * size::cellSize }, CellState::Empty));
 				rawRow.push_back(true);
 			}
 			else if (line[i] == 'M')
 			{
-				row.push_back(Cell({ cellWidth, cellHeight }, { i * cellWidth / 2, m_map.size() * cellHeight }, CellState::Empty));
+				row.push_back(Cell({ size::cellSize, size::cellSize }, { i * size::cellSize / 2, m_map.size() * size::cellSize }, CellState::Empty));
 				rawRow.push_back(true);
-				m_spawnPosition = { i * cellWidth / 2, m_map.size() * cellHeight };
+				m_spawnPosition = { i * size::cellSize / 2, m_map.size() * size::cellSize };
 			}
 			else if (line[i] == 'G')
 			{
-				row.push_back(Cell({ cellWidth, cellHeight }, { i * cellWidth / 2, m_map.size() * cellHeight }, CellState::Empty));
+				row.push_back(Cell({ size::cellSize, size::cellSize }, { i * size::cellSize / 2, m_map.size() * size::cellSize }, CellState::Empty));
 				rawRow.push_back(true);
-				m_goblinSpawnPos = { i * cellWidth / 2, m_map.size() * cellHeight };
+				m_goblinSpawnPos = { i * size::cellSize / 2, m_map.size() * size::cellSize };
 			}
 			else if (line[i] == 'V')
 			{
-				row.push_back(Cell({ cellWidth, cellHeight }, { i * cellWidth / 2, m_map.size() * cellHeight }, CellState::Teleport));
+				row.push_back(Cell({ size::cellSize, size::cellSize }, { i * size::cellSize / 2, m_map.size() * size::cellSize }, CellState::Teleport));
 				rawRow.push_back(true);
 			}
 		}
@@ -49,7 +48,7 @@ void Dungeon::LoadMap(Character& character)
 	}
 }
 
-std::vector<std::vector<bool>> Dungeon::GetRawMap() const
+const std::vector<std::vector<bool>>& Dungeon::GetRawMap() const
 {
 	return m_rawMap;
 }

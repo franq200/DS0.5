@@ -40,3 +40,8 @@ namespace position
 	}
 
 }
+
+namespace size
+{
+	float cellSize = 50.f;
+}

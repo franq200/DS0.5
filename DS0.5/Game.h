@@ -38,4 +38,5 @@ private:
 	Goblin m_goblin;
 	CurrentMap m_currentMap = CurrentMap::village;
 	bool m_isAbleToAttack = true;
+	sf::View m_view;
 };

@@ -2,9 +2,9 @@
 #include <SFML/Graphics.hpp>
 #include "Fightable.h"
 #include "Moveable.h"
-#include "AStar.h"
+#include "aster2.h"
 
-class Goblin : public sf::Sprite, public Moveable
+class Goblin : public sf::Sprite, public Moveable, public AStar
 {
 public:
 	void Init();
@@ -20,5 +20,5 @@ private:
 	sf::Clock m_moveClock;
 	int m_movesCounter = 0;
 	std::vector<sf::Vector2f> m_path;
-	AStar m_aStar;
+	std::vector<sf::Vector2f> m_pathToCharacter;
 };

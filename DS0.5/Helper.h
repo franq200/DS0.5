@@ -28,3 +28,8 @@ namespace position
 
 	double CalculateDistance(std::pair<size_t, size_t> start, std::pair<size_t, size_t> end);
 }
+
+namespace size
+{
+	extern float cellSize;
+}
