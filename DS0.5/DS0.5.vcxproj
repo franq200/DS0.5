@@ -154,6 +154,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Goblin.cpp" />
     <ClCompile Include="Helper.cpp" />
+    <ClCompile Include="HpBar.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Moveable.cpp" />
     <ClCompile Include="Source.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Goblin.h" />
     <ClInclude Include="Helper.h" />
+    <ClInclude Include="HpBar.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Moveable.h" />
     <ClInclude Include="resource.h" />

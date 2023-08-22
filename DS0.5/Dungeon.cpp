@@ -3,10 +3,10 @@
 #include <fstream>
 #include <string>
 
-void Dungeon::LoadMap(Character& character)
+void Dungeon::LoadMap()
 {
 	std::ifstream file;
-	file.open("maps\\dungeon.txt");
+	file.open("maps\\dungeon1.txt");
 	std::string line;
 
 	while (getline(file, line))

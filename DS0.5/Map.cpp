@@ -33,14 +33,14 @@ bool Map::IsCollisionWithCharacter(sf::Vector2f posAfterMove, CellState cellsToC
 	return false;
 }
 
-void Map::SetSpawnPosition(Character& character)
+sf::Vector2f Map::GetCharacterSpawnPos() const
 {
-	character.setPosition(m_spawnPosition);
+	return m_spawnPosition;
 }
 
-void Map::SetGoblinPosition(Goblin& goblin)
+sf::Vector2f Map::GetGoblinSpawnPos() const
 {
-	goblin.setPosition(m_goblinSpawnPos);
+	return m_goblinSpawnPos;
 }
 
 bool Map::IsCollisionWithCell(const sf::Vector2f& cellPos, const sf::Vector2f& characterPos)

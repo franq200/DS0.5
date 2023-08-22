@@ -2,7 +2,7 @@
 #include <fstream>
 #include <string>
 
-void Village::LoadMap(Character& character)
+void Village::LoadMap()
 {
 	std::ifstream file;
 	file.open("maps\\map.txt");
@@ -26,7 +26,7 @@ void Village::LoadMap(Character& character)
 			else if (line[i] == 'S')
 			{
 				row.push_back(Cell({ cellWidth, cellHeight }, { i * cellWidth / 2, m_map.size() * cellHeight }, CellState::Empty));
-				character.setPosition({ i * cellWidth / 2, m_map.size() * cellHeight });
+				m_spawnPosition = { i * cellWidth / 2, m_map.size() * cellHeight };
 			}
 			else if (line[i] == 'M')
 			{

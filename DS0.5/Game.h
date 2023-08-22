@@ -23,12 +23,17 @@ private:
 	void LoadTextures();
 	void Draw();
 	void Events();
+
 	void CheckCurrentMapAndTryMoveCharacter();
 	void TryMoveCharacter(Map* map);
 	void TryChangeMap();
 	void TryAttackWithCharacter();
-	void MakeGoblinMove();
 	bool IsAttackSuccessful();
+
+	void MakeGoblinMove();
+	void TryDeleteGoblin();
+
+	void Restart();
 
 	sf::RenderWindow m_window;
 	Village m_villageMap;
@@ -38,5 +43,5 @@ private:
 	Goblin m_goblin;
 	CurrentMap m_currentMap = CurrentMap::village;
 	bool m_isAbleToAttack = true;
-	sf::View m_view;
+	bool m_isGoblinAlive = true;
 };

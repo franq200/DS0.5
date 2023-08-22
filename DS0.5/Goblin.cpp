@@ -1,18 +1,19 @@
 #include "Goblin.h"
 #include "Helper.h"
 
-void Goblin::Init()
+void Goblin::Init(sf::Vector2f spawnPos)
 {
-	HpBarInit();
 	setTexture(textures::goblin);
 	setScale(0.5, 0.5);
 	m_walkTextures = { textures::goblin, textures::walkGoblin1, textures::walkGoblin2, textures::walkGoblin3, textures::walkGoblin4 };
 	m_moveClock.restart();
+	setPosition(spawnPos);
+	m_hpBar.Init(getPosition());
 }
 
 void Goblin::MakeMove(const sf::Vector2f& characterPos, const std::vector<std::vector<bool>>& map)
 {
-	if (m_moveClock.getElapsedTime() > sf::milliseconds(200))
+	if (m_moveClock.getElapsedTime() > sf::milliseconds(600))
 	{
 		if (m_movesCounter == 0)
 		{
@@ -20,7 +21,9 @@ void Goblin::MakeMove(const sf::Vector2f& characterPos, const std::vector<std::v
 		}
 		if (!m_path.empty())
 		{
-			setPosition(position::GetPositionFromMapIndexes({ static_cast<float>(m_path[m_path.size() - 1].x), static_cast<float>(m_path[m_path.size() - 1].y) }));
+			sf::Vector2f movePos = position::GetPositionFromMapIndexes({ static_cast<float>(m_path[m_path.size() - 1].x), static_cast<float>(m_path[m_path.size() - 1].y) });
+			setPosition(movePos);
+			m_hpBar.SetPosition(movePos);
 			m_path.pop_back();
 		}
 		if (m_movesCounter == 2)
@@ -38,25 +41,17 @@ void Goblin::MakeMove(const sf::Vector2f& characterPos, const std::vector<std::v
 void Goblin::LossHp()
 {
 	m_hp -= 10.f;
-	m_hpBar.setScale(m_hp/100, 1.f);
+	m_hpBar.ChangeHpLevel(m_hp);
 }
 
 void Goblin::DrawHpBar(sf::RenderWindow& window)
 {
-	window.draw(m_hpBarBackground);
-	window.draw(m_hpBar);
+	m_hpBar.Draw(window);
 }
 
-void Goblin::HpBarInit()
+bool Goblin::IsDead() const
 {
-	sf::Vector2f currentPos = getPosition();
-	m_hpBarBackground.setPosition(currentPos.x, currentPos.y + 50.f);
-	m_hpBarBackground.setSize({50.f, 16.f});
-	m_hpBarBackground.setFillColor(sf::Color(60, 50, 50, 160));
-
-	m_hpBar.setPosition(currentPos.x + 2, currentPos.y + 52.f);
-	m_hpBar.setSize({ 46.f, 12.f });
-	m_hpBar.setFillColor(sf::Color(210, 50, 50, 230));
+	return m_hp <= 0.f;
 }
 
 /*

@@ -3,7 +3,7 @@
 class Village : public Map
 {
 public:
-	void LoadMap(Character& character) override;
+	void LoadMap() override;
 private:
 };
 

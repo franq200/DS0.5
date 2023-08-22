@@ -6,7 +6,7 @@
 class Character : public sf::Sprite, public Moveable, public Fightable
 {
 public:
-	void Init();
+	void Init(sf::Vector2f spawnPos);
 	void MakeMove(const sf::Vector2f& moveValue);
 	void Attack() override;
 	int GetElapsedTimeAsMilliseconds() const;
