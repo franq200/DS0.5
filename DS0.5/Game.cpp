@@ -1,30 +1,29 @@
-#include "Game.h"
 #include <SFML/Graphics.hpp>
-#include "Helper.h"
 #include <iostream>
+#include "Game.h"
+#include "Helper.h"
 
 void Game::Init()
 {
-	m_window.create(sf::VideoMode(1500, 750), "SFML works!");
+	m_window.create(sf::VideoMode(size::windowSizeX, size::windowSizeY), "SFML works!");
 	LoadTextures();
-	m_dungeonMap.LoadMap();
-	m_villageMap.LoadMap();
-	m_character.Init(m_villageMap.GetCharacterSpawnPos());
-	m_goblin.Init(m_dungeonMap.GetGoblinSpawnPos());
+	LoadMaps();
+	m_character.Init(m_maps[static_cast<int>(MapStates::village)]->GetCharacterSpawnPos());
+	m_goblin.Init(m_maps[static_cast<int>(MapStates::dungeon)]->GetGoblinSpawnPos());
 }
 
 void Game::Update()
 {
 	while (m_window.isOpen())
 	{
-		if (m_currentMap == CurrentMap::dungeon && m_isGoblinAlive)
+		if (m_currentMap == MapStates::dungeon && m_isGoblinAlive)
 		{
 			TryDeleteGoblin();
 			TryAttackWithCharacter();
 			MakeGoblinMove();
 		}
 		Events();
-		CheckCurrentMapAndTryMoveCharacter();
+		TryMoveCharacter();
 		TryChangeMap();
 		Draw();
 	}
@@ -32,17 +31,30 @@ void Game::Update()
 
 void Game::LoadTextures()
 {
-	textures::character.loadFromFile("textures\\characters\\1.png");
-	textures::walkCharacter1.loadFromFile("textures\\characters\\2.png");
-	textures::walkCharacter2.loadFromFile("textures\\characters\\3.png");
-	textures::walkCharacter3.loadFromFile("textures\\characters\\4.png");
-	textures::walkCharacter4.loadFromFile("textures\\characters\\5.png");
+	bool isLoaded = true;
+	isLoaded &= textures::character.loadFromFile("textures\\characters\\1.png");
+	isLoaded &= textures::walkCharacter1.loadFromFile("textures\\characters\\2.png");
+	isLoaded &= textures::walkCharacter2.loadFromFile("textures\\characters\\3.png");
+	isLoaded &= textures::walkCharacter3.loadFromFile("textures\\characters\\4.png");
+	isLoaded &= textures::walkCharacter4.loadFromFile("textures\\characters\\5.png");
+	isLoaded &= textures::goblin.loadFromFile("textures\\characters\\Goblin1.png");
+	isLoaded &= textures::walkGoblin1.loadFromFile("textures\\characters\\Goblin2.png");
+	isLoaded &= textures::walkGoblin2.loadFromFile("textures\\characters\\Goblin3.png");
+	isLoaded &= textures::walkGoblin3.loadFromFile("textures\\characters\\Goblin4.png");
+	isLoaded &= textures::walkGoblin4.loadFromFile("textures\\characters\\Goblin5.png");
+	if (!isLoaded)
+	{
+		throw(std::exception("failed to load textures"));
+	}
+}
 
-	textures::goblin.loadFromFile("textures\\characters\\Goblin1.png");
-	textures::walkGoblin1.loadFromFile("textures\\characters\\Goblin2.png");
-	textures::walkGoblin2.loadFromFile("textures\\characters\\Goblin3.png");
-	textures::walkGoblin3.loadFromFile("textures\\characters\\Goblin4.png");
-	textures::walkGoblin4.loadFromFile("textures\\characters\\Goblin5.png");
+void Game::LoadMaps()
+{
+	village->LoadMap();
+	dungeon->LoadMap();
+
+	m_maps.push_back(village.get());
+	m_maps.push_back(dungeon.get());
 }
 
 void Game::Events()
@@ -58,13 +70,9 @@ void Game::Events()
 void Game::Draw()
 {
 	m_window.clear();
-	if (m_currentMap == CurrentMap::village)
+	m_maps[static_cast<int>(m_currentMap)]->Draw(m_window);
+	if (m_currentMap == MapStates::dungeon)
 	{
-		m_villageMap.Draw(m_window);
-	}
-	else if (m_currentMap == CurrentMap::dungeon)
-	{
-		m_dungeonMap.Draw(m_window);
 		if (m_isGoblinAlive)
 		{
 			m_goblin.DrawHpBar(m_window);
@@ -75,73 +83,60 @@ void Game::Draw()
 	m_window.display();
 }
 
-void Game::CheckCurrentMapAndTryMoveCharacter()
+void Game::TryMoveCharacter()
 {
-	if (m_currentMap == CurrentMap::village)
-	{
-		TryMoveCharacter(&m_villageMap);
-	}
-	else if (m_currentMap == CurrentMap::dungeon)
-	{
-		TryMoveCharacter(&m_dungeonMap);
-	}
-}
-
-void Game::TryMoveCharacter(Map* map)
-{
-	if (m_character.GetElapsedTimeAsMilliseconds() >= speed::character)
-	{
-		sf::Vector2f characterPos = m_character.getPosition();
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !map->IsCollisionWithCharacter({ characterPos.x, characterPos.y - 10.f }, CellState::Filled, m_character.getScale().x))
-		{
-			m_character.MakeMove({ 0.f, -10.f });
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !map->IsCollisionWithCharacter({ characterPos.x - 10.f, characterPos.y }, CellState::Filled, m_character.getScale().x))
-		{
-			if (m_character.getScale().x > 0)
-			{
-				m_character.setScale(-0.25, 0.25);
-				m_character.move(50.f, 0.f);
-			}
-			m_character.MakeMove({ -10.f, 0.f });
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !map->IsCollisionWithCharacter({ characterPos.x, characterPos.y + 10.f }, CellState::Filled, m_character.getScale().x))
-		{
-			m_character.MakeMove({ 0.f, 10.f });
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !map->IsCollisionWithCharacter({ characterPos.x + 10.f, characterPos.y }, CellState::Filled, m_character.getScale().x))
-		{
-			if (m_character.getScale().x < 0)
-			{
-				m_character.setScale(0.25, 0.25);
-				m_character.move(-50.f, 0.f);
-			}
-			m_character.MakeMove({ 10.f, 0.f });
-		}
-	}
 	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		m_character.setTexture(textures::character);
+	}
+	else
+	{
+		if (m_character.GetMoveClockAsMilliseconds() >= speed::character)
+		{
+			sf::Vector2f characterPos = m_character.getPosition();
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter({ characterPos.x, characterPos.y - 10.f }, CellState::Filled, m_character.getScale().x))
+			{
+				m_character.MakeMove({ 0.f, -10.f });
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter({ characterPos.x - 10.f, characterPos.y }, CellState::Filled, m_character.getScale().x))
+			{
+				if (m_character.getScale().x > 0)
+				{
+					m_character.setScale(-0.25, 0.25);
+					m_character.move(50.f, 0.f);
+				}
+				m_character.MakeMove({ -10.f, 0.f });
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter({ characterPos.x, characterPos.y + 10.f }, CellState::Filled, m_character.getScale().x))
+			{
+				m_character.MakeMove({ 0.f, 10.f });
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter({ characterPos.x + 10.f, characterPos.y }, CellState::Filled, m_character.getScale().x))
+			{
+				if (m_character.getScale().x < 0)
+				{
+					m_character.setScale(0.25, 0.25);
+					m_character.move(-50.f, 0.f);
+				}
+				m_character.MakeMove({ 10.f, 0.f });
+			}
+		}
 	}
 }
 
 void Game::TryChangeMap()
 {
-	if (m_currentMap == CurrentMap::village)
+	if (m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter(m_character.getPosition(), CellState::Teleport, m_character.getScale().x))
 	{
-		if (m_villageMap.IsCollisionWithCharacter(m_character.getPosition(), CellState::Teleport, m_character.getScale().x))
+		if (m_currentMap == MapStates::village)
 		{
-			m_currentMap = CurrentMap::dungeon;
-			m_character.setPosition(m_dungeonMap.GetCharacterSpawnPos());
-			m_goblin.setPosition(m_dungeonMap.GetGoblinSpawnPos());
+			m_currentMap = MapStates::dungeon;
+			m_character.setPosition(m_maps[static_cast<int>(m_currentMap)]->GetCharacterSpawnPos());
 		}
-	}
-	else if (m_currentMap == CurrentMap::dungeon)
-	{
-		if (m_dungeonMap.IsCollisionWithCharacter(m_character.getPosition(), CellState::Teleport, m_character.getScale().x))
+		else
 		{
-			m_currentMap = CurrentMap::village;
-			m_character.setPosition(m_villageMap.GetCharacterSpawnPos());
+			m_currentMap = MapStates::village;
+			m_character.setPosition(m_maps[static_cast<int>(m_currentMap)]->GetCharacterSpawnPos());
 		}
 	}
 }
@@ -155,16 +150,14 @@ void Game::TryAttackWithCharacter()
 			m_goblin.LossHp();
 		}
 		m_isAbleToAttack = false;
+		return;
 	}
-	else
-	{
-		m_isAbleToAttack = true;
-	}
+	m_isAbleToAttack = true;
 }
 
 void Game::MakeGoblinMove()
 {
-	m_goblin.MakeMove(m_character.getPosition(), m_dungeonMap.GetRawMap());
+	m_goblin.MakeMove(m_character.getPosition(), m_maps[static_cast<int>(m_currentMap)]->GetRawMap());
 }
 
 void Game::TryDeleteGoblin()
@@ -184,10 +177,4 @@ bool Game::IsAttackSuccessful()
 		characterPos.x -= 50.f;
 	}
 	return (std::abs(goblinPos.x - characterPos.x) <= 60 && std::abs(goblinPos.y - characterPos.y) <= 60);
-}
-
-void Game::Restart()
-{
-	m_currentMap = CurrentMap::village;
-	//m_character.setPosition()
 }

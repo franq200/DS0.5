@@ -45,9 +45,6 @@
     <ClCompile Include="Moveable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Fightable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AStar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -84,9 +81,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Moveable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Fightable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AStar.h">

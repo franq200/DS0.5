@@ -7,12 +7,11 @@
 #include <SFML/Graphics.hpp>
 
 
-enum class CurrentMap : uint8_t
+enum class MapStates : uint8_t
 {
 	village = 0,
 	dungeon
 };
-
 
 class Game
 {
@@ -20,28 +19,24 @@ public:
 	void Init();
 	void Update();
 private:
-	void LoadTextures();
-	void Draw();
 	void Events();
-
-	void CheckCurrentMapAndTryMoveCharacter();
-	void TryMoveCharacter(Map* map);
+	void LoadTextures();
+	void LoadMaps();
+	void TryMoveCharacter();
 	void TryChangeMap();
 	void TryAttackWithCharacter();
 	bool IsAttackSuccessful();
-
 	void MakeGoblinMove();
 	void TryDeleteGoblin();
-
-	void Restart();
+	void Draw();
 
 	sf::RenderWindow m_window;
-	Village m_villageMap;
-	Dungeon m_dungeonMap;
-	sf::CircleShape shape;
 	Character m_character;
 	Goblin m_goblin;
-	CurrentMap m_currentMap = CurrentMap::village;
+	MapStates m_currentMap = MapStates::village;
 	bool m_isAbleToAttack = true;
 	bool m_isGoblinAlive = true;
+	std::vector<Map*> m_maps;
+	std::unique_ptr<Village> village = std::make_unique<Village>();
+	std::unique_ptr<Dungeon> dungeon = std::make_unique<Dungeon>();
 };

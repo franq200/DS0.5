@@ -44,4 +44,6 @@ namespace position
 namespace size
 {
 	float cellSize = 50.f;
+	float windowSizeX = 1500.f;
+	float windowSizeY = 750.f;
 }

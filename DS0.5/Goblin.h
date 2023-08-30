@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "Fightable.h"
 #include "Moveable.h"
 #include "AStar.h"
 #include "HpBar.h"

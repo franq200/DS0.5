@@ -32,4 +32,6 @@ namespace position
 namespace size
 {
 	extern float cellSize;
+	extern float windowSizeX;
+	extern float windowSizeY;
 }

@@ -150,7 +150,6 @@
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Dungeon.cpp" />
-    <ClCompile Include="Fightable.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Goblin.cpp" />
     <ClCompile Include="Helper.cpp" />
@@ -165,7 +164,6 @@
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Dungeon.h" />
-    <ClInclude Include="Fightable.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Goblin.h" />
     <ClInclude Include="Helper.h" />

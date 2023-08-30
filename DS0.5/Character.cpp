@@ -16,13 +16,7 @@ void Character::MakeMove(const sf::Vector2f& moveValue)
 	m_moveClock.restart();
 }
 
-void Character::Attack()
-{
-	//AttackAnimation();
-
-}
-
-int Character::GetElapsedTimeAsMilliseconds() const
+const int Character::GetMoveClockAsMilliseconds() const
 {
 	return m_moveClock.getElapsedTime().asMilliseconds();
 }
@@ -39,18 +33,3 @@ void Character::WalkAnimation()
 	}
 	moveCounter++;
 }
-
-/*
-void Character::AttackAnimation()
-{
-	static int attackCounter = 0;
-	setTexture(m_attackTextures[attackCounter]);
-	if (attackCounter == 4)
-	{
-		setTexture(textures::walkCharacter4);
-		attackCounter = 0;
-		return;
-	}
-	attackCounter++;
-}
-*/
