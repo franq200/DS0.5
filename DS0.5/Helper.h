@@ -19,6 +19,7 @@ namespace textures
 namespace speed
 {
 	extern float character;
+	extern float goblinAttackSpeed;
 }
 
 namespace position

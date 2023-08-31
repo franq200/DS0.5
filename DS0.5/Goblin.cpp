@@ -49,9 +49,28 @@ void Goblin::DrawHpBar(sf::RenderWindow& window)
 	m_hpBar.Draw(window);
 }
 
-bool Goblin::IsDead() const
+const bool Goblin::IsDead() const
 {
 	return m_hp <= 0.f;
+}
+
+int Goblin::GetAttackClockAsMilliseconds() const
+{
+	return m_attackClock.getElapsedTime().asMilliseconds();
+}
+
+void Goblin::RestartAttackClock()
+{
+	m_attackClock.restart();
+}
+
+void Goblin::Restart(sf::Vector2f spawnPos)
+{
+	m_moveClock.restart();
+	SetPosition(spawnPos);
+	m_hp = 100.f;
+	m_hpBar.ChangeHpLevel(m_hp);
+	m_movesCounter = 0;
 }
 
 /*

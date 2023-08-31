@@ -18,6 +18,7 @@ namespace textures
 namespace speed
 {
 	float character = 100.f;
+	float goblinAttackSpeed = 1000.f;
 }
 
 namespace position

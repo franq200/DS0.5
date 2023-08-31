@@ -23,8 +23,11 @@ void Game::Update()
 			MakeGoblinMove();
 		}
 		Events();
+		TryKillCharacter();
 		TryMoveCharacter();
 		TryChangeMap();
+		TryLossHp();
+		m_character.HpBarUpdate();
 		Draw();
 	}
 }
@@ -71,14 +74,12 @@ void Game::Draw()
 {
 	m_window.clear();
 	m_maps[static_cast<int>(m_currentMap)]->Draw(m_window);
-	if (m_currentMap == MapStates::dungeon)
+	if (m_currentMap == MapStates::dungeon && m_isGoblinAlive)
 	{
-		if (m_isGoblinAlive)
-		{
-			m_goblin.DrawHpBar(m_window);
-			m_window.draw(m_goblin);
-		}
+		m_goblin.DrawHpBar(m_window);
+		m_window.draw(m_goblin);
 	}
+	m_character.DrawHpBar(m_window); 
 	m_window.draw(m_character);
 	m_window.display();
 }
@@ -155,6 +156,35 @@ void Game::TryAttackWithCharacter()
 	m_isAbleToAttack = true;
 }
 
+void Game::TryKillCharacter()
+{
+	if (m_character.IsDead())
+	{
+		Restart();
+	}
+}
+
+void Game::TryLossHp()
+{
+	if (IsAttackSuccessful())
+	{
+		if (!m_isGoblinAttackClockRestarted)
+		{
+			m_goblin.RestartAttackClock();
+			m_isGoblinAttackClockRestarted = true;
+		}
+		if (m_goblin.GetAttackClockAsMilliseconds() >= speed::goblinAttackSpeed)
+		{
+			m_character.LossHp();
+			m_goblin.RestartAttackClock();
+		}
+	}
+	else if (m_isGoblinAttackClockRestarted)
+	{
+		m_isGoblinAttackClockRestarted = false;
+	}
+}
+
 void Game::MakeGoblinMove()
 {
 	m_goblin.MakeMove(m_character.getPosition(), m_maps[static_cast<int>(m_currentMap)]->GetRawMap());
@@ -166,6 +196,14 @@ void Game::TryDeleteGoblin()
 	{
 		m_isGoblinAlive = false;
 	}
+}
+
+void Game::Restart()
+{
+	m_character.Restart(m_maps[static_cast<int>(MapStates::village)]->GetCharacterSpawnPos());
+	m_goblin.Restart(m_maps[static_cast<int>(MapStates::village)]->GetGoblinSpawnPos());
+	m_isGoblinAlive = true;
+	m_currentMap = MapStates::village;
 }
 
 bool Game::IsAttackSuccessful()

@@ -25,9 +25,12 @@ private:
 	void TryMoveCharacter();
 	void TryChangeMap();
 	void TryAttackWithCharacter();
+	void TryKillCharacter();
+	void TryLossHp();
 	bool IsAttackSuccessful();
 	void MakeGoblinMove();
 	void TryDeleteGoblin();
+	void Restart();
 	void Draw();
 
 	sf::RenderWindow m_window;
@@ -39,4 +42,5 @@ private:
 	std::vector<Map*> m_maps;
 	std::unique_ptr<Village> village = std::make_unique<Village>();
 	std::unique_ptr<Dungeon> dungeon = std::make_unique<Dungeon>();
+	bool m_isGoblinAttackClockRestarted = false;
 };
