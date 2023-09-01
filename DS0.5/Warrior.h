@@ -4,7 +4,7 @@
 #include "AStar.h"
 #include "HpBar.h"
 
-class Goblin : public sf::Sprite, public Moveable, public AStar
+class Warrior : public sf::Sprite, public Moveable, public AStar
 {
 public:
 	void Init(sf::Vector2f spawnPos);
@@ -24,3 +24,4 @@ private:
 	std::vector<sf::Vector2f> m_pathToCharacter;
 	HpBar m_hpBar;
 };
+

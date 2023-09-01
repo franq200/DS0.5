@@ -14,6 +14,8 @@ namespace textures
 	extern sf::Texture walkGoblin2;
 	extern sf::Texture walkGoblin3;
 	extern sf::Texture walkGoblin4;
+	
+	extern sf::Texture warrior;
 }
 
 namespace speed
@@ -35,4 +37,10 @@ namespace size
 	extern float cellSize;
 	extern float windowSizeX;
 	extern float windowSizeY;
+}
+
+namespace character
+{
+	extern float damageTakenScaling;
+	extern float damageScaling;
 }

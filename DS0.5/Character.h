@@ -9,6 +9,7 @@ public:
 	void Init(sf::Vector2f spawnPos);
 	void MakeMove(const sf::Vector2f& moveValue);
 	void LossHp();
+	void GetHp();
 	void DrawHpBar(sf::RenderWindow& window);
 	const int GetMoveClockAsMilliseconds() const;
 	const bool IsDead() const;

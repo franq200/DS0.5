@@ -10,17 +10,26 @@ void Game::Init()
 	LoadMaps();
 	m_character.Init(m_maps[static_cast<int>(MapStates::village)]->GetCharacterSpawnPos());
 	m_goblin.Init(m_maps[static_cast<int>(MapStates::dungeon)]->GetGoblinSpawnPos());
+	m_warrior.Init(m_maps[static_cast<int>(MapStates::dungeon)]->GetWarriorSpawnPos());
 }
 
 void Game::Update()
 {
 	while (m_window.isOpen())
 	{
-		if (m_currentMap == MapStates::dungeon && m_isGoblinAlive)
+		if (m_currentMap == MapStates::dungeon)
 		{
-			TryDeleteGoblin();
+			if (m_isGoblinAlive)
+			{
+				TryDeleteGoblin();
+				MakeGoblinMove();
+			}
+			if (m_isWarriorAlive)
+			{
+				TryDeleteWarrior();
+				MakeWarriorMove();
+			}
 			TryAttackWithCharacter();
-			MakeGoblinMove();
 		}
 		Events();
 		TryKillCharacter();
@@ -45,6 +54,7 @@ void Game::LoadTextures()
 	isLoaded &= textures::walkGoblin2.loadFromFile("textures\\characters\\Goblin3.png");
 	isLoaded &= textures::walkGoblin3.loadFromFile("textures\\characters\\Goblin4.png");
 	isLoaded &= textures::walkGoblin4.loadFromFile("textures\\characters\\Goblin5.png");
+	isLoaded &= textures::warrior.loadFromFile("textures\\characters\\Warrior.png");
 	if (!isLoaded)
 	{
 		throw(std::exception("failed to load textures"));
@@ -74,10 +84,18 @@ void Game::Draw()
 {
 	m_window.clear();
 	m_maps[static_cast<int>(m_currentMap)]->Draw(m_window);
-	if (m_currentMap == MapStates::dungeon && m_isGoblinAlive)
+	if (m_currentMap == MapStates::dungeon)
 	{
-		m_goblin.DrawHpBar(m_window);
-		m_window.draw(m_goblin);
+		if (m_isGoblinAlive)
+		{
+			m_goblin.DrawHpBar(m_window);
+			m_window.draw(m_goblin);
+		}
+		if (m_isWarriorAlive)
+		{
+			m_warrior.DrawHpBar(m_window);
+			m_window.draw(m_warrior);
+		}
 	}
 	m_character.DrawHpBar(m_window); 
 	m_window.draw(m_character);
@@ -198,11 +216,26 @@ void Game::TryDeleteGoblin()
 	}
 }
 
+void Game::MakeWarriorMove()
+{
+	m_warrior.MakeMove(m_character.getPosition(), m_maps[static_cast<int>(m_currentMap)]->GetRawMap());
+}
+
+void Game::TryDeleteWarrior()
+{
+	if (m_warrior.IsDead())
+	{
+		m_isWarriorAlive = false;
+	}
+}
+
 void Game::Restart()
 {
 	m_character.Restart(m_maps[static_cast<int>(MapStates::village)]->GetCharacterSpawnPos());
 	m_goblin.Restart(m_maps[static_cast<int>(MapStates::village)]->GetGoblinSpawnPos());
+	m_warrior.Restart(m_maps[static_cast<int>(MapStates::village)]->GetWarriorSpawnPos());
 	m_isGoblinAlive = true;
+	m_isWarriorAlive = true;
 	m_currentMap = MapStates::village;
 }
 

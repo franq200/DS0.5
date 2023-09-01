@@ -1,17 +1,17 @@
-#include "Goblin.h"
+#include "Warrior.h"
 #include "Helper.h"
 
-void Goblin::Init(sf::Vector2f spawnPos)
+void Warrior::Init(sf::Vector2f spawnPos)
 {
-	setTexture(textures::goblin);
-	setScale(0.5, 0.5);
-	m_walkTextures = { textures::goblin, textures::walkGoblin1, textures::walkGoblin2, textures::walkGoblin3, textures::walkGoblin4 };
+	setTexture(textures::warrior);
+	setScale(0.33f, 0.33f);
+	//m_walkTextures = { textures::goblin, textures::walkGoblin1, textures::walkGoblin2, textures::walkGoblin3, textures::walkGoblin4 };
 	m_moveClock.restart();
 	setPosition(spawnPos);
 	m_hpBar.Init(getPosition());
 }
 
-void Goblin::MakeMove(const sf::Vector2f& characterPos, const std::vector<std::vector<bool>>& map)
+void Warrior::MakeMove(const sf::Vector2f& characterPos, const std::vector<std::vector<bool>>& map)
 {
 	if (m_moveClock.getElapsedTime() > sf::milliseconds(600))
 	{
@@ -38,33 +38,33 @@ void Goblin::MakeMove(const sf::Vector2f& characterPos, const std::vector<std::v
 	}
 }
 
-void Goblin::LossHp()
+void Warrior::LossHp()
 {
 	m_hp -= 10.f * character::damageScaling;
 	m_hpBar.ChangeHpLevel(m_hp);
 }
 
-void Goblin::DrawHpBar(sf::RenderWindow& window)
+void Warrior::DrawHpBar(sf::RenderWindow& window)
 {
 	m_hpBar.Draw(window);
 }
 
-const bool Goblin::IsDead() const
+const bool Warrior::IsDead() const
 {
 	return m_hp <= 0.f;
 }
 
-int Goblin::GetAttackClockAsMilliseconds() const
+int Warrior::GetAttackClockAsMilliseconds() const
 {
 	return m_attackClock.getElapsedTime().asMilliseconds();
 }
 
-void Goblin::RestartAttackClock()
+void Warrior::RestartAttackClock()
 {
 	m_attackClock.restart();
 }
 
-void Goblin::Restart(sf::Vector2f spawnPos)
+void Warrior::Restart(sf::Vector2f spawnPos)
 {
 	m_moveClock.restart();
 	setPosition(spawnPos);

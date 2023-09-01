@@ -13,6 +13,8 @@ namespace textures
 	sf::Texture walkGoblin2;
 	sf::Texture walkGoblin3;
 	sf::Texture walkGoblin4;
+
+	sf::Texture warrior;
 }
 
 namespace speed
@@ -48,3 +50,10 @@ namespace size
 	float windowSizeX = 1500.f;
 	float windowSizeY = 750.f;
 }
+
+namespace character
+{
+	float damageTakenScaling = 1.f;
+	float damageScaling = 1.f;
+}
+

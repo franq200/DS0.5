@@ -37,6 +37,12 @@ void Dungeon::LoadMap()
 				rawRow.push_back(true);
 				m_goblinSpawnPos = { i * size::cellSize / 2, m_map.size() * size::cellSize };
 			}
+			else if (line[i] == 'W')
+			{
+				row.push_back(Cell({ size::cellSize, size::cellSize }, { i * size::cellSize / 2, m_map.size() * size::cellSize }, CellState::Empty));
+				rawRow.push_back(true);
+				m_warriorSpawnPos = { i * size::cellSize / 2, m_map.size() * size::cellSize };
+			}
 			else if (line[i] == 'V')
 			{
 				row.push_back(Cell({ size::cellSize, size::cellSize }, { i * size::cellSize / 2, m_map.size() * size::cellSize }, CellState::Teleport));

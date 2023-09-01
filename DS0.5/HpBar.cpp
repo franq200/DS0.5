@@ -22,6 +22,12 @@ void HpBar::ChangeHpLevel(const float& hp)
 	m_hpBar.setScale(hp / 100.f, 1.f);
 }
 
+void HpBar::Rescale(const float& hp)
+{
+	m_hpBar.setScale(hp / 100.f, 1.f);
+	m_hpBarBackground.setScale(hp / 100.f, 1.f);
+}
+
 void HpBar::Draw(sf::RenderWindow& window)
 {
 	window.draw(m_hpBarBackground);

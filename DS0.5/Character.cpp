@@ -15,13 +15,17 @@ void Character::MakeMove(const sf::Vector2f& moveValue)
 	WalkAnimation();
 	move(moveValue);
 	m_moveClock.restart();
-	//m_hpBar.SetPosition(getPosition());
 }
 
 void Character::LossHp()
 {
-	m_hp -= 10.f;
-	//m_hpBar.ChangeHpLevel(m_hp);
+	m_hp -= 10.f * character::damageTakenScaling;
+}
+
+void Character::GetHp()
+{
+	m_hp = 150.f;
+	m_hpBar.Rescale(m_hp);
 }
 
 void Character::DrawHpBar(sf::RenderWindow& window)
@@ -56,7 +60,6 @@ void Character::Restart(sf::Vector2f spawnPos)
 	m_moveClock.restart();
 	setPosition(spawnPos);
 	m_hp = 100.f;
-	//m_hpBar.ChangeHpLevel(m_hp);
 }
 
 void Character::WalkAnimation()

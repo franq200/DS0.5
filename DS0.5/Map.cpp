@@ -33,14 +33,19 @@ bool Map::IsCollisionWithCharacter(sf::Vector2f posAfterMove, CellState cellsToC
 	return false;
 }
 
-sf::Vector2f Map::GetCharacterSpawnPos() const
+const sf::Vector2f Map::GetCharacterSpawnPos() const
 {
 	return m_spawnPosition;
 }
 
-sf::Vector2f Map::GetGoblinSpawnPos() const
+const sf::Vector2f Map::GetGoblinSpawnPos() const
 {
 	return m_goblinSpawnPos;
+}
+
+const sf::Vector2f Map::GetWarriorSpawnPos() const
+{
+	return m_warriorSpawnPos;
 }
 
 bool Map::IsCollisionWithCell(const sf::Vector2f& cellPos, const sf::Vector2f& characterPos)

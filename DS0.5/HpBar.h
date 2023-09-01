@@ -7,6 +7,7 @@ public:
 	void Init(const sf::Vector2f& goblinPos);
 	void SetPosition(const sf::Vector2f& goblinPos);
 	void ChangeHpLevel(const float& hp);
+	void Rescale(const float& hp);
 	void Draw(sf::RenderWindow& window);
 private:
 	sf::RectangleShape m_hpBarBackground;
