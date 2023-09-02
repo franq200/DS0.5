@@ -28,7 +28,6 @@ private:
 	void TryAttackWithCharacter();
 	void TryKillCharacter();
 	void TryLossHp();
-	bool IsAttackSuccessful();
 	void MakeGoblinMove();
 	void TryDeleteGoblin();
 	void MakeWarriorMove();

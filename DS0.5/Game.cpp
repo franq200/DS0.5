@@ -29,13 +29,16 @@ void Game::Update()
 				TryDeleteWarrior();
 				MakeWarriorMove();
 			}
-			TryAttackWithCharacter();
+			if (m_isWarriorAlive || m_isGoblinAlive)
+			{
+				TryAttackWithCharacter();
+				TryLossHp();
+			}
 		}
 		Events();
 		TryKillCharacter();
 		TryMoveCharacter();
 		TryChangeMap();
-		TryLossHp();
 		m_character.HpBarUpdate();
 		Draw();
 	}
@@ -162,16 +165,14 @@ void Game::TryChangeMap()
 
 void Game::TryAttackWithCharacter()
 {
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	if (m_character.IsAttackSuccessful(m_goblin.getPosition()) && m_isGoblinAlive)
 	{
-		if (IsAttackSuccessful() && m_isAbleToAttack)
-		{
-			m_goblin.LossHp();
-		}
-		m_isAbleToAttack = false;
-		return;
+		m_goblin.LossHp();
 	}
-	m_isAbleToAttack = true;
+	if (m_character.IsAttackSuccessful(m_warrior.getPosition()) && m_isWarriorAlive)
+	{
+		m_warrior.LossHp();
+	}
 }
 
 void Game::TryKillCharacter()
@@ -184,22 +185,13 @@ void Game::TryKillCharacter()
 
 void Game::TryLossHp()
 {
-	if (IsAttackSuccessful())
+	if (m_warrior.IsAttackSuccessful(m_character.getPosition(), m_character.getScale().x) && m_isWarriorAlive)
 	{
-		if (!m_isGoblinAttackClockRestarted)
-		{
-			m_goblin.RestartAttackClock();
-			m_isGoblinAttackClockRestarted = true;
-		}
-		if (m_goblin.GetAttackClockAsMilliseconds() >= speed::goblinAttackSpeed)
-		{
-			m_character.LossHp();
-			m_goblin.RestartAttackClock();
-		}
+		m_character.LossHp(30.f);
 	}
-	else if (m_isGoblinAttackClockRestarted)
+	if (m_goblin.IsAttackSuccessful(m_character.getPosition(), m_character.getScale().x) && m_isGoblinAlive)
 	{
-		m_isGoblinAttackClockRestarted = false;
+		m_character.LossHp(20.f);
 	}
 }
 
@@ -213,6 +205,16 @@ void Game::TryDeleteGoblin()
 	if (m_goblin.IsDead())
 	{
 		m_isGoblinAlive = false;
+		character::damageScaling = 1.25f;
+	}
+}
+
+void Game::TryDeleteWarrior()
+{
+	if (m_warrior.IsDead())
+	{
+		m_isWarriorAlive = false;
+		character::damageTakenScaling = 0.75f;
 	}
 }
 
@@ -221,31 +223,12 @@ void Game::MakeWarriorMove()
 	m_warrior.MakeMove(m_character.getPosition(), m_maps[static_cast<int>(m_currentMap)]->GetRawMap());
 }
 
-void Game::TryDeleteWarrior()
-{
-	if (m_warrior.IsDead())
-	{
-		m_isWarriorAlive = false;
-	}
-}
-
 void Game::Restart()
 {
 	m_character.Restart(m_maps[static_cast<int>(MapStates::village)]->GetCharacterSpawnPos());
-	m_goblin.Restart(m_maps[static_cast<int>(MapStates::village)]->GetGoblinSpawnPos());
-	m_warrior.Restart(m_maps[static_cast<int>(MapStates::village)]->GetWarriorSpawnPos());
+	m_goblin.Restart(m_maps[static_cast<int>(MapStates::dungeon)]->GetGoblinSpawnPos());
+	m_warrior.Restart(m_maps[static_cast<int>(MapStates::dungeon)]->GetWarriorSpawnPos());
 	m_isGoblinAlive = true;
 	m_isWarriorAlive = true;
 	m_currentMap = MapStates::village;
-}
-
-bool Game::IsAttackSuccessful()
-{
-	sf::Vector2f goblinPos = m_goblin.getPosition();
-	sf::Vector2f characterPos = m_character.getPosition();
-	if (m_character.getScale().x < 0.f)
-	{
-		characterPos.x -= 50.f;
-	}
-	return (std::abs(goblinPos.x - characterPos.x) <= 60 && std::abs(goblinPos.y - characterPos.y) <= 60);
 }

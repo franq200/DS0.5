@@ -17,9 +17,19 @@ void Character::MakeMove(const sf::Vector2f& moveValue)
 	m_moveClock.restart();
 }
 
-void Character::LossHp()
+bool Character::IsAttackSuccessful(const sf::Vector2f& enemyPos)
 {
-	m_hp -= 10.f * character::damageTakenScaling;
+	if (IsEnemyInRange(enemyPos) && sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_attackClock.getElapsedTime().asMilliseconds() >= speed::characterAttackSpeed)
+	{
+		m_attackClock.restart();
+		return true;
+	}
+	return false;
+}
+
+void Character::LossHp(const float& lostHp)
+{
+	m_hp -= lostHp * character::damageTakenScaling;
 }
 
 void Character::GetHp()
@@ -60,6 +70,12 @@ void Character::Restart(sf::Vector2f spawnPos)
 	m_moveClock.restart();
 	setPosition(spawnPos);
 	m_hp = 100.f;
+}
+
+bool Character::IsEnemyInRange(const sf::Vector2f& enemyPos) const
+{
+	sf::Vector2f pos = getPosition();
+	return (std::abs(pos.x - enemyPos.x) <= 60 && std::abs(pos.y - enemyPos.y) <= 60);
 }
 
 void Character::WalkAnimation()

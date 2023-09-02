@@ -1,26 +1,10 @@
 #pragma once
+#include "enemy.h"
 #include <SFML/Graphics.hpp>
-#include "Moveable.h"
-#include "AStar.h"
-#include "HpBar.h"
+#include "Character.h"
 
-class Goblin : public sf::Sprite, public Moveable, public AStar
+class Goblin : public Enemy
 {
 public:
-	void Init(sf::Vector2f spawnPos);
-	void MakeMove(const sf::Vector2f& characterPos, const std::vector<std::vector<bool>>& map);
-	void LossHp();
-	void DrawHpBar(sf::RenderWindow& window);
-	const bool IsDead() const;
-	int GetAttackClockAsMilliseconds() const;
-	void RestartAttackClock();
-	void Restart(sf::Vector2f spawnPos);
-private:
-	float m_hp = 100.f;
-	sf::Clock m_moveClock;
-	sf::Clock m_attackClock;
-	int m_movesCounter = 0;
-	std::vector<sf::Vector2f> m_path;
-	std::vector<sf::Vector2f> m_pathToCharacter;
-	HpBar m_hpBar;
+	void Init(sf::Vector2f spawnPos) override;
 };
