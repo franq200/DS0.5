@@ -7,7 +7,7 @@
 class Enemy : public sf::Sprite, public AStar
 {
 public:
-	virtual void Init(sf::Vector2f spawnPos) = 0;
+	virtual void Init(const sf::Vector2f& spawnPos) = 0;
 	bool IsAttackSuccessful(const sf::Vector2f& characterPos, const float& characterScaleX);
 	void MakeMove(const sf::Vector2f& characterPos, const std::vector<std::vector<bool>>& map);
 	void LossHp();
@@ -16,7 +16,7 @@ public:
 	void DrawHpBar(sf::RenderWindow& window);
 protected:
 	bool IsCharacterInRange(const sf::Vector2f& characterPos, const float& characterScaleX) const;
-	float m_hp = 100.f;
+	float m_hp;
 	sf::Clock m_moveClock;
 	sf::Clock m_attackClock;
 	int m_movesCounter = 0;

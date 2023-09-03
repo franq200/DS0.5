@@ -15,6 +15,8 @@ namespace textures
 	sf::Texture walkGoblin4;
 
 	sf::Texture warrior;
+
+	sf::Texture dragon;
 }
 
 namespace speed
@@ -42,6 +44,26 @@ namespace position
 		double xPos = static_cast<double>(start.first) - end.first;
 		double yPos = static_cast<double>(start.second) - end.second;
 		return std::abs(xPos) + std::abs(yPos);
+	}
+
+	std::pair<int, int> Left(int x, int y)
+	{
+		return std::pair<int, int>(x - 1, y);
+	}
+
+	std::pair<int, int> Right(int x, int y)
+	{
+		return std::pair<int, int>(x + 1, y);
+	}
+
+	std::pair<int, int> Top(int x, int y)
+	{
+		return std::pair<int, int>(x, y + 1);
+	}
+
+	std::pair<int, int> Bottom(int x, int y)
+	{
+		return std::pair<int, int>(x, y - 1);
 	}
 
 }

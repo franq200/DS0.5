@@ -49,8 +49,3 @@ void Village::LoadMap()
 		m_rawMap.push_back(rawRow);
 	}
 }
-
-const std::vector<std::vector<bool>>& Village::GetRawMap() const
-{
-	return m_rawMap;
-}

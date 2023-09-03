@@ -17,9 +17,19 @@ m_state(state)
 	{
 		setFillColor(sf::Color::Blue);
 	}
+	else if (state == CellState::Gate)
+	{
+		setFillColor(sf::Color::Yellow);
+	}
 }
 
 CellState Cell::GetState() const
 {
 	return m_state;
+}
+
+void Cell::ChangeState(const CellState& newState)
+{
+	m_state = newState;
+	setFillColor(sf::Color::Green);
 }

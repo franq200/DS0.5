@@ -11,6 +11,7 @@ void Game::Init()
 	m_character.Init(m_maps[static_cast<int>(MapStates::village)]->GetCharacterSpawnPos());
 	m_goblin.Init(m_maps[static_cast<int>(MapStates::dungeon)]->GetGoblinSpawnPos());
 	m_warrior.Init(m_maps[static_cast<int>(MapStates::dungeon)]->GetWarriorSpawnPos());
+	m_dragon.Init(m_maps[static_cast<int>(MapStates::dungeon)]->GetDragonSpawnPos());
 }
 
 void Game::Update()
@@ -19,18 +20,11 @@ void Game::Update()
 	{
 		if (m_currentMap == MapStates::dungeon)
 		{
-			if (m_isGoblinAlive)
+			TryOpenGate();
+			if (m_isWarriorAlive || m_isGoblinAlive || m_isDragonAlive)
 			{
-				TryDeleteGoblin();
-				MakeGoblinMove();
-			}
-			if (m_isWarriorAlive)
-			{
-				TryDeleteWarrior();
-				MakeWarriorMove();
-			}
-			if (m_isWarriorAlive || m_isGoblinAlive)
-			{
+				TryDeleteEnemies();
+				MakeEnemiesMove();
 				TryAttackWithCharacter();
 				TryLossHp();
 			}
@@ -58,6 +52,7 @@ void Game::LoadTextures()
 	isLoaded &= textures::walkGoblin3.loadFromFile("textures\\characters\\Goblin4.png");
 	isLoaded &= textures::walkGoblin4.loadFromFile("textures\\characters\\Goblin5.png");
 	isLoaded &= textures::warrior.loadFromFile("textures\\characters\\Warrior.png");
+	isLoaded &= textures::dragon.loadFromFile("textures\\characters\\Dragon.png");
 	if (!isLoaded)
 	{
 		throw(std::exception("failed to load textures"));
@@ -99,6 +94,11 @@ void Game::Draw()
 			m_warrior.DrawHpBar(m_window);
 			m_window.draw(m_warrior);
 		}
+		if (m_isDragonAlive)
+		{
+			m_dragon.DrawHpBar(m_window);
+			m_window.draw(m_dragon);
+		}
 	}
 	m_character.DrawHpBar(m_window); 
 	m_window.draw(m_character);
@@ -116,11 +116,11 @@ void Game::TryMoveCharacter()
 		if (m_character.GetMoveClockAsMilliseconds() >= speed::character)
 		{
 			sf::Vector2f characterPos = m_character.getPosition();
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter({ characterPos.x, characterPos.y - 10.f }, CellState::Filled, m_character.getScale().x))
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter({ characterPos.x, characterPos.y - 10.f }, { CellState::Filled, CellState::Gate }, m_character.getScale().x))
 			{
 				m_character.MakeMove({ 0.f, -10.f });
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter({ characterPos.x - 10.f, characterPos.y }, CellState::Filled, m_character.getScale().x))
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter({ characterPos.x - 10.f, characterPos.y }, { CellState::Filled, CellState::Gate }, m_character.getScale().x))
 			{
 				if (m_character.getScale().x > 0)
 				{
@@ -129,11 +129,11 @@ void Game::TryMoveCharacter()
 				}
 				m_character.MakeMove({ -10.f, 0.f });
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter({ characterPos.x, characterPos.y + 10.f }, CellState::Filled, m_character.getScale().x))
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter({ characterPos.x, characterPos.y + 10.f }, { CellState::Filled, CellState::Gate }, m_character.getScale().x))
 			{
 				m_character.MakeMove({ 0.f, 10.f });
 			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter({ characterPos.x + 10.f, characterPos.y }, CellState::Filled, m_character.getScale().x))
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter({ characterPos.x + 10.f, characterPos.y }, { CellState::Filled, CellState::Gate }, m_character.getScale().x))
 			{
 				if (m_character.getScale().x < 0)
 				{
@@ -148,7 +148,7 @@ void Game::TryMoveCharacter()
 
 void Game::TryChangeMap()
 {
-	if (m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter(m_character.getPosition(), CellState::Teleport, m_character.getScale().x))
+	if (m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter(m_character.getPosition(), { CellState::Teleport }, m_character.getScale().x))
 	{
 		if (m_currentMap == MapStates::village)
 		{
@@ -173,6 +173,10 @@ void Game::TryAttackWithCharacter()
 	{
 		m_warrior.LossHp();
 	}
+	if (m_character.IsAttackSuccessful(m_dragon.getPosition()) && m_isDragonAlive)
+	{
+		m_dragon.LossHp();
+	}
 }
 
 void Game::TryKillCharacter()
@@ -193,35 +197,54 @@ void Game::TryLossHp()
 	{
 		m_character.LossHp(20.f);
 	}
+	if (m_dragon.IsAttackSuccessful(m_character.getPosition(), m_character.getScale().x) && m_isDragonAlive)
+	{
+		m_character.LossHp(60.f);
+	}
 }
 
-void Game::MakeGoblinMove()
+void Game::MakeEnemiesMove()
 {
-	m_goblin.MakeMove(m_character.getPosition(), m_maps[static_cast<int>(m_currentMap)]->GetRawMap());
+	if (m_isGoblinAlive)
+	{
+		m_goblin.MakeMove(m_character.getPosition(), m_maps[static_cast<int>(m_currentMap)]->GetRawMap());
+	}
+	if (m_isWarriorAlive)
+	{
+		m_warrior.MakeMove(m_character.getPosition(), m_maps[static_cast<int>(m_currentMap)]->GetRawMap());
+	}
+	if (m_isDragonAlive)
+	{
+		m_dragon.MakeMove(m_character.getPosition(), m_maps[static_cast<int>(m_currentMap)]->GetRawMap());
+	}
 }
 
-void Game::TryDeleteGoblin()
+void Game::TryDeleteEnemies()
 {
-	if (m_goblin.IsDead())
+	if (m_goblin.IsDead() && m_isGoblinAlive)
 	{
 		m_isGoblinAlive = false;
 		character::damageScaling = 1.25f;
 	}
-}
-
-void Game::TryDeleteWarrior()
-{
-	if (m_warrior.IsDead())
+	if (m_warrior.IsDead() && m_isWarriorAlive)
 	{
 		m_isWarriorAlive = false;
 		character::damageTakenScaling = 0.75f;
 	}
+	if (m_dragon.IsDead() && m_isDragonAlive)
+	{
+		m_isDragonAlive = false;
+	}
 }
 
-void Game::MakeWarriorMove()
+void Game::TryOpenGate()
 {
-	m_warrior.MakeMove(m_character.getPosition(), m_maps[static_cast<int>(m_currentMap)]->GetRawMap());
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) && m_currentMap == MapStates::dungeon)
+	{
+		m_maps[static_cast<int>(m_currentMap)]->TryOpenGate(m_character.getPosition(), m_character.getScale());
+	}
 }
+
 
 void Game::Restart()
 {

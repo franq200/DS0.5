@@ -16,6 +16,8 @@ namespace textures
 	extern sf::Texture walkGoblin4;
 	
 	extern sf::Texture warrior;
+
+	extern sf::Texture dragon;
 }
 
 namespace speed
@@ -32,6 +34,11 @@ namespace position
 	sf::Vector2f GetPositionFromMapIndexes(const std::pair<std::size_t, std::size_t>&);
 
 	double CalculateDistance(std::pair<size_t, size_t> start, std::pair<size_t, size_t> end);
+
+	std::pair<int, int> Left(int x, int y);
+	std::pair<int, int> Right(int x, int y);
+	std::pair<int, int> Top(int x, int y);
+	std::pair<int, int> Bottom(int x, int y);
 }
 
 namespace size

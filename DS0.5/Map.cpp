@@ -11,21 +11,20 @@ void Map::Draw(sf::RenderWindow& window)
 	}
 }
 
-bool Map::IsCollisionWithCharacter(sf::Vector2f posAfterMove, CellState cellsToCheck, const float& characterXScale)
+bool Map::IsCollisionWithCharacter(sf::Vector2f posAfterMove, const std::vector<CellState>& cellsToCheck, const float& characterXScale)
 {
-	if (characterXScale < 0.f)
-	{
-		posAfterMove.x -= 50.f;
-	}
 	for (int y = 0; y < m_map.size(); ++y)
 	{
 		for (int x = 0; x < m_map[y].size(); ++x)
 		{
-			if (m_map[y][x].GetState() == cellsToCheck)
+			for (int i = 0; i < cellsToCheck.size(); i++)
 			{
-				if (IsCollisionWithCell(m_map[y][x].getPosition(), posAfterMove))
+				if (m_map[y][x].GetState() == cellsToCheck[i])
 				{
-					return true;
+					if (IsCollisionWithCell(m_map[y][x].getPosition(), posAfterMove, {characterXScale, 0.f}))
+					{
+						return true;
+					}
 				}
 			}
 		}
@@ -38,17 +37,36 @@ const sf::Vector2f Map::GetCharacterSpawnPos() const
 	return m_spawnPosition;
 }
 
+const std::vector<std::vector<bool>>& Map::GetRawMap() const
+{
+	return m_rawMap;
+}
+
 const sf::Vector2f Map::GetGoblinSpawnPos() const
 {
-	return m_goblinSpawnPos;
+	return sf::Vector2f();
 }
 
 const sf::Vector2f Map::GetWarriorSpawnPos() const
 {
-	return m_warriorSpawnPos;
+	return sf::Vector2f();
 }
 
-bool Map::IsCollisionWithCell(const sf::Vector2f& cellPos, const sf::Vector2f& characterPos)
+const sf::Vector2f Map::GetDragonSpawnPos() const
 {
+	return sf::Vector2f();
+}
+
+void Map::TryOpenGate(const sf::Vector2f& characterPos, const sf::Vector2f& characterScale)
+{
+}
+
+bool Map::IsCollisionWithCell(const sf::Vector2f& cellPos, const sf::Vector2f& characterPos, const sf::Vector2f& scale)
+{
+	if (scale.x < 0)
+	{
+		return (std::abs(characterPos.x - 50.f - cellPos.x) <= 50.f && std::abs(characterPos.y - cellPos.y) <= 50.f);
+	}
 	return (std::abs(characterPos.x - cellPos.x) <= 50.f && std::abs(characterPos.y - cellPos.y) <= 50.f);
 }
+

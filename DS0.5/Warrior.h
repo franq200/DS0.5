@@ -6,6 +6,6 @@
 class Warrior : public Enemy
 {
 public:
-	void Init(sf::Vector2f spawnPos) override;
+	void Init(const sf::Vector2f& spawnPos) override;
 };
 

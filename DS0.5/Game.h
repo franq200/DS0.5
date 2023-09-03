@@ -5,6 +5,7 @@
 #include "Dungeon.h"
 #include "Goblin.h"
 #include "Warrior.h"
+#include "Dragon.h"
 #include <SFML/Graphics.hpp>
 
 
@@ -28,10 +29,9 @@ private:
 	void TryAttackWithCharacter();
 	void TryKillCharacter();
 	void TryLossHp();
-	void MakeGoblinMove();
-	void TryDeleteGoblin();
-	void MakeWarriorMove();
-	void TryDeleteWarrior();
+	void MakeEnemiesMove();
+	void TryDeleteEnemies();
+	void TryOpenGate();
 	void Restart();
 	void Draw();
 
@@ -39,12 +39,13 @@ private:
 	Character m_character;
 	Goblin m_goblin;
 	Warrior m_warrior;
-	MapStates m_currentMap = MapStates::village;
-	bool m_isAbleToAttack = true;
+	Dragon m_dragon;
 	bool m_isGoblinAlive = true;
 	bool m_isWarriorAlive = true;
+	bool m_isDragonAlive = true;
+
 	std::vector<Map*> m_maps;
+	MapStates m_currentMap = MapStates::village;
 	std::unique_ptr<Village> village = std::make_unique<Village>();
 	std::unique_ptr<Dungeon> dungeon = std::make_unique<Dungeon>();
-	bool m_isGoblinAttackClockRestarted = false;
 };
