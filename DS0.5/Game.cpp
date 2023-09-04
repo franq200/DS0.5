@@ -8,10 +8,7 @@ void Game::Init()
 	m_window.create(sf::VideoMode(size::windowSizeX, size::windowSizeY), "SFML works!");
 	LoadTextures();
 	LoadMaps();
-	m_character.Init(m_maps[static_cast<int>(MapStates::village)]->GetCharacterSpawnPos());
-	m_goblin.Init(m_maps[static_cast<int>(MapStates::dungeon)]->GetGoblinSpawnPos());
-	m_warrior.Init(m_maps[static_cast<int>(MapStates::dungeon)]->GetWarriorSpawnPos());
-	m_dragon.Init(m_maps[static_cast<int>(MapStates::dungeon)]->GetDragonSpawnPos());
+	CharactersInit();
 }
 
 void Game::Update()
@@ -66,6 +63,14 @@ void Game::LoadMaps()
 
 	m_maps.push_back(village.get());
 	m_maps.push_back(dungeon.get());
+}
+
+void Game::CharactersInit()
+{
+	m_character.Init(m_maps[static_cast<int>(MapStates::village)]->GetCharacterSpawnPos());
+	m_goblin.Init(m_maps[static_cast<int>(MapStates::dungeon)]->GetGoblinSpawnPos());
+	m_warrior.Init(m_maps[static_cast<int>(MapStates::dungeon)]->GetWarriorSpawnPos());
+	m_dragon.Init(m_maps[static_cast<int>(MapStates::dungeon)]->GetDragonSpawnPos());
 }
 
 void Game::Events()
@@ -224,12 +229,14 @@ void Game::TryDeleteEnemies()
 	if (m_goblin.IsDead() && m_isGoblinAlive)
 	{
 		m_isGoblinAlive = false;
-		character::damageScaling = 1.25f;
+		character::damageScaling = 1.3f;
+		m_character.GetHp(130.f);
 	}
 	if (m_warrior.IsDead() && m_isWarriorAlive)
 	{
 		m_isWarriorAlive = false;
-		character::damageTakenScaling = 0.75f;
+		character::damageTakenScaling = 0.8f;
+		m_character.GetHp(160.f);
 	}
 	if (m_dragon.IsDead() && m_isDragonAlive)
 	{

@@ -4,7 +4,7 @@
 class HpBar
 {
 public:
-	void Init(const sf::Vector2f& goblinPos);
+	void Init(const sf::Vector2f& goblinPos, const float& hp);
 	void SetPosition(const sf::Vector2f& goblinPos);
 	void ChangeHpLevel(const float& hp);
 	void Rescale(const float& hp);

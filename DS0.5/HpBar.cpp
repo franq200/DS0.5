@@ -1,14 +1,16 @@
 #include "HpBar.h"
 
-void HpBar::Init(const sf::Vector2f& goblinPos)
+void HpBar::Init(const sf::Vector2f& characterPos, const float& hp)
 {
-	SetPosition(goblinPos);
+	SetPosition(characterPos);
 
 	m_hpBarBackground.setSize({ 50.f, 16.f });
 	m_hpBarBackground.setFillColor(sf::Color(60, 50, 50, 160));
+	m_hpBarBackground.setScale(hp / 100.f, 1.f);
 
 	m_hpBar.setSize({ 46.f, 12.f });
 	m_hpBar.setFillColor(sf::Color(210, 50, 50, 230));
+	m_hpBar.setScale(hp / 100.f, 1.f);
 }
 
 void HpBar::SetPosition(const sf::Vector2f& goblinPos)

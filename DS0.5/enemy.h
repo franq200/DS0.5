@@ -16,7 +16,7 @@ public:
 	void DrawHpBar(sf::RenderWindow& window);
 protected:
 	bool IsCharacterInRange(const sf::Vector2f& characterPos, const float& characterScaleX) const;
-	float m_hp;
+	float m_hp = 100.f;
 	sf::Clock m_moveClock;
 	sf::Clock m_attackClock;
 	int m_movesCounter = 0;

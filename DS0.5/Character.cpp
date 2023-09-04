@@ -7,7 +7,7 @@ void Character::Init(sf::Vector2f spawnPos)
 	setScale(0.25, 0.25);
 	m_walkTextures = { textures::character, textures::walkCharacter1, textures::walkCharacter2, textures::walkCharacter3, textures::walkCharacter4 };
 	setPosition(spawnPos);
-	m_hpBar.Init(getPosition());
+	m_hpBar.Init(getPosition(), m_hp);
 }
 
 void Character::MakeMove(const sf::Vector2f& moveValue)
@@ -32,9 +32,9 @@ void Character::LossHp(const float& lostHp)
 	m_hp -= lostHp * character::damageTakenScaling;
 }
 
-void Character::GetHp()
+void Character::GetHp(const float& newHp)
 {
-	m_hp = 150.f;
+	m_hp = newHp;
 	m_hpBar.Rescale(m_hp);
 }
 

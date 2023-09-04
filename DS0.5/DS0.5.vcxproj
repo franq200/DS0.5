@@ -157,7 +157,6 @@
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="HpBar.cpp" />
     <ClCompile Include="Map.cpp" />
-    <ClCompile Include="Moveable.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Village.cpp" />
     <ClCompile Include="Warrior.cpp" />
@@ -174,7 +173,6 @@
     <ClInclude Include="Helper.h" />
     <ClInclude Include="HpBar.h" />
     <ClInclude Include="Map.h" />
-    <ClInclude Include="Moveable.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Village.h" />
     <ClInclude Include="Warrior.h" />

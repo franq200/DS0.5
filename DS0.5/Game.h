@@ -21,6 +21,7 @@ public:
 	void Init();
 	void Update();
 private:
+	void CharactersInit();
 	void Events();
 	void LoadTextures();
 	void LoadMaps();
@@ -36,6 +37,7 @@ private:
 	void Draw();
 
 	sf::RenderWindow m_window;
+	sf::View m_view;
 	Character m_character;
 	Goblin m_goblin;
 	Warrior m_warrior;
