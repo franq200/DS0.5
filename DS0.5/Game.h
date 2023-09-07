@@ -46,7 +46,7 @@ private:
 	bool m_isWarriorAlive = true;
 	bool m_isDragonAlive = true;
 
-	std::vector<Map*> m_maps;
+	std::vector<std::unique_ptr<Map>> m_maps;
 	MapStates m_currentMap = MapStates::village;
 	std::unique_ptr<Village> village = std::make_unique<Village>();
 	std::unique_ptr<Dungeon> dungeon = std::make_unique<Dungeon>();

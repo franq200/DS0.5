@@ -1,10 +1,11 @@
 #include "Cell.h"
 
-Cell::Cell(sf::Vector2f size, sf::Vector2f pos, CellState state) :
+Cell::Cell(const sf::Vector2f& size, const sf::Vector2f& pos, CellState state) :
 m_state(state)
 {
 	setSize(size);
 	setPosition(pos);
+
 	if (state == CellState::Empty)
 	{
 		setFillColor(sf::Color::Green);
@@ -28,7 +29,7 @@ CellState Cell::GetState() const
 	return m_state;
 }
 
-void Cell::ChangeState(const CellState& newState)
+void Cell::ChangeState(CellState newState)
 {
 	m_state = newState;
 	setFillColor(sf::Color::Green);

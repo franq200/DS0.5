@@ -30,7 +30,7 @@ std::vector<sf::Vector2f> AStar::FindShortestPath(const std::pair<std::size_t, s
 		AStarData currentData = *m_openList.begin();
 		m_openList.erase(m_openList.begin());
 
-		std::optional< std::vector<sf::Vector2f>> direction = ChooseDirection(currentData, data, characterIndex, enemyIndex, map);
+		auto direction = ChooseDirection(currentData, data, characterIndex, enemyIndex, map);
 		if (direction.has_value())
 		{
 			return direction.value();
@@ -39,7 +39,7 @@ std::vector<sf::Vector2f> AStar::FindShortestPath(const std::pair<std::size_t, s
 	return {};
 }
 
-std::optional< std::vector<sf::Vector2f>> AStar::ChooseDirection(const AStarData& currentData, std::vector<std::vector<AStarData>>& data, const std::pair<std::size_t, size_t>& characterIndex, const std::pair<std::size_t, size_t>& enemyIndex, const std::vector<std::vector<bool>>& map)
+DirectionResult AStar::ChooseDirection(const AStarData& currentData, std::vector<std::vector<AStarData>>& data, const std::pair<std::size_t, size_t>& characterIndex, const std::pair<std::size_t, size_t>& enemyIndex, const std::vector<std::vector<bool>>& map)
 {
 	std::pair<int, int> currentPos = currentData.m_pos;
 

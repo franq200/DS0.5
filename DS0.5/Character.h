@@ -1,22 +1,20 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-//#include "Moveable.h"
 #include "HpBar.h"
-#include "enemy.h"
 
-class Character : public sf::Sprite//, public Moveable
+class Character : public sf::Sprite
 {
 public:
 	void Init(sf::Vector2f spawnPos);
 	void MakeMove(const sf::Vector2f& moveValue);
 	bool IsAttackSuccessful(const sf::Vector2f& enemyPos);
-	void LossHp(const float& lostHp);
-	void GetHp(const float& newHp);
+	void LossHp(float lostHp);
+	void SetHp(float newHp);
 	void DrawHpBar(sf::RenderWindow& window);
 	const int GetMoveClockAsMilliseconds() const;
 	const bool IsDead() const;
 	void HpBarUpdate();
-	void Restart(sf::Vector2f spawnPos);
+	void Restart(const sf::Vector2f& spawnPos);
 private:
 	bool IsEnemyInRange(const sf::Vector2f& enemyPos) const;
 	void WalkAnimation();
@@ -25,5 +23,6 @@ private:
 	HpBar m_hpBar;
 	sf::Clock m_attackClock;
 	std::vector <sf::Texture> m_walkTextures;
+	int m_moveCounter = 0;
 };
 

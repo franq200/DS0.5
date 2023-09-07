@@ -13,9 +13,9 @@ class Cell : public sf::RectangleShape
 {
 public:
 	Cell() = default;
-	Cell(sf::Vector2f size, sf::Vector2f pos, CellState state);
+	Cell(const sf::Vector2f& size, const sf::Vector2f& pos, CellState state);
 	CellState GetState() const;
-	void ChangeState(const CellState& newState);
+	void ChangeState(CellState newState);
 private:
 	CellState m_state;
 };

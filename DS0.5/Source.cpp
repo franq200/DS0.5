@@ -1,6 +1,7 @@
-#include <SFML/Graphics.hpp>
 #include <exception>
 #include "Game.h"
+#include <iostream>
+#include <SFML/Graphics.hpp>
 
 int main()
 {
@@ -8,11 +9,11 @@ int main()
     try
     {
         game.Init();
+        game.Update();
     }
-    catch (std::exception e)
+    catch (const std::exception& e)
     {
         std::cout << e.what();
     }
-    game.Update();
     return 0;
 }

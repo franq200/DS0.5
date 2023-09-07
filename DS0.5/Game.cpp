@@ -58,11 +58,13 @@ void Game::LoadTextures()
 
 void Game::LoadMaps()
 {
-	village->LoadMap();
-	dungeon->LoadMap();
-
-	m_maps.push_back(village.get());
-	m_maps.push_back(dungeon.get());
+	m_maps.resize(2);
+	m_maps[0] = std::make_unique<Village>();
+	m_maps[1] = std::make_unique<Dungeon>();
+	for (int i = 0; i < m_maps.size(); i++)
+	{
+		m_maps[i]->LoadMap();
+	}
 }
 
 void Game::CharactersInit()
@@ -230,13 +232,13 @@ void Game::TryDeleteEnemies()
 	{
 		m_isGoblinAlive = false;
 		character::damageScaling = 1.3f;
-		m_character.GetHp(130.f);
+		m_character.SetHp(130.f);
 	}
 	if (m_warrior.IsDead() && m_isWarriorAlive)
 	{
 		m_isWarriorAlive = false;
 		character::damageTakenScaling = 0.8f;
-		m_character.GetHp(160.f);
+		m_character.SetHp(160.f);
 	}
 	if (m_dragon.IsDead() && m_isDragonAlive)
 	{

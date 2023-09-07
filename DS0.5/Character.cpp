@@ -19,7 +19,7 @@ void Character::MakeMove(const sf::Vector2f& moveValue)
 
 bool Character::IsAttackSuccessful(const sf::Vector2f& enemyPos)
 {
-	if (IsEnemyInRange(enemyPos) && sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_attackClock.getElapsedTime().asMilliseconds() >= speed::characterAttackSpeed)
+	if (m_attackClock.getElapsedTime().asMilliseconds() >= speed::characterAttackSpeed && sf::Mouse::isButtonPressed(sf::Mouse::Left) && IsEnemyInRange(enemyPos))
 	{
 		m_attackClock.restart();
 		return true;
@@ -27,12 +27,16 @@ bool Character::IsAttackSuccessful(const sf::Vector2f& enemyPos)
 	return false;
 }
 
-void Character::LossHp(const float& lostHp)
+void Character::LossHp(float lostHp)
 {
+	if (m_hp <= 0)
+	{
+		throw std::exception("invalid hp state");
+	}
 	m_hp -= lostHp * character::damageTakenScaling;
 }
 
-void Character::GetHp(const float& newHp)
+void Character::SetHp(float newHp)
 {
 	m_hp = newHp;
 	m_hpBar.Rescale(m_hp);
@@ -65,7 +69,7 @@ void Character::HpBarUpdate()
 	m_hpBar.SetPosition(getPosition());
 }
 
-void Character::Restart(sf::Vector2f spawnPos)
+void Character::Restart(const sf::Vector2f& spawnPos)
 {
 	m_moveClock.restart();
 	setPosition(spawnPos);
@@ -80,13 +84,12 @@ bool Character::IsEnemyInRange(const sf::Vector2f& enemyPos) const
 
 void Character::WalkAnimation()
 {
-	static int moveCounter = 0;
-	setTexture(m_walkTextures[moveCounter]);
-	if (moveCounter == 4)
+	setTexture(m_walkTextures[m_moveCounter]);
+	if (m_moveCounter == m_walkTextures.size() - 1)
 	{
 		setTexture(textures::walkCharacter4);
-		moveCounter = 0;
+		m_moveCounter = 0;
 		return;
 	}
-	moveCounter++;
+	m_moveCounter++;
 }
