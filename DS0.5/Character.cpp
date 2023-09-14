@@ -23,19 +23,7 @@ void Character::Init(sf::Vector2f spawnPos)
 void Character::MakeMove(const sf::Vector2f& moveValue)
 {
 	WalkAnimation();
-	if (moveValue.x != 0)
-	{
-		if (moveValue.x == 10 && getScale().x < 0)
-		{
-			setScale(character::defaultScale, character::defaultScale);
-			move(-size::cellSize, 0.f);
-		}
-		else if (moveValue.x == -10 && getScale().x > 0)
-		{
-			setScale(-character::defaultScale, character::defaultScale);
-			move(size::cellSize, 0.f);
-		}
-	}
+	Rotate(moveValue);
 	move(moveValue);
 	UpdateHpBarPos();
 	m_moveClock.restart();
@@ -72,7 +60,7 @@ sf::Vector2f Character::GetNextUp() const
 sf::Vector2f Character::GetNextDown() const
 {
 	sf::Vector2f pos = getPosition();
-	return { pos.x, pos.y + size::cellSize + character::moveRange };
+	return { pos.x, pos.y + character::moveRange };
 }
 
 sf::Vector2f Character::GetNextLeft() const
@@ -84,12 +72,29 @@ sf::Vector2f Character::GetNextLeft() const
 sf::Vector2f Character::GetNextRight() const
 {
 	sf::Vector2f pos = getPosition();
-	return { pos.x + size::cellSize + character::moveRange, pos.y};
+	return { pos.x + character::moveRange, pos.y};
 }
 
 void Character::UpdateHpBarPos()
 {
 	m_hpBar.SetPosition(getPosition());
+}
+
+void Character::Rotate(const sf::Vector2f& moveValue)
+{
+	if (moveValue.x != 0)
+	{
+		if (moveValue.x == 10 && getScale().x < 0)
+		{
+			setScale(character::defaultScale, character::defaultScale);
+			move(-size::cellSize, 0.f);
+		}
+		else if (moveValue.x == -10 && getScale().x > 0)
+		{
+			setScale(-character::defaultScale, character::defaultScale);
+			move(size::cellSize, 0.f);
+		}
+	}
 }
 
 void Character::WalkAnimation()

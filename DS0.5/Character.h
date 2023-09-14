@@ -19,6 +19,7 @@ public:
 	sf::Vector2f GetNextRight() const;
 	void UpdateHpBarPos() override;
 private:
+	void Rotate(const sf::Vector2f& moveValue);
 	void WalkAnimation();
 	sf::Clock m_moveClock;
 	std::vector <sf::Texture> m_walkTextures;

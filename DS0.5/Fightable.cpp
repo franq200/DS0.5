@@ -12,7 +12,7 @@ void Fightable::GainHp(float gainedHp)
 
 bool Fightable::IsDead()
 {
-	return false;
+	return m_hpBar.IsDead();
 }
 
 void Fightable::DrawHpBar(sf::RenderWindow& window)

@@ -17,7 +17,6 @@ bool Map::IsCollisionWithCharacter(const sf::Vector2f& posAfterMove, const std::
 	auto [xInt, yInt] = position::GetMapIndexesFromPosition({ posAfterMove.x, posAfterMove.y });
 	float x = static_cast<float>(xInt);
 	float y = static_cast<float>(yInt);
-	//CellState cellState = m_map[y][x].GetState();
 	std::vector<sf::Vector2f> characterPositions;
 	characterPositions.push_back({ x, y });
 	if (static_cast<int>(posAfterMove.x) % static_cast<int>(size::cellSize) != 0 && static_cast<int>(posAfterMove.y) % static_cast<int>(size::cellSize) != 0)
@@ -43,7 +42,6 @@ bool Map::IsCollisionWithCharacter(const sf::Vector2f& posAfterMove, const std::
 		}
 	}
 	return false;
-	//return std::any_of(forbiddenStates.begin(), forbiddenStates.end(), [characterPositions](auto state) {return std::any_of(characterPositions.begin(), characterPositions.end(), [state](auto characterPos) { return characterPos.GetState() == state; }; });
 }
 
 const sf::Vector2f& Map::GetCharacterSpawnPos() const

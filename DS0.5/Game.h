@@ -1,8 +1,6 @@
 #pragma once
 #include "Map.h"
 #include "Character.h"
-#include "Village.h"
-#include "Dungeon.h"
 #include "Goblin.h"
 #include "Warrior.h"
 #include "Dragon.h"
@@ -48,6 +46,4 @@ private:
 
 	std::vector<std::unique_ptr<Map>> m_maps;
 	MapStates m_currentMap = MapStates::village;
-	std::unique_ptr<Village> village = std::make_unique<Village>();
-	std::unique_ptr<Dungeon> dungeon = std::make_unique<Dungeon>();
 };

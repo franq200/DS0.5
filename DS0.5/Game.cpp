@@ -2,6 +2,8 @@
 #include <iostream>
 #include "Game.h"
 #include "Helper.h"
+#include "Village.h"
+#include "Dungeon.h"
 
 void Game::Init()
 {
@@ -245,8 +247,9 @@ void Game::TryOpenGate()
 
 void Game::Restart()
 {
+	auto* dungeonMap = dynamic_cast<Dungeon*>(m_maps[static_cast<int>(MapStates::dungeon)].get());
 	m_character.Restart(m_maps[static_cast<int>(MapStates::village)]->GetCharacterSpawnPos());
-	m_goblin.Restart(m_maps[static_cast<int>(MapStates::dungeon)]->GetGoblinSpawnPos());
+	m_goblin.Restart(dungeonMap->GetGoblinSpawnPos());
 	m_warrior.Restart(m_maps[static_cast<int>(MapStates::dungeon)]->GetWarriorSpawnPos());
 	m_isGoblinAlive = true;
 	m_isWarriorAlive = true;

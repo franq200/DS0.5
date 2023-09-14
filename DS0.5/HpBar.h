@@ -18,4 +18,3 @@ private:
 	sf::RectangleShape m_hpBar;
 	float m_hp;
 };
-
