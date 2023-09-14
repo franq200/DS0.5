@@ -6,7 +6,7 @@ m_state(state)
 	setSize(size);
 	setPosition(pos);
 
-	if (state == CellState::Empty)
+	if (state == CellState::Empty) // switch case
 	{
 		setFillColor(sf::Color::Green);
 	}

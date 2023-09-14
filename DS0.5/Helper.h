@@ -44,12 +44,15 @@ namespace position
 namespace size
 {
 	extern float cellSize;
-	extern float windowSizeX;
-	extern float windowSizeY;
+	extern int windowSizeX;
+	extern int windowSizeY;
 }
 
 namespace character
 {
 	extern float damageTakenScaling;
 	extern float damageScaling;
+	extern float defaultScale;
+	extern float defaultHp;
+	extern float moveRange;
 }

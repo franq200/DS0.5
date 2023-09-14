@@ -31,7 +31,7 @@ namespace position
 {
 	std::pair<std::size_t, std::size_t> GetMapIndexesFromPosition(const sf::Vector2f& pos)
 	{
-		return { static_cast<size_t>(pos.x / 50), static_cast<size_t>(pos.y / 50) };
+		return { static_cast<size_t>(pos.x / size::cellSize), static_cast<size_t>(pos.y / size::cellSize) };
 	}
 
 	sf::Vector2f GetPositionFromMapIndexes(const std::pair<std::size_t, std::size_t>& mapIndexes)
@@ -71,13 +71,16 @@ namespace position
 namespace size
 {
 	float cellSize = 50.f;
-	float windowSizeX = 1500.f;
-	float windowSizeY = 750.f;
+	int windowSizeX = 1500;
+	int windowSizeY = 750;
 }
 
 namespace character
 {
 	float damageTakenScaling = 1.f;
 	float damageScaling = 1.f;
+	float defaultScale = 0.25f;
+	float defaultHp = 100.f;
+	float moveRange = 10.f;
 }
 

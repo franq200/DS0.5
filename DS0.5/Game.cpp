@@ -30,7 +30,6 @@ void Game::Update()
 		TryKillCharacter();
 		TryMoveCharacter();
 		TryChangeMap();
-		m_character.HpBarUpdate();
 		Draw();
 	}
 }
@@ -122,32 +121,21 @@ void Game::TryMoveCharacter()
 	{
 		if (m_character.GetMoveClockAsMilliseconds() >= speed::character)
 		{
-			sf::Vector2f characterPos = m_character.getPosition();
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter({ characterPos.x, characterPos.y - 10.f }, { CellState::Filled, CellState::Gate }, m_character.getScale().x))
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter(m_character.GetNextUp(), { CellState::Filled, CellState::Gate }))
+			{																																																	   
+				m_character.MakeMove({ 0.f, -character::moveRange });
+			}																																																	   
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter(m_character.GetNextLeft(), { CellState::Filled, CellState::Gate }))
+			{																																																	   																																							  																																									   
+				m_character.MakeMove({ -character::moveRange, 0.f });
+			}																																																	   
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter(m_character.GetNextDown(), { CellState::Filled, CellState::Gate }))
+			{																																																	   
+				m_character.MakeMove({ 0.f, character::moveRange });
+			}																																																	   
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter(m_character.GetNextRight(), {CellState::Filled, CellState::Gate}))
 			{
-				m_character.MakeMove({ 0.f, -10.f });
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter({ characterPos.x - 10.f, characterPos.y }, { CellState::Filled, CellState::Gate }, m_character.getScale().x))
-			{
-				if (m_character.getScale().x > 0)
-				{
-					m_character.setScale(-0.25, 0.25);
-					m_character.move(50.f, 0.f);
-				}
-				m_character.MakeMove({ -10.f, 0.f });
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter({ characterPos.x, characterPos.y + 10.f }, { CellState::Filled, CellState::Gate }, m_character.getScale().x))
-			{
-				m_character.MakeMove({ 0.f, 10.f });
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter({ characterPos.x + 10.f, characterPos.y }, { CellState::Filled, CellState::Gate }, m_character.getScale().x))
-			{
-				if (m_character.getScale().x < 0)
-				{
-					m_character.setScale(0.25, 0.25);
-					m_character.move(-50.f, 0.f);
-				}
-				m_character.MakeMove({ 10.f, 0.f });
+				m_character.MakeMove({ character::moveRange, 0.f });
 			}
 		}
 	}
@@ -155,7 +143,7 @@ void Game::TryMoveCharacter()
 
 void Game::TryChangeMap()
 {
-	if (m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter(m_character.getPosition(), { CellState::Teleport }, m_character.getScale().x))
+	if (m_maps[static_cast<int>(m_currentMap)]->IsCollisionWithCharacter(m_character.getPosition(), {CellState::Teleport}))
 	{
 		if (m_currentMap == MapStates::village)
 		{
@@ -174,15 +162,15 @@ void Game::TryAttackWithCharacter()
 {
 	if (m_character.IsAttackSuccessful(m_goblin.getPosition()) && m_isGoblinAlive)
 	{
-		m_goblin.LossHp();
+		m_goblin.LossHp(20.f);
 	}
 	if (m_character.IsAttackSuccessful(m_warrior.getPosition()) && m_isWarriorAlive)
 	{
-		m_warrior.LossHp();
+		m_warrior.LossHp(20.f);
 	}
 	if (m_character.IsAttackSuccessful(m_dragon.getPosition()) && m_isDragonAlive)
 	{
-		m_dragon.LossHp();
+		m_dragon.LossHp(20.f);
 	}
 }
 
@@ -196,15 +184,15 @@ void Game::TryKillCharacter()
 
 void Game::TryLossHp()
 {
-	if (m_warrior.IsAttackSuccessful(m_character.getPosition(), m_character.getScale().x) && m_isWarriorAlive)
+	if (m_warrior.IsAttackSuccessful(m_character.getPosition()) && m_isWarriorAlive)
 	{
 		m_character.LossHp(30.f);
 	}
-	if (m_goblin.IsAttackSuccessful(m_character.getPosition(), m_character.getScale().x) && m_isGoblinAlive)
+	if (m_goblin.IsAttackSuccessful(m_character.getPosition()) && m_isGoblinAlive)
 	{
 		m_character.LossHp(20.f);
 	}
-	if (m_dragon.IsAttackSuccessful(m_character.getPosition(), m_character.getScale().x) && m_isDragonAlive)
+	if (m_dragon.IsAttackSuccessful(m_character.getPosition()) && m_isDragonAlive)
 	{
 		m_character.LossHp(60.f);
 	}

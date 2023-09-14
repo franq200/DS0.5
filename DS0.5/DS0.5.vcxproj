@@ -126,7 +126,7 @@
       <AdditionalDependencies>sfml-window-d.lib;sfml-system-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y ".\SFML-2.6.0\bin\*" "..\x64\Debug"</Command>
+      <Command>copy /Y ".\SFML-2.6.0\bin\*" "..\$(IntDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -148,7 +148,7 @@
       <AdditionalDependencies>sfml-window.lib;sfml-system.lib;sfml-graphics.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y ".\SFML-2.6.0\bin\*" "..\x64\Debug"</Command>
+      <Command>copy /Y ".\SFML-2.6.0\bin\*" "..\$(IntDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -158,11 +158,13 @@
     <ClCompile Include="Dragon.cpp" />
     <ClCompile Include="Dungeon.cpp" />
     <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="Fightable.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Goblin.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="HpBar.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Moveable.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Village.cpp" />
     <ClCompile Include="Warrior.cpp" />
@@ -174,11 +176,13 @@
     <ClInclude Include="Dragon.h" />
     <ClInclude Include="Dungeon.h" />
     <ClInclude Include="enemy.h" />
+    <ClInclude Include="Fightable.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Goblin.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="HpBar.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="Moveable.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Village.h" />
     <ClInclude Include="Warrior.h" />

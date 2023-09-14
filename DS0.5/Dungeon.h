@@ -6,9 +6,9 @@ class Dungeon : public Map
 {
 public:
 	void LoadMap() override;
-	const sf::Vector2f GetGoblinSpawnPos() const override;
-	const sf::Vector2f GetWarriorSpawnPos() const override;
-	const sf::Vector2f GetDragonSpawnPos() const override;
+	const sf::Vector2f& GetGoblinSpawnPos() const override;
+	const sf::Vector2f& GetWarriorSpawnPos() const override;
+	const sf::Vector2f& GetDragonSpawnPos() const override;
 	void TryOpenGate(const sf::Vector2f& characterPos, const sf::Vector2f& characterScale) override;
 private:
 	void Open(int x, int y);

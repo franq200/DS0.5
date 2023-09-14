@@ -57,6 +57,12 @@
     <ClCompile Include="Dragon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Fightable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Moveable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -99,6 +105,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dragon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Fightable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Moveable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

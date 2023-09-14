@@ -65,17 +65,17 @@ void Dungeon::LoadMap()
 	}
 }
 
-const sf::Vector2f Dungeon::GetGoblinSpawnPos() const
+const sf::Vector2f& Dungeon::GetGoblinSpawnPos() const
 {
 	return m_goblinSpawnPos;
 }
 
-const sf::Vector2f Dungeon::GetWarriorSpawnPos() const
+const sf::Vector2f& Dungeon::GetWarriorSpawnPos() const
 {
 	return m_warriorSpawnPos;
 }
 
-const sf::Vector2f Dungeon::GetDragonSpawnPos() const
+const sf::Vector2f& Dungeon::GetDragonSpawnPos() const
 {
 	return m_dragonSpawnPos;
 }
@@ -86,7 +86,7 @@ void Dungeon::TryOpenGate(const sf::Vector2f& characterPos, const sf::Vector2f& 
 	{
 		for (int y = 0; y < m_map[x].size(); y++)
 		{
-			if (IsCollisionWithCell(m_map[x][y].getPosition(), characterPos, characterScale))
+			if (IsCollisionWithCell(m_map[x][y].getPosition(), characterPos))
 			{
 				Open(x, y);
 			}

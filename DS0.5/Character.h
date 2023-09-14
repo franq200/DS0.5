@@ -1,27 +1,26 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "HpBar.h"
+#include "Moveable.h"
+#include "Fightable.h"
 
-class Character : public sf::Sprite
+class Character : public Moveable, public Fightable
 {
 public:
+	sf::Vector2f getPosition() const;
 	void Init(sf::Vector2f spawnPos);
 	void MakeMove(const sf::Vector2f& moveValue);
-	bool IsAttackSuccessful(const sf::Vector2f& enemyPos);
-	void LossHp(float lostHp);
-	void SetHp(float newHp);
-	void DrawHpBar(sf::RenderWindow& window);
-	const int GetMoveClockAsMilliseconds() const;
-	const bool IsDead() const;
-	void HpBarUpdate();
+	bool IsAttackSuccessful(const sf::Vector2f& opponentPos) override;
+	int GetMoveClockAsMilliseconds() const;
 	void Restart(const sf::Vector2f& spawnPos);
+	sf::Vector2f GetNextUp() const;
+	sf::Vector2f GetNextDown() const;
+	sf::Vector2f GetNextLeft() const;
+	sf::Vector2f GetNextRight() const;
+	void UpdateHpBarPos() override;
 private:
-	bool IsEnemyInRange(const sf::Vector2f& enemyPos) const;
 	void WalkAnimation();
 	sf::Clock m_moveClock;
-	float m_hp = 100.f;
-	HpBar m_hpBar;
-	sf::Clock m_attackClock;
 	std::vector <sf::Texture> m_walkTextures;
 	int m_moveCounter = 0;
 };
