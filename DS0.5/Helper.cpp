@@ -82,5 +82,6 @@ namespace character
 	float defaultScale = 0.25f;
 	float defaultHp = 100.f;
 	float moveRange = 10.f;
+	float attackDamage = 20.f;
 }
 

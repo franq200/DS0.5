@@ -8,4 +8,5 @@ void Warrior::Init(const sf::Vector2f& spawnPos)
 	m_moveClock.restart();
 	setPosition(spawnPos);
 	m_hpBar.Init(getPosition(), 100.f);
+	m_attackDamage = 30.f;
 }

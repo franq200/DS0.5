@@ -13,11 +13,13 @@ sf::Vector2f Character::getPosition() const
 
 void Character::Init(sf::Vector2f spawnPos)
 {
+	m_spawnPos = spawnPos;
 	setTexture(textures::character);
 	setScale(character::defaultScale, character::defaultScale);
 	m_walkTextures = { textures::character, textures::walkCharacter1, textures::walkCharacter2, textures::walkCharacter3, textures::walkCharacter4 };
-	setPosition(spawnPos);
+	setPosition(m_spawnPos);
 	m_hpBar.Init(getPosition(), character::defaultHp);
+	m_attackDamage = 20.f;
 }
 
 void Character::MakeMove(const sf::Vector2f& moveValue)
@@ -29,12 +31,17 @@ void Character::MakeMove(const sf::Vector2f& moveValue)
 	m_moveClock.restart();
 }
 
-bool Character::IsAttackSuccessful(const sf::Vector2f& opponentPos)
+bool Character::IsAttackSuccessful(const sf::Vector2f& enemyPos)
 {
-	if (m_attackClock.getElapsedTime().asMilliseconds() >= speed::characterAttackSpeed && sf::Mouse::isButtonPressed(sf::Mouse::Left) && IsOpponentInRange(opponentPos))
+	if (IsOpponentInRange(enemyPos) && sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_isAbleToAttack)
 	{
-		m_attackClock.restart();
+		m_isAbleToAttack = false;
 		return true;
+	}
+	else if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && !m_isAbleToAttack)
+	{
+		m_isAbleToAttack = true;
+		return false;
 	}
 	return false;
 }
@@ -44,10 +51,10 @@ int Character::GetMoveClockAsMilliseconds() const
 	return m_moveClock.getElapsedTime().asMilliseconds();
 }
 
-void Character::Restart(const sf::Vector2f& spawnPos)
+void Character::Restart()
 {
 	m_moveClock.restart();
-	setPosition(spawnPos);
+	setPosition(m_spawnPos);
 	m_hpBar.SetHp(character::defaultHp);
 }
 

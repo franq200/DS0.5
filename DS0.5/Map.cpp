@@ -38,15 +38,9 @@ std::vector<sf::Vector2f> prepareOccupiedPositionsByCharacter(const sf::Vector2f
 	return characterPositions;
 }
 
-void Map::Draw(sf::RenderWindow& window)
+const sf::Vector2f& Map::GetCharacterSpawnPos() const
 {
-	for (int i = 0; i < m_map.size(); ++i)
-	{
-		for (int j = 0; j < m_map[i].size(); ++j)
-		{
-			window.draw(m_map[i][j]);
-		}
-	}
+	return m_characterSpawnPos;
 }
 
 bool Map::IsCollisionWithCharacter(const sf::Vector2f& posAfterMove, const std::vector<CellState>& forbiddenStates)
@@ -68,33 +62,15 @@ bool Map::IsCollisionWithCharacter(const sf::Vector2f& posAfterMove, const std::
 	return false;
 }
 
-const sf::Vector2f& Map::GetCharacterSpawnPos() const
+void Map::DrawMap(sf::RenderWindow& window)
 {
-	return m_spawnPosition;
-}
-
-const std::vector<std::vector<bool>>& Map::GetRawMap() const
-{
-	return m_rawMap;
-}
-
-const sf::Vector2f& Map::GetGoblinSpawnPos() const
-{
-	return sf::Vector2f();
-}
-
-const sf::Vector2f& Map::GetWarriorSpawnPos() const
-{
-	return sf::Vector2f();
-}
-
-const sf::Vector2f& Map::GetDragonSpawnPos() const
-{
-	return sf::Vector2f();
-}
-
-void Map::TryOpenGate(const sf::Vector2f& characterPos, const sf::Vector2f& characterScale)
-{
+	for (int i = 0; i < m_map.size(); ++i)
+	{
+		for (int j = 0; j < m_map[i].size(); ++j)
+		{
+			window.draw(m_map[i][j]);
+		}
+	}
 }
 
 bool Map::IsCollisionWithCell(const sf::Vector2f& cellPos, const sf::Vector2f& characterPos)

@@ -8,4 +8,5 @@ void Goblin::Init(const sf::Vector2f& spawnPos)
 	m_moveClock.restart();
 	setPosition(spawnPos);
 	m_hpBar.Init(getPosition(), 100.f);
+	m_attackDamage = 20.f;
 }

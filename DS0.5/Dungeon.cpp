@@ -3,6 +3,158 @@
 #include <fstream>
 #include <string>
 
+void Dungeon::MapInit()
+{
+	LoadMap();
+	Init();
+}
+
+void Dungeon::Update(Character& character)
+{
+	if (m_isAnyEnemyAlive)
+	{
+		TryOpenGate(character.getPosition());
+		AttackCharacter(character);
+		AttackOpponent(character);
+		MakeEnemiesMove(character);
+	}
+}
+
+void Dungeon::Draw(sf::RenderWindow& window)
+{
+	DrawMap(window);
+	if (m_isAnyEnemyAlive)
+	{
+		DrawEnemies(window);
+	}
+}
+
+void Dungeon::Restart()
+{
+	m_goblin.Restart(m_goblinSpawnPos);
+	m_warrior.Restart(m_warriorSpawnPos);
+	m_dragon.Restart(m_dragonSpawnPos);
+	m_isGoblinAlive = true;
+	m_isWarriorAlive = true;
+	m_isDragonAlive = true;
+}
+
+void Dungeon::TryOpenGate(const sf::Vector2f& characterPos)
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+	{
+		for (int x = 0; x < m_map.size(); x++)
+		{
+			for (int y = 0; y < m_map[x].size(); y++)
+			{
+				if (m_map[x][y].GetState() == CellState::Gate && IsCollisionWithCell(m_map[x][y].getPosition(), characterPos))
+				{
+					Open(x, y);
+				}
+			}
+		}
+	}
+}
+
+void Dungeon::AttackCharacter(Character& character)
+{
+	sf::Vector2f characterPos = character.getPosition();
+	if (m_goblin.IsAttackSuccessful(characterPos) && m_isGoblinAlive)
+	{
+		character.LossHp(m_goblin.GetAttackDamage() * character::damageTakenScaling);
+	}
+	else if (m_warrior.IsAttackSuccessful(characterPos) && m_isWarriorAlive)
+	{
+		character.LossHp(m_warrior.GetAttackDamage() * character::damageTakenScaling);
+	}
+	else if (m_dragon.IsAttackSuccessful(characterPos) && m_isDragonAlive)
+	{
+		character.LossHp(m_dragon.GetAttackDamage() * character::damageTakenScaling);
+	}
+}
+
+void Dungeon::AttackOpponent(Character& character)
+{
+	if (character.IsAttackSuccessful(m_goblin.getPosition()) && m_isGoblinAlive)
+	{
+		m_goblin.LossHp(character::attackDamage * character::damageScaling);
+		TryKillGoblin(character);
+	}
+	else if (character.IsAttackSuccessful(m_warrior.getPosition()) && m_isWarriorAlive)
+	{
+		m_warrior.LossHp(character::attackDamage * character::damageScaling);
+		TryKillWarrior(character);
+	}
+	else if (character.IsAttackSuccessful(m_dragon.getPosition()) && m_isDragonAlive)
+	{
+		m_dragon.LossHp(character::attackDamage * character::damageScaling);
+		TryKillDragon(character);
+	}
+}
+
+void Dungeon::MakeEnemiesMove(Character& character)
+{
+	if (m_isGoblinAlive)
+	{
+		m_goblin.MakeMove(character.getPosition(), m_rawMap);
+	}
+	if (m_isWarriorAlive)
+	{
+		m_warrior.MakeMove(character.getPosition(), m_rawMap);
+	}
+	if (m_isDragonAlive)
+	{
+		m_dragon.MakeMove(character.getPosition(), m_rawMap);
+	}
+}
+
+void Dungeon::TryKillGoblin(Character& character)
+{
+	if (m_goblin.IsDead() && m_isGoblinAlive)
+	{
+		m_isGoblinAlive = false;
+		character::damageScaling = 1.3f;
+		character.SetHp(130.f);
+	}
+}
+
+void Dungeon::TryKillWarrior(Character& character)
+{
+	if (m_warrior.IsDead() && m_isWarriorAlive)
+	{
+		m_isWarriorAlive = false;
+		character::damageTakenScaling = 0.8f;
+		character.SetHp(150.f);
+	}
+}
+
+void Dungeon::TryKillDragon(Character& character)
+{
+	if (m_dragon.IsDead() && m_isDragonAlive)
+	{
+		m_isDragonAlive = false;
+	}
+}
+
+void Dungeon::DrawEnemies(sf::RenderWindow& window)
+{
+	if (m_isGoblinAlive)
+	{
+		m_goblin.DrawHpBar(window);
+		window.draw(m_goblin);
+	}
+	if (m_isWarriorAlive)
+	{
+		m_warrior.DrawHpBar(window);
+		window.draw(m_warrior);
+	}
+	if (m_isDragonAlive)
+	{
+		m_dragon.DrawHpBar(window);
+		window.draw(m_dragon);
+	}
+}
+
 void Dungeon::LoadMap()
 {
 	std::ifstream file;
@@ -34,7 +186,7 @@ void Dungeon::LoadMap()
 			{
 				row.push_back(Cell({ size::cellSize, size::cellSize }, { i * size::cellSize / 2, m_map.size() * size::cellSize }, CellState::Empty));
 				rawRow.push_back(true);
-				m_spawnPosition = { i * size::cellSize / 2, m_map.size() * size::cellSize };
+				m_characterSpawnPos = { i * size::cellSize / 2, m_map.size() * size::cellSize };
 			}
 			else if (line[i] == 'G')
 			{
@@ -65,33 +217,11 @@ void Dungeon::LoadMap()
 	}
 }
 
-const sf::Vector2f& Dungeon::GetGoblinSpawnPos() const
+void Dungeon::Init()
 {
-	return m_goblinSpawnPos;
-}
-
-const sf::Vector2f& Dungeon::GetWarriorSpawnPos() const
-{
-	return m_warriorSpawnPos;
-}
-
-const sf::Vector2f& Dungeon::GetDragonSpawnPos() const
-{
-	return m_dragonSpawnPos;
-}
-
-void Dungeon::TryOpenGate(const sf::Vector2f& characterPos, const sf::Vector2f& characterScale)
-{
-	for (int x = 0; x < m_map.size(); x++)
-	{
-		for (int y = 0; y < m_map[x].size(); y++)
-		{
-			if (IsCollisionWithCell(m_map[x][y].getPosition(), characterPos))
-			{
-				Open(x, y);
-			}
-		}
-	}
+	m_goblin.Init(m_goblinSpawnPos);
+	m_warrior.Init(m_warriorSpawnPos);
+	m_dragon.Init(m_dragonSpawnPos);
 }
 
 void Dungeon::Open(int x, int y)

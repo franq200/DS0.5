@@ -6,20 +6,15 @@ m_state(state)
 	setSize(size);
 	setPosition(pos);
 
-	if (state == CellState::Empty) // switch case
+	switch (state)
 	{
+	case CellState::Empty:
 		setFillColor(sf::Color::Green);
-	}
-	else if (state == CellState::Filled)
-	{
+	case CellState::Filled:
 		setFillColor(sf::Color::Red);
-	}
-	else if (state == CellState::Teleport)
-	{
+	case CellState::Teleport:
 		setFillColor(sf::Color::Blue);
-	}
-	else if (state == CellState::Gate)
-	{
+	case CellState::Gate:
 		setFillColor(sf::Color::Yellow);
 	}
 }

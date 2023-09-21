@@ -8,4 +8,5 @@ void Dragon::Init(const sf::Vector2f& spawnPos)
 	m_moveClock.restart();
 	setPosition(spawnPos);
 	m_hpBar.Init(getPosition(), 250.f);
+	m_attackDamage = 60.f;
 }

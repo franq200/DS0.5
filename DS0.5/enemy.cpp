@@ -1,9 +1,9 @@
 #include "enemy.h"
 #include "Helper.h"
 
-bool Enemy::IsAttackSuccessful(const sf::Vector2f& opponentPos)
+bool Enemy::IsAttackSuccessful(const sf::Vector2f& characterPos)
 {
-	if (IsOpponentInRange(opponentPos))
+	if (IsOpponentInRange(characterPos))
 	{
 		if (!m_isAttackClockRestarted)
 		{
@@ -62,4 +62,9 @@ void Enemy::Restart(sf::Vector2f spawnPos)
 void Enemy::UpdateHpBarPos()
 {
 	m_hpBar.SetPosition(getPosition());
+}
+
+float Enemy::GetAttackDamage() const
+{
+	return m_attackDamage;
 }

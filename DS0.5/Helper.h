@@ -55,4 +55,5 @@ namespace character
 	extern float defaultScale;
 	extern float defaultHp;
 	extern float moveRange;
+	extern float attackDamage;
 }

@@ -10,24 +10,14 @@ void Game::Init()
 	m_window.create(sf::VideoMode(size::windowSizeX, size::windowSizeY), "SFML works!");
 	LoadTextures();
 	LoadMaps();
-	CharactersInit();
+	m_character.Init(m_maps[static_cast<int>(MapStates::village)]->GetCharacterSpawnPos());
 }
 
 void Game::Update()
 {
 	while (m_window.isOpen())
 	{
-		if (m_currentMap == MapStates::dungeon)
-		{
-			TryOpenGate();
-			if (m_isWarriorAlive || m_isGoblinAlive || m_isDragonAlive)
-			{
-				TryDeleteEnemies();
-				MakeEnemiesMove();
-				TryAttackWithCharacter();
-				TryLossHp();
-			}
-		}
+		m_maps[static_cast<int>(m_currentMap)].get()->Update(m_character);
 		Events();
 		TryKillCharacter();
 		TryMoveCharacter();
@@ -64,16 +54,8 @@ void Game::LoadMaps()
 	m_maps[1] = std::make_unique<Dungeon>();
 	for (int i = 0; i < m_maps.size(); i++)
 	{
-		m_maps[i]->LoadMap();
+		m_maps[i]->MapInit();
 	}
-}
-
-void Game::CharactersInit()
-{
-	m_character.Init(m_maps[static_cast<int>(MapStates::village)]->GetCharacterSpawnPos());
-	m_goblin.Init(m_maps[static_cast<int>(MapStates::dungeon)]->GetGoblinSpawnPos());
-	m_warrior.Init(m_maps[static_cast<int>(MapStates::dungeon)]->GetWarriorSpawnPos());
-	m_dragon.Init(m_maps[static_cast<int>(MapStates::dungeon)]->GetDragonSpawnPos());
 }
 
 void Game::Events()
@@ -90,25 +72,7 @@ void Game::Draw()
 {
 	m_window.clear();
 	m_maps[static_cast<int>(m_currentMap)]->Draw(m_window);
-	if (m_currentMap == MapStates::dungeon)
-	{
-		if (m_isGoblinAlive)
-		{
-			m_goblin.DrawHpBar(m_window);
-			m_window.draw(m_goblin);
-		}
-		if (m_isWarriorAlive)
-		{
-			m_warrior.DrawHpBar(m_window);
-			m_window.draw(m_warrior);
-		}
-		if (m_isDragonAlive)
-		{
-			m_dragon.DrawHpBar(m_window);
-			m_window.draw(m_dragon);
-		}
-	}
-	m_character.DrawHpBar(m_window); 
+	m_character.DrawHpBar(m_window);
 	m_window.draw(m_character);
 	m_window.display();
 }
@@ -160,22 +124,6 @@ void Game::TryChangeMap()
 	}
 }
 
-void Game::TryAttackWithCharacter()
-{
-	if (m_character.IsAttackSuccessful(m_goblin.getPosition()) && m_isGoblinAlive)
-	{
-		m_goblin.LossHp(20.f);
-	}
-	if (m_character.IsAttackSuccessful(m_warrior.getPosition()) && m_isWarriorAlive)
-	{
-		m_warrior.LossHp(20.f);
-	}
-	if (m_character.IsAttackSuccessful(m_dragon.getPosition()) && m_isDragonAlive)
-	{
-		m_dragon.LossHp(20.f);
-	}
-}
-
 void Game::TryKillCharacter()
 {
 	if (m_character.IsDead())
@@ -184,74 +132,14 @@ void Game::TryKillCharacter()
 	}
 }
 
-void Game::TryLossHp()
-{
-	if (m_warrior.IsAttackSuccessful(m_character.getPosition()) && m_isWarriorAlive)
-	{
-		m_character.LossHp(30.f);
-	}
-	if (m_goblin.IsAttackSuccessful(m_character.getPosition()) && m_isGoblinAlive)
-	{
-		m_character.LossHp(20.f);
-	}
-	if (m_dragon.IsAttackSuccessful(m_character.getPosition()) && m_isDragonAlive)
-	{
-		m_character.LossHp(60.f);
-	}
-}
-
-void Game::MakeEnemiesMove()
-{
-	if (m_isGoblinAlive)
-	{
-		m_goblin.MakeMove(m_character.getPosition(), m_maps[static_cast<int>(m_currentMap)]->GetRawMap());
-	}
-	if (m_isWarriorAlive)
-	{
-		m_warrior.MakeMove(m_character.getPosition(), m_maps[static_cast<int>(m_currentMap)]->GetRawMap());
-	}
-	if (m_isDragonAlive)
-	{
-		m_dragon.MakeMove(m_character.getPosition(), m_maps[static_cast<int>(m_currentMap)]->GetRawMap());
-	}
-}
-
-void Game::TryDeleteEnemies()
-{
-	if (m_goblin.IsDead() && m_isGoblinAlive)
-	{
-		m_isGoblinAlive = false;
-		character::damageScaling = 1.3f;
-		m_character.SetHp(130.f);
-	}
-	if (m_warrior.IsDead() && m_isWarriorAlive)
-	{
-		m_isWarriorAlive = false;
-		character::damageTakenScaling = 0.8f;
-		m_character.SetHp(160.f);
-	}
-	if (m_dragon.IsDead() && m_isDragonAlive)
-	{
-		m_isDragonAlive = false;
-	}
-}
-
-void Game::TryOpenGate()
-{
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E) && m_currentMap == MapStates::dungeon)
-	{
-		m_maps[static_cast<int>(m_currentMap)]->TryOpenGate(m_character.getPosition(), m_character.getScale());
-	}
-}
-
 
 void Game::Restart()
 {
-	auto* dungeonMap = dynamic_cast<Dungeon*>(m_maps[static_cast<int>(MapStates::dungeon)].get());
-	m_character.Restart(m_maps[static_cast<int>(MapStates::village)]->GetCharacterSpawnPos());
-	m_goblin.Restart(dungeonMap->GetGoblinSpawnPos());
-	m_warrior.Restart(m_maps[static_cast<int>(MapStates::dungeon)]->GetWarriorSpawnPos());
-	m_isGoblinAlive = true;
-	m_isWarriorAlive = true;
+	//auto* dungeonMap = dynamic_cast<Dungeon*>(m_maps[static_cast<int>(MapStates::dungeon)].get());
+	m_character.Restart();
+	for (int i = 0; i < m_maps.size(); i++)
+	{
+		m_maps[i].get()->Restart();
+	}
 	m_currentMap = MapStates::village;
 }

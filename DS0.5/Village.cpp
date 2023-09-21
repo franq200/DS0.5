@@ -2,6 +2,25 @@
 #include <fstream>
 #include <string>
 
+void Village::MapInit()
+{
+	LoadMap();
+	Init();
+}
+
+void Village::Update(Character& character)
+{
+}
+
+void Village::Draw(sf::RenderWindow& window)
+{
+	DrawMap(window);
+}
+
+void Village::Restart()
+{
+}
+
 void Village::LoadMap()
 {
 	std::ifstream file;
@@ -30,13 +49,13 @@ void Village::LoadMap()
 			{
 				row.push_back(Cell({ cellWidth, cellHeight }, { i * cellWidth / 2, m_map.size() * cellHeight }, CellState::Empty));
 				rawRow.push_back(true);
-				m_spawnPosition = { i * cellWidth / 2, m_map.size() * cellHeight };
+				m_characterSpawnPos = { i * cellWidth / 2, m_map.size() * cellHeight };
 			}
 			else if (line[i] == 'M')
 			{
 				row.push_back(Cell({ cellWidth, cellHeight }, { i * cellWidth / 2, m_map.size() * cellHeight }, CellState::Empty));
 				rawRow.push_back(true);
-				m_spawnPosition = { i * cellWidth / 2, m_map.size() * cellHeight };
+				m_characterSpawnPos = { i * cellWidth / 2, m_map.size() * cellHeight };
 			}
 			else if (line[i] == 'D')
 			{
@@ -48,4 +67,8 @@ void Village::LoadMap()
 		m_map.push_back(row);
 		m_rawMap.push_back(rawRow);
 	}
+}
+
+void Village::Init()
+{
 }
