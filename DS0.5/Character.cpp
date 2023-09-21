@@ -87,6 +87,11 @@ void Character::UpdateHpBarPos()
 	m_hpBar.SetPosition(getPosition());
 }
 
+std::vector<sf::Vector2f> Character::GetEveryPossibleMovement() const
+{
+	return { GetNextRight(), GetNextLeft(), GetNextUp(), GetNextDown()};
+}
+
 void Character::Rotate(const sf::Vector2f& moveValue)
 {
 	if (moveValue.x != 0)

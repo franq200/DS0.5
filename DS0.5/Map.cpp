@@ -1,5 +1,4 @@
 #include "Map.h"
-#include "Helper.h"
 
 bool IsOccupiedDownSquare(const sf::Vector2f& posAfterMove)
 {
@@ -43,7 +42,7 @@ const sf::Vector2f& Map::GetCharacterSpawnPos() const
 	return m_characterSpawnPos;
 }
 
-bool Map::IsCollisionWithCharacter(const sf::Vector2f& posAfterMove, const std::vector<CellState>& forbiddenStates)
+std::optional<std::pair<float, float>> Map::GetCollisionSquare(const sf::Vector2f& posAfterMove, const std::vector<CellState>& forbiddenStates)
 {
 	auto [xInt, yInt] = position::GetMapIndexesFromPosition({ posAfterMove.x, posAfterMove.y });
 	float x = static_cast<float>(xInt);
@@ -56,10 +55,14 @@ bool Map::IsCollisionWithCharacter(const sf::Vector2f& posAfterMove, const std::
 		CellState cellState = m_map[y][x].GetState();
 		if (std::any_of(forbiddenStates.begin(), forbiddenStates.end(), [cellState](auto state) {return cellState == state; }))
 		{
-			return IsCollisionWithCell({x * size::cellSize, y * size::cellSize}, posAfterMove);
+			bool isCollision = IsCollisionWithCell({x * size::cellSize, y * size::cellSize}, posAfterMove);
+			if (isCollision)
+			{
+				return std::make_optional < std::pair<float, float>>(x, y);
+			}
 		}
 	}
-	return false;
+	return std::nullopt;
 }
 
 void Map::DrawMap(sf::RenderWindow& window)

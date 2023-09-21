@@ -1,9 +1,10 @@
 #include "enemy.h"
 #include "Helper.h"
+#include "Character.h"
 
-bool Enemy::IsAttackSuccessful(const sf::Vector2f& characterPos)
+bool Enemy::Attack(Character& character)
 {
-	if (IsOpponentInRange(characterPos))
+	if (IsOpponentInRange(character.getPosition()))
 	{
 		if (!m_isAttackClockRestarted)
 		{

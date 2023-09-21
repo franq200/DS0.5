@@ -1,16 +1,16 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "AStar.h"
-#include "HpBar.h"
 #include "Fightable.h"
 #include "Moveable.h"
-#include "Character.h"
+
+class Character;
 
 class Enemy : public Fightable, public Moveable
 {
 public:
 	virtual void Init(const sf::Vector2f& spawnPos) = 0;
-	bool IsAttackSuccessful(const sf::Vector2f& characterPos);
+	bool Attack(Character& character);
 	void MakeMove(const sf::Vector2f& characterPos, const std::vector<std::vector<bool>>& map);
 	void Restart(sf::Vector2f spawnPos);
 	void UpdateHpBarPos() override;

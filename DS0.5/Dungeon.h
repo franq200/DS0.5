@@ -1,9 +1,10 @@
 #pragma once
 #include "Map.h"
-#include "Character.h"
 #include "Goblin.h"
 #include "Dragon.h"
 #include "Warrior.h"
+
+class Character;
 
 class Dungeon : public Map
 {
@@ -13,10 +14,10 @@ public:
 	void Draw(sf::RenderWindow& window) override;
 	void Restart() override;
 private:
-	void TryOpenGate(const sf::Vector2f& characterPos);
+	void TryOpenGate(const std::vector<sf::Vector2f>& characterPositions);
 	void AttackCharacter(Character& character);
 	void AttackOpponent(Character& character);
-	void MakeEnemiesMove(Character& character);
+	void MakeEnemiesMove(const sf::Vector2f& characterPos);
 	void TryKillGoblin(Character& character);
 	void TryKillWarrior(Character& character);
 	void TryKillDragon(Character& character);

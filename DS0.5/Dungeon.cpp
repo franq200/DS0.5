@@ -13,10 +13,10 @@ void Dungeon::Update(Character& character)
 {
 	if (m_isAnyEnemyAlive)
 	{
-		TryOpenGate(character.getPosition());
+		TryOpenGate(character.GetEveryPossibleMovement());
 		AttackCharacter(character);
 		AttackOpponent(character);
-		MakeEnemiesMove(character);
+		MakeEnemiesMove(character.getPosition());
 	}
 }
 
@@ -39,18 +39,17 @@ void Dungeon::Restart()
 	m_isDragonAlive = true;
 }
 
-void Dungeon::TryOpenGate(const sf::Vector2f& characterPos)
+void Dungeon::TryOpenGate(const std::vector<sf::Vector2f>& characterPositions)
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
 	{
-		for (int x = 0; x < m_map.size(); x++)
+		for (auto nextPos : characterPositions)
 		{
-			for (int y = 0; y < m_map[x].size(); y++)
+			if (auto collisionSquare = GetCollisionSquare(nextPos, { CellState::Gate }))
 			{
-				if (m_map[x][y].GetState() == CellState::Gate && IsCollisionWithCell(m_map[x][y].getPosition(), characterPos))
-				{
-					Open(x, y);
-				}
+				auto [x, y] = collisionSquare.value();
+				Open(y, x);
+				break;
 			}
 		}
 	}
@@ -59,15 +58,15 @@ void Dungeon::TryOpenGate(const sf::Vector2f& characterPos)
 void Dungeon::AttackCharacter(Character& character)
 {
 	sf::Vector2f characterPos = character.getPosition();
-	if (m_goblin.IsAttackSuccessful(characterPos) && m_isGoblinAlive)
+	if (m_goblin.Attack(character) && m_isGoblinAlive)
 	{
 		character.LossHp(m_goblin.GetAttackDamage() * character::damageTakenScaling);
 	}
-	else if (m_warrior.IsAttackSuccessful(characterPos) && m_isWarriorAlive)
+	else if (m_warrior.Attack(character) && m_isWarriorAlive)
 	{
 		character.LossHp(m_warrior.GetAttackDamage() * character::damageTakenScaling);
 	}
-	else if (m_dragon.IsAttackSuccessful(characterPos) && m_isDragonAlive)
+	else if (m_dragon.Attack(character) && m_isDragonAlive)
 	{
 		character.LossHp(m_dragon.GetAttackDamage() * character::damageTakenScaling);
 	}
@@ -92,19 +91,19 @@ void Dungeon::AttackOpponent(Character& character)
 	}
 }
 
-void Dungeon::MakeEnemiesMove(Character& character)
+void Dungeon::MakeEnemiesMove(const sf::Vector2f& characterPos)
 {
 	if (m_isGoblinAlive)
 	{
-		m_goblin.MakeMove(character.getPosition(), m_rawMap);
+		m_goblin.MakeMove(characterPos, m_rawMap);
 	}
 	if (m_isWarriorAlive)
 	{
-		m_warrior.MakeMove(character.getPosition(), m_rawMap);
+		m_warrior.MakeMove(characterPos, m_rawMap);
 	}
 	if (m_isDragonAlive)
 	{
-		m_dragon.MakeMove(character.getPosition(), m_rawMap);
+		m_dragon.MakeMove(characterPos, m_rawMap);
 	}
 }
 

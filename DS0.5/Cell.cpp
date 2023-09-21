@@ -10,12 +10,16 @@ m_state(state)
 	{
 	case CellState::Empty:
 		setFillColor(sf::Color::Green);
+		break;
 	case CellState::Filled:
 		setFillColor(sf::Color::Red);
+		break;
 	case CellState::Teleport:
 		setFillColor(sf::Color::Blue);
+		break;
 	case CellState::Gate:
 		setFillColor(sf::Color::Yellow);
+		break;
 	}
 }
 

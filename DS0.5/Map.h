@@ -1,8 +1,11 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <optional>
 #include "Cell.h"
-#include "Character.h"
+#include "Helper.h"
+
+class Character;
 
 class Map
 {
@@ -12,7 +15,7 @@ public:
 	virtual void Draw(sf::RenderWindow& window) = 0;
 	virtual void Restart() = 0;
 	const sf::Vector2f& GetCharacterSpawnPos() const;
-	bool IsCollisionWithCharacter(const sf::Vector2f& posAfterMove, const std::vector<CellState>& forbiddenStates);
+	std::optional<std::pair<float, float>> GetCollisionSquare(const sf::Vector2f& posAfterMove, const std::vector<CellState>& forbiddenStates);
 protected:
 	virtual void LoadMap() = 0;
 	virtual void Init() = 0;

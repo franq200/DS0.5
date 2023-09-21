@@ -1,9 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "HpBar.h"
 #include "Moveable.h"
 #include "Fightable.h"
-#include "enemy.h"
+
+class Enemy;
 
 class Character : public Moveable, public Fightable
 {
@@ -19,6 +19,7 @@ public:
 	sf::Vector2f GetNextLeft() const;
 	sf::Vector2f GetNextRight() const;
 	void UpdateHpBarPos() override;
+	std::vector<sf::Vector2f> GetEveryPossibleMovement() const;
 private:
 	void Rotate(const sf::Vector2f& moveValue);
 	void WalkAnimation();
