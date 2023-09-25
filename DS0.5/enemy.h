@@ -10,12 +10,14 @@ class Enemy : public Fightable, public Moveable
 {
 public:
 	virtual void Init(const sf::Vector2f& spawnPos) = 0;
-	bool Attack(Character& character);
+	virtual void Restart() = 0;
+	void TryKill(Character& character);
+	void Attack(Character& character);
 	void MakeMove(const sf::Vector2f& characterPos, const std::vector<std::vector<bool>>& map);
-	void Restart(sf::Vector2f spawnPos);
 	void UpdateHpBarPos() override;
-	float GetAttackDamage() const;
 protected:
+	virtual void Kill(Character& character) = 0;
+	sf::Vector2f m_spawnPos;
 	sf::Clock m_moveClock;
 	int m_movesCounter = 0;
 	std::vector<sf::Vector2f> m_path;

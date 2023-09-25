@@ -1,5 +1,6 @@
 #include "Character.h"
 #include "Helper.h"
+#include "enemy.h"
 
 sf::Vector2f Character::getPosition() const
 {
@@ -31,19 +32,18 @@ void Character::MakeMove(const sf::Vector2f& moveValue)
 	m_moveClock.restart();
 }
 
-bool Character::IsAttackSuccessful(const sf::Vector2f& enemyPos)
+void Character::Attack(Enemy& enemy)
 {
-	if (IsOpponentInRange(enemyPos) && sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_isAbleToAttack)
+	if (IsOpponentInRange(enemy.getPosition()) && sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_isAbleToAttack)
 	{
 		m_isAbleToAttack = false;
-		return true;
+		enemy.LossHp(m_attackDamage);
+		enemy.TryKill(*this);
 	}
 	else if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && !m_isAbleToAttack)
 	{
 		m_isAbleToAttack = true;
-		return false;
 	}
-	return false;
 }
 
 int Character::GetMoveClockAsMilliseconds() const

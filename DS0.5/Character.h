@@ -11,7 +11,7 @@ public:
 	sf::Vector2f getPosition() const;
 	void Init(sf::Vector2f spawnPos);
 	void MakeMove(const sf::Vector2f& moveValue);
-	bool IsAttackSuccessful(const sf::Vector2f& enemyPos);
+	void Attack(Enemy& enemy);
 	int GetMoveClockAsMilliseconds() const;
 	void Restart();
 	sf::Vector2f GetNextUp() const;

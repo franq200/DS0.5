@@ -27,6 +27,13 @@ namespace speed
 	float characterAttackSpeed = 300.f;
 }
 
+namespace enemy
+{
+	float defaultGoblinHp = 100.f;
+	float defaultWarriorHp = 110.f;
+	float defaultDragonHp = 250.f;
+}
+
 namespace position
 {
 	std::pair<std::size_t, std::size_t> GetMapIndexesFromPosition(const sf::Vector2f& pos)

@@ -28,6 +28,13 @@ namespace speed
 	extern float characterAttackSpeed;
 }
 
+namespace enemy
+{
+	extern float defaultGoblinHp;
+	extern float defaultWarriorHp;
+	extern float defaultDragonHp;
+}
+
 namespace position
 {
 	std::pair<std::size_t, std::size_t> GetMapIndexesFromPosition(const sf::Vector2f&);

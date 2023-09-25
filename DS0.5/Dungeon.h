@@ -16,25 +16,19 @@ public:
 private:
 	void TryOpenGate(const std::vector<sf::Vector2f>& characterPositions);
 	void AttackCharacter(Character& character);
-	void AttackOpponent(Character& character);
+	void AttackOpponents(Character& character);
 	void MakeEnemiesMove(const sf::Vector2f& characterPos);
-	void TryKillGoblin(Character& character);
-	void TryKillWarrior(Character& character);
-	void TryKillDragon(Character& character);
 	void DrawEnemies(sf::RenderWindow& window);
 	void LoadMap() override;
 	void Init() override;
 	void Open(int x, int y);
 
+	std::vector<std::unique_ptr<Enemy>> m_enemies;
 	sf::Vector2f m_goblinSpawnPos;
 	sf::Vector2f m_warriorSpawnPos;
 	sf::Vector2f m_dragonSpawnPos;
-	Goblin m_goblin;
-	Warrior m_warrior;
-	Dragon m_dragon;
-	bool m_isGoblinAlive = true;
-	bool m_isWarriorAlive = true;
-	bool m_isDragonAlive = true;
-	bool m_isAnyEnemyAlive = true;
+	//Goblin m_goblin;
+	//Warrior m_warrior;
+	//Dragon m_dragon;
 };
 

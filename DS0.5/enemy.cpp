@@ -2,7 +2,15 @@
 #include "Helper.h"
 #include "Character.h"
 
-bool Enemy::Attack(Character& character)
+void Enemy::TryKill(Character& character)
+{
+	if (IsDead())
+	{
+		Kill(character);
+	}
+}
+
+void Enemy::Attack(Character& character)
 {
 	if (IsOpponentInRange(character.getPosition()))
 	{
@@ -10,19 +18,17 @@ bool Enemy::Attack(Character& character)
 		{
 			m_attackClock.restart();
 			m_isAttackClockRestarted = true;
-			return false;
 		}
 		if (m_attackClock.getElapsedTime().asMilliseconds() >= speed::enemyAttackSpeed)
 		{
 			m_attackClock.restart();
-			return true;
+			character.LossHp(m_attackDamage * character::damageTakenScaling);
 		}
 	}
 	else if (m_isAttackClockRestarted)
 	{
 		m_isAttackClockRestarted = false;
 	}
-	return false;
 }
 
 void Enemy::MakeMove(const sf::Vector2f& characterPos, const std::vector<std::vector<bool>>& map)
@@ -52,20 +58,7 @@ void Enemy::MakeMove(const sf::Vector2f& characterPos, const std::vector<std::ve
 	}
 }
 
-void Enemy::Restart(sf::Vector2f spawnPos)
-{
-	m_moveClock.restart();
-	setPosition(spawnPos);
-	m_hpBar.ChangeHpLevel();
-	m_movesCounter = 0;
-}
-
 void Enemy::UpdateHpBarPos()
 {
 	m_hpBar.SetPosition(getPosition());
-}
-
-float Enemy::GetAttackDamage() const
-{
-	return m_attackDamage;
 }
