@@ -160,7 +160,14 @@ namespace
 
 		void Parse(char command, int i)
 		{
-			commands.at(command)->execute(map.size(), i);
+
+			auto commandIt = commands.find(command);
+			if(commandIt != commands.end())
+			{
+				auto [_row, _rawRow] = commandIt->second->execute(map.size(), i);
+				row.emplace_back(_row);
+				rawRow.emplace_back(_rawRow);
+			}
 		}
 		
 		void EndRow()
