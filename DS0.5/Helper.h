@@ -30,9 +30,9 @@ namespace speed
 
 namespace enemy
 {
-	extern float defaultGoblinHp;
-	extern float defaultWarriorHp;
-	extern float defaultDragonHp;
+	extern const float defaultGoblinHp;
+	extern const float defaultWarriorHp;
+	extern const float defaultDragonHp;
 }
 
 namespace position

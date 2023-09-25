@@ -12,6 +12,19 @@ sf::Vector2f Character::getPosition() const
 	return pos;
 }
 
+bool Character::IsAbleToAttack()
+{
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_isAbleToAttack)
+	{
+		return true;
+	}
+	else if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && !m_isAbleToAttack)
+	{
+		m_isAbleToAttack = true;
+		return false;
+	}
+}
+
 void Character::Init(sf::Vector2f spawnPos)
 {
 	m_spawnPos = spawnPos;
@@ -34,15 +47,11 @@ void Character::MakeMove(const sf::Vector2f& moveValue)
 
 void Character::Attack(Enemy& enemy)
 {
-	if (IsOpponentInRange(enemy.getPosition()) && sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_isAbleToAttack)
+	if (IsOpponentInRange(enemy.getPosition()))
 	{
 		m_isAbleToAttack = false;
 		enemy.LossHp(m_attackDamage);
 		enemy.TryKill(*this);
-	}
-	else if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && !m_isAbleToAttack)
-	{
-		m_isAbleToAttack = true;
 	}
 }
 

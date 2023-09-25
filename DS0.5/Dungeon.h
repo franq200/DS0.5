@@ -27,8 +27,5 @@ private:
 	sf::Vector2f m_goblinSpawnPos;
 	sf::Vector2f m_warriorSpawnPos;
 	sf::Vector2f m_dragonSpawnPos;
-	//Goblin m_goblin;
-	//Warrior m_warrior;
-	//Dragon m_dragon;
 };
 

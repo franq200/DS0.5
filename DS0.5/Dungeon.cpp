@@ -3,6 +3,198 @@
 #include "Character.h"
 #include <fstream>
 #include <string>
+#include <map>
+
+namespace
+{
+	sf::Vector2f ConvertMapIndexPositionToPixelPosition(size_t mapSize, int i)
+	{
+		return { i * size::cellSize / 2, mapSize * size::cellSize };
+	}
+
+	struct LineParseResult
+	{
+		Cell cell;
+		bool isMoveableCell;
+	};
+
+	enum class ObjType
+	{
+		Character,
+		Warrior,
+		Goblin,
+		Dragon
+	};
+
+	struct MoveableObjPosition
+	{
+		sf::Vector2f position;
+		ObjType type;
+	};
+
+	class ParserCommand
+	{
+	public:
+		virtual LineParseResult execute(size_t mapSize, int i) = 0;
+	};
+
+	class ParserCommandWithPosition : public ParserCommand
+	{
+	public:
+		virtual MoveableObjPosition GetPosition() const = 0;
+	protected:
+		sf::Vector2f position;
+	};
+
+	class ParserFilledCellCommand : public ParserCommand
+	{
+	public:
+		LineParseResult execute(size_t mapSize, int i) override
+		{
+			return { Cell({ size::cellSize, size::cellSize }, { ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Filled), false };
+		}
+	};
+
+	class ParserEmptyCellCommand : public ParserCommand
+	{
+	public:
+		LineParseResult execute(size_t mapSize, int i) override
+		{
+			return { Cell({ size::cellSize, size::cellSize }, { ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
+		}
+	};
+
+	class ParserGateCellCommand : public ParserCommand
+	{
+	public:
+		LineParseResult execute(size_t mapSize, int i) override
+		{
+			return { Cell({ size::cellSize, size::cellSize }, { ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Gate), false };
+		}
+	};
+
+	class ParserTeleportCellCommand : public ParserCommand
+	{
+	public:
+		LineParseResult execute(size_t mapSize, int i) override
+		{
+			return { Cell({ size::cellSize, size::cellSize }, { ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Teleport), true };
+		}
+	};
+
+	class ParserCharacterCellCommand : public ParserCommandWithPosition
+	{
+	public:
+		LineParseResult execute(size_t mapSize, int i) override
+		{
+			position = ConvertMapIndexPositionToPixelPosition(mapSize, i);
+			return { Cell({ size::cellSize, size::cellSize }, { ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
+		}
+		
+ 		MoveableObjPosition GetPosition() const
+		{
+			return {position, ObjType::Character};
+		}
+	};
+
+	class ParserGoblinCellCommand : public ParserCommandWithPosition
+	{
+	public:
+		LineParseResult execute(size_t mapSize, int i) override
+		{
+			position = ConvertMapIndexPositionToPixelPosition(mapSize, i);
+			return { Cell({ size::cellSize, size::cellSize }, { ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
+		}
+
+		MoveableObjPosition GetPosition() const
+		{
+			return {position, ObjType::Goblin};
+		}
+	};
+
+	class ParserWarriorCellCommand : public ParserCommandWithPosition
+	{
+	public:
+		LineParseResult execute(size_t mapSize, int i) override
+		{
+			position = ConvertMapIndexPositionToPixelPosition(mapSize, i);
+			return { Cell({ size::cellSize, size::cellSize }, { ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
+		}
+
+	 	MoveableObjPosition GetPosition() const
+		{
+			return {position, ObjType::Warrior};
+		}
+	};
+
+	class ParserDragonCellCommand : public ParserCommandWithPosition
+	{
+	public:
+		LineParseResult execute(size_t mapSize, int i) override
+		{
+			position = ConvertMapIndexPositionToPixelPosition(mapSize, i);
+			return { Cell({ size::cellSize, size::cellSize }, { ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
+		}
+
+		MoveableObjPosition GetPosition() const
+		{
+			return {position, ObjType::Dragon};
+		}
+	};
+
+	class Parser
+	{
+	public:
+		Parser(std::vector<std::vector<Cell>>& map, std::vector<std::vector<bool>> rawMap)
+		: map(map), rawMap(rawMap)
+		{
+			commands['1'] = std::make_unique<ParserFilledCellCommand>();
+			commands['0'] = std::make_unique<ParserEmptyCellCommand>();
+			commands['2'] = std::make_unique<ParserGateCellCommand>();
+			commands['V'] = std::make_unique<ParserTeleportCellCommand>();
+			commands['M'] = std::make_unique<ParserCharacterCellCommand>();
+			commands['G'] = std::make_unique<ParserGoblinCellCommand>();
+			commands['W'] = std::make_unique<ParserWarriorCellCommand>();
+			commands['D'] = std::make_unique<ParserDragonCellCommand>();
+		}
+
+		void Parse(char command, int i)
+		{
+			commands.at(command)->execute(map.size(), i);
+		}
+		
+		void EndRow()
+		{
+			map.push_back(row);
+			rawMap.push_back(rawRow);
+
+			row.clear();
+			rawRow.clear();
+		}
+
+		std::vector<MoveableObjPosition> GetPositions() const
+		{
+			std::vector<MoveableObjPosition> results;
+			for(auto&[key, obj] : commands)
+			{
+				if(auto* moveableObj = dynamic_cast<ParserCommandWithPosition*>(obj.get()))
+				{
+					results.emplace_back(moveableObj->GetPosition());
+				}
+			}
+
+			return results;
+		}
+
+	private:
+		std::map<char, std::unique_ptr<ParserCommand>> commands;
+		std::vector<std::vector<Cell>>& map;
+		std::vector<std::vector<bool>>& rawMap;
+		std::vector<Cell> row;
+		std::vector<bool> rawRow;
+	};
+}
+
 
 void Dungeon::MapInit()
 {
@@ -61,11 +253,14 @@ void Dungeon::AttackCharacter(Character& character)
 
 void Dungeon::AttackOpponents(Character& character)
 {
-	for (auto& enemy : m_enemies)
+	if (character.IsAbleToAttack())
 	{
-		if (!enemy->IsDead())
+		for (auto& enemy : m_enemies)
 		{
-			character.Attack(*enemy);
+			if (!enemy->IsDead())
+			{
+				character.Attack(*enemy);
+			}
 		}
 	}
 }
@@ -95,64 +290,42 @@ void Dungeon::DrawEnemies(sf::RenderWindow& window)
 
 void Dungeon::LoadMap()
 {
-	std::ifstream file;
-	file.open("maps\\dungeon1.txt");
+	std::ifstream file("maps\\dungeon1.txt");
 	std::string line;
 
+	Parser parser(m_map, m_rawMap);
 	while (getline(file, line))
 	{
-		std::vector<Cell> row;
-		std::vector<bool> rawRow;
 		for (int i = 0; i < line.size(); ++i)
 		{
-			if (line[i] == '1')
-			{
-				row.push_back(Cell({ size::cellSize, size::cellSize }, { i * size::cellSize / 2, m_map.size() * size::cellSize }, CellState::Filled));
-				rawRow.push_back(false);
-			}
-			else if (line[i] == '0')
-			{
-				row.push_back(Cell({ size::cellSize, size::cellSize }, { i * size::cellSize / 2, m_map.size() * size::cellSize }, CellState::Empty));
-				rawRow.push_back(true);
-			}
-			else if (line[i] == '2')
-			{
-				row.push_back(Cell({ size::cellSize, size::cellSize }, { i * size::cellSize / 2, m_map.size() * size::cellSize }, CellState::Gate));
-				rawRow.push_back(false);
-			}
-			else if (line[i] == 'M')
-			{
-				row.push_back(Cell({ size::cellSize, size::cellSize }, { i * size::cellSize / 2, m_map.size() * size::cellSize }, CellState::Empty));
-				rawRow.push_back(true);
-				m_characterSpawnPos = { i * size::cellSize / 2, m_map.size() * size::cellSize };
-			}
-			else if (line[i] == 'G')
-			{
-				row.push_back(Cell({ size::cellSize, size::cellSize }, { i * size::cellSize / 2, m_map.size() * size::cellSize }, CellState::Empty));
-				rawRow.push_back(true);
-				m_goblinSpawnPos = { i * size::cellSize / 2, m_map.size() * size::cellSize };
-			}
-			else if (line[i] == 'W')
-			{
-				row.push_back(Cell({ size::cellSize, size::cellSize }, { i * size::cellSize / 2, m_map.size() * size::cellSize }, CellState::Empty));
-				rawRow.push_back(true);
-				m_warriorSpawnPos = { i * size::cellSize / 2, m_map.size() * size::cellSize };
-			}
-			else if (line[i] == 'D')
-			{
-				row.push_back(Cell({ size::cellSize, size::cellSize }, { i * size::cellSize / 2, m_map.size() * size::cellSize }, CellState::Empty));
-				rawRow.push_back(true);
-				m_dragonSpawnPos = { i * size::cellSize / 2, m_map.size() * size::cellSize };
-			}
-			else if (line[i] == 'V')
-			{
-				row.push_back(Cell({ size::cellSize, size::cellSize }, { i * size::cellSize / 2, m_map.size() * size::cellSize }, CellState::Teleport));
-				rawRow.push_back(true);
-			}
+			parser.Parse(line[i], i);
 		}
-		m_map.push_back(row);
-		m_rawMap.push_back(rawRow);
+		parser.EndRow();
 	}
+
+	auto positions = parser.GetPositions();
+
+	for(auto& [position, type] : positions)
+	{
+		switch (type)
+		{
+		case ObjType::Character:
+			m_characterSpawnPos = position;
+			break;
+		case ObjType::Warrior:
+			m_warriorSpawnPos = position;
+			break;
+		case ObjType::Goblin:
+			m_goblinSpawnPos = position;
+			break;
+		case ObjType::Dragon:
+			m_dragonSpawnPos = position;
+			break;
+		default:
+			break;
+		}
+	}
+
 }
 
 void Dungeon::Init()

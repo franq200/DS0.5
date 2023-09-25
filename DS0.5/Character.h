@@ -9,6 +9,7 @@ class Character : public Moveable, public Fightable
 {
 public:
 	sf::Vector2f getPosition() const;
+	bool IsAbleToAttack();
 	void Init(sf::Vector2f spawnPos);
 	void MakeMove(const sf::Vector2f& moveValue);
 	void Attack(Enemy& enemy);

@@ -29,9 +29,9 @@ namespace speed
 
 namespace enemy
 {
-	float defaultGoblinHp = 100.f;
-	float defaultWarriorHp = 110.f;
-	float defaultDragonHp = 250.f;
+	const float defaultGoblinHp = 100.f;
+	const float defaultWarriorHp = 110.f;
+	const float defaultDragonHp = 250.f;
 }
 
 namespace position
