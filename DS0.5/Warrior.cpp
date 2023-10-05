@@ -17,7 +17,7 @@ void Warrior::Restart()
 {
 	m_moveClock.restart();
 	setPosition(m_spawnPos);
-	m_hpBar.SetHp(enemy::defaultWarriorHp);
+	m_hpBar.IncreaseMaxHp(enemy::defaultWarriorHp);
 	m_movesCounter = 0;
 }
 

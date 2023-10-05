@@ -22,7 +22,7 @@ void Fightable::DrawHpBar(sf::RenderWindow& window)
 
 void Fightable::SetHp(float newHp)
 {
-	m_hpBar.SetHp(newHp);
+	m_hpBar.IncreaseMaxHp(newHp);
 }
 
 bool Fightable::IsOpponentInRange(const sf::Vector2f& opponentPos)

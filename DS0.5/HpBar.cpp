@@ -29,7 +29,7 @@ void HpBar::ChangeHpLevel()
 void HpBar::Rescale()
 {
 	m_hpBar.setScale(m_hp / 100.f, 1.f);
-	m_hpBarBackground.setScale(m_hp / 100.f, 1.f);
+	m_hpBarBackground.setSize({ m_hpBar.getSize().x, 16.f});
 }
 
 void HpBar::Draw(sf::RenderWindow& window)
@@ -55,8 +55,8 @@ void HpBar::GainHp(float gainedHp)
 	ChangeHpLevel();
 }
 
-void HpBar::SetHp(float newHp)
+void HpBar::IncreaseMaxHp(float hpToIncrease)
 {
-	m_hp = newHp;
+	m_hp += hpToIncrease;
 	Rescale();
 }

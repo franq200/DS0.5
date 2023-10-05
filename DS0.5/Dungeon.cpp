@@ -51,7 +51,7 @@ namespace
 	public:
 		LineParseResult execute(size_t mapSize, int i) override
 		{
-			return { Cell({ size::cellSize, size::cellSize }, { ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Filled), false };
+			return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Filled), false };
 		}
 	};
 
@@ -60,7 +60,7 @@ namespace
 	public:
 		LineParseResult execute(size_t mapSize, int i) override
 		{
-			return { Cell({ size::cellSize, size::cellSize }, { ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
+			return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
 		}
 	};
 
@@ -69,7 +69,7 @@ namespace
 	public:
 		LineParseResult execute(size_t mapSize, int i) override
 		{
-			return { Cell({ size::cellSize, size::cellSize }, { ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Gate), false };
+			return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Gate), false };
 		}
 	};
 
@@ -78,7 +78,7 @@ namespace
 	public:
 		LineParseResult execute(size_t mapSize, int i) override
 		{
-			return { Cell({ size::cellSize, size::cellSize }, { ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Teleport), true };
+			return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Teleport), true };
 		}
 	};
 
@@ -88,7 +88,7 @@ namespace
 		LineParseResult execute(size_t mapSize, int i) override
 		{
 			position = ConvertMapIndexPositionToPixelPosition(mapSize, i);
-			return { Cell({ size::cellSize, size::cellSize }, { ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
+			return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
 		}
 		
  		MoveableObjPosition GetPosition() const
@@ -103,7 +103,7 @@ namespace
 		LineParseResult execute(size_t mapSize, int i) override
 		{
 			position = ConvertMapIndexPositionToPixelPosition(mapSize, i);
-			return { Cell({ size::cellSize, size::cellSize }, { ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
+			return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
 		}
 
 		MoveableObjPosition GetPosition() const
@@ -118,7 +118,7 @@ namespace
 		LineParseResult execute(size_t mapSize, int i) override
 		{
 			position = ConvertMapIndexPositionToPixelPosition(mapSize, i);
-			return { Cell({ size::cellSize, size::cellSize }, { ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
+			return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
 		}
 
 	 	MoveableObjPosition GetPosition() const
@@ -133,7 +133,7 @@ namespace
 		LineParseResult execute(size_t mapSize, int i) override
 		{
 			position = ConvertMapIndexPositionToPixelPosition(mapSize, i);
-			return { Cell({ size::cellSize, size::cellSize }, { ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
+			return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
 		}
 
 		MoveableObjPosition GetPosition() const
@@ -312,7 +312,7 @@ void Dungeon::LoadMap()
 
 	auto positions = parser.GetPositions();
 
-	for(auto& [position, type] : positions)
+	for (auto& [position, type] : positions)
 	{
 		switch (type)
 		{
@@ -332,7 +332,6 @@ void Dungeon::LoadMap()
 			break;
 		}
 	}
-
 }
 
 void Dungeon::Init()

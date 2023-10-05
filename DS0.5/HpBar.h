@@ -11,7 +11,7 @@ public:
 	bool IsDead();
 	void LossHp(float lostHp);
 	void GainHp(float gainedHp);
-	void SetHp(float newHp);
+	void IncreaseMaxHp(float hpToIncrease);
 private:
 	void Rescale();
 	sf::RectangleShape m_hpBarBackground;

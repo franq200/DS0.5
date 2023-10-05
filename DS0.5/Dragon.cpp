@@ -17,7 +17,7 @@ void Dragon::Restart()
 {
 	m_moveClock.restart();
 	setPosition(m_spawnPos);
-	m_hpBar.SetHp(enemy::defaultDragonHp);
+	m_hpBar.IncreaseMaxHp(enemy::defaultDragonHp);
 	m_movesCounter = 0;
 }
 

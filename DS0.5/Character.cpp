@@ -64,7 +64,7 @@ void Character::Restart()
 {
 	m_moveClock.restart();
 	setPosition(m_spawnPos);
-	m_hpBar.SetHp(character::defaultHp);
+	m_hpBar.IncreaseMaxHp(character::defaultHp);
 }
 
 sf::Vector2f Character::GetNextUp() const

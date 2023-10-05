@@ -1,9 +1,10 @@
 #include "Cell.h"
+#include "Helper.h"
 
-Cell::Cell(const sf::Vector2f& size, const sf::Vector2f& pos, CellState state) :
+Cell::Cell(const sf::Vector2f& pos, CellState state) :
 m_state(state)
 {
-	setSize(size);
+	setSize({size::cellSize, size::cellSize});
 	setPosition(pos);
 
 	switch (state)
