@@ -74,7 +74,7 @@ namespace
 	class Parser
 	{
 	public:
-		Parser(std::vector<std::vector<Cell>>& map, std::vector<std::vector<bool>> rawMap)
+		Parser(std::vector<std::vector<Cell>>& map, std::vector<std::vector<bool>>& rawMap)
 			: map(map), rawMap(rawMap)
 		{
 			commands['1'] = std::make_unique<ParserFilledCellCommand>();
@@ -112,6 +112,7 @@ namespace
 					return moveableObj->GetPosition();
 				}
 			}
+			throw(std::exception("Get Position Error"));
 		}
 
 	private:

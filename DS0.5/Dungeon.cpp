@@ -145,7 +145,7 @@ namespace
 	class Parser
 	{
 	public:
-		Parser(std::vector<std::vector<Cell>>& map, std::vector<std::vector<bool>> rawMap)
+		Parser(std::vector<std::vector<Cell>>& map, std::vector<std::vector<bool>>& rawMap)
 		: map(map), rawMap(rawMap)
 		{
 			commands['1'] = std::make_unique<ParserFilledCellCommand>();
@@ -189,7 +189,6 @@ namespace
 					results.emplace_back(moveableObj->GetPosition());
 				}
 			}
-
 			return results;
 		}
 
