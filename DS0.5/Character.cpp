@@ -23,6 +23,7 @@ bool Character::IsAbleToAttack()
 		m_isAbleToAttack = true;
 		return false;
 	}
+	return false;
 }
 
 void Character::Init(sf::Vector2f spawnPos)

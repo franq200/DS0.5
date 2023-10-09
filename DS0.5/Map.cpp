@@ -52,7 +52,7 @@ std::optional<std::pair<float, float>> Map::GetCollisionSquare(const sf::Vector2
 	
 	for (const auto[x, y] : characterPositions)
 	{ 
-		CellState cellState = m_map[y][x].GetState();
+		CellState cellState = m_map[static_cast<int>(y)][static_cast<int>(x)].GetState();
 		if (std::any_of(forbiddenStates.begin(), forbiddenStates.end(), [cellState](auto state) {return cellState == state; }))
 		{
 			bool isCollision = IsCollisionWithCell({x * size::cellSize, y * size::cellSize}, posAfterMove);

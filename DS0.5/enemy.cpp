@@ -41,7 +41,7 @@ void Enemy::MakeMove(const sf::Vector2f& characterPos, const std::vector<std::ve
 		}
 		if (!m_path.empty())
 		{
-			sf::Vector2f movePos = position::GetPositionFromMapIndexes({ static_cast<float>(m_path[m_path.size() - 1].x), static_cast<float>(m_path[m_path.size() - 1].y) });
+			sf::Vector2f movePos = position::GetPositionFromMapIndexes({ static_cast<size_t>(m_path[m_path.size() - 1].x), static_cast<size_t>(m_path[m_path.size() - 1].y) });
 			setPosition(movePos);
 			UpdateHpBarPos();
 			m_path.pop_back();

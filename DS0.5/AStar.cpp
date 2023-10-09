@@ -2,7 +2,7 @@
 #include "Helper.h"
 #include <cassert>
 
-std::vector<sf::Vector2f> AStar::FindShortestPath(const std::pair<std::size_t, size_t>& characterIndex, const std::pair<std::size_t, size_t>& enemyIndex, const std::vector<std::vector<bool>>& map)
+std::vector<sf::Vector2f> AStar::FindShortestPath(const IndexPosition& characterIndex, const IndexPosition& enemyIndex, const std::vector<std::vector<bool>>& map)
 {
 	m_openList.clear();
 	assert(m_openList.empty());
@@ -39,29 +39,29 @@ std::vector<sf::Vector2f> AStar::FindShortestPath(const std::pair<std::size_t, s
 	return {};
 }
 
-DirectionResult AStar::ChooseDirection(const AStarData& currentData, std::vector<std::vector<AStarData>>& data, const std::pair<std::size_t, size_t>& characterIndex, const std::pair<std::size_t, size_t>& enemyIndex, const std::vector<std::vector<bool>>& map)
+DirectionResult AStar::ChooseDirection(const AStarData& currentData, std::vector<std::vector<AStarData>>& data, const IndexPosition& characterIndex, const IndexPosition& enemyIndex, const std::vector<std::vector<bool>>& map)
 {
-	std::pair<int, int> currentPos = currentData.m_pos;
+	IndexPosition currentPos = currentData.m_pos;
 
-	std::pair<int, int> leftPos = { currentPos.first - 1, currentPos.second };
+	IndexPosition leftPos = { currentPos.first - 1, currentPos.second };
 	if (!CheckEndPos(data, characterIndex, leftPos, currentData, currentPos, map))
 	{
 		return GetResult(data, characterIndex, enemyIndex);
 	}
 
-	std::pair<int, int> rightPos = { currentPos.first + 1, currentPos.second };
+	IndexPosition rightPos = { currentPos.first + 1, currentPos.second };
 	if (!CheckEndPos(data, characterIndex, rightPos, currentData, currentPos, map))
 	{
 		return GetResult(data, characterIndex, enemyIndex);
 	}
 
-	std::pair<int, int> upPos = { currentPos.first, currentPos.second - 1 };
+	IndexPosition upPos = { currentPos.first, currentPos.second - 1 };
 	if (!CheckEndPos(data, characterIndex, upPos, currentData, currentPos, map))
 	{
 		return GetResult(data, characterIndex, enemyIndex);
 	}
 
-	std::pair<int, int> downPos = { currentPos.first, currentPos.second + 1 };
+	IndexPosition downPos = { currentPos.first, currentPos.second + 1 };
 	if (!CheckEndPos(data, characterIndex, downPos, currentData, currentPos, map))
 	{
 		return GetResult(data, characterIndex, enemyIndex);
@@ -69,9 +69,9 @@ DirectionResult AStar::ChooseDirection(const AStarData& currentData, std::vector
 	return std::nullopt;
 }
 
-bool AStar::CheckEndPos(std::vector<std::vector<AStarData>>& data, std::pair<int, int> endPos, std::pair<int, int> movePos, const AStarData& currentData, std::pair<int, int> currentPos, std::vector<std::vector<bool>> map)
+bool AStar::CheckEndPos(std::vector<std::vector<AStarData>>& data, const IndexPosition& endPos, const IndexPosition& movePos, const AStarData& currentData, const IndexPosition& currentPos, const std::vector<std::vector<bool>>& map)
 {
-	if (!(currentPos.first >= data.size()|| currentPos.first < 0 || currentPos.second >= data[0].size() || currentPos.second < 0 || map[currentPos.second][currentPos.first] == false))
+	if (!(currentPos.first >= data.size() || currentPos.first < 0 || currentPos.second >= data[0].size() || currentPos.second < 0 || map[currentPos.second][currentPos.first] == false))
 	{
 		if (movePos == endPos)
 		{
@@ -95,7 +95,7 @@ bool AStar::CheckEndPos(std::vector<std::vector<AStarData>>& data, std::pair<int
 	return true;
 }
 
-std::vector<sf::Vector2f> AStar::GetResult(std::vector<std::vector<AStarData>>& data, std::pair<std::size_t, size_t> characterIndex, std::pair<std::size_t, size_t> enemyIndex)
+std::vector<sf::Vector2f> AStar::GetResult(std::vector<std::vector<AStarData>>& data, const IndexPosition& characterIndex, const IndexPosition& enemyIndex)
 {
 	std::vector<sf::Vector2f> result;
 	auto currentIndex = characterIndex;
