@@ -1,116 +1,126 @@
 #include "Parser.h"
+#include "Helper.h"
 
-namespace
+sf::Vector2f ConvertMapIndexPositionToPixelPosition(size_t mapSize, int i)
 {
-	sf::Vector2f ConvertMapIndexPositionToPixelPosition(size_t mapSize, int i)
+	return { i * size::cellSize / 2, mapSize * size::cellSize };
+}
+
+struct LineParseResult
+{
+	Cell cell;
+	bool isMoveableCell;
+};
+
+class ParserCommand
+{
+public:
+	virtual LineParseResult execute(size_t mapSize, int i) = 0;
+};
+
+class ParserCommandWithPosition : public ParserCommand
+{
+public:
+	virtual MoveableObjPosition GetPosition() const = 0;
+protected:
+	sf::Vector2f position;
+};
+
+class ParserFilledCellCommand : public ParserCommand
+{
+public:
+	LineParseResult execute(size_t mapSize, int i) override
 	{
-		return { i * size::cellSize / 2, mapSize * size::cellSize };
+		return { Cell({ConvertMapIndexPositionToPixelPosition(mapSize, i)}, CellState::Filled), false };
+	}
+};
+
+class ParserEmptyCellCommand : public ParserCommand
+{
+public:
+	LineParseResult execute(size_t mapSize, int i) override
+	{
+		return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
+	}
+};
+
+class ParserGateCellCommand : public ParserCommand
+{
+public:
+	LineParseResult execute(size_t mapSize, int i) override
+	{
+		return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Gate), false };
+	}
+};
+
+class ParserTeleportCellCommand : public ParserCommand
+{
+public:
+	LineParseResult execute(size_t mapSize, int i) override
+	{
+		return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Teleport), true };
+	}
+};
+
+class ParserCharacterCellCommand : public ParserCommandWithPosition
+{
+public:
+	LineParseResult execute(size_t mapSize, int i) override
+	{
+		position = ConvertMapIndexPositionToPixelPosition(mapSize, i);
+		return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
 	}
 
-	class ParserCommandWithPosition : public ParserCommand
+	MoveableObjPosition GetPosition() const
 	{
-	public:
-		virtual MoveableObjPosition GetPosition() const = 0;
-	protected:
-		sf::Vector2f position;
-	};
+		return { position, ObjType::Character };
+	}
+};
 
-	class ParserFilledCellCommand : public ParserCommand
+class ParserGoblinCellCommand : public ParserCommandWithPosition
+{
+public:
+	LineParseResult execute(size_t mapSize, int i) override
 	{
-	public:
-		LineParseResult execute(size_t mapSize, int i) override
-		{
-			return { Cell({ConvertMapIndexPositionToPixelPosition(mapSize, i)}, CellState::Filled), false };
-		}
-	};
+		position = ConvertMapIndexPositionToPixelPosition(mapSize, i);
+		return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
+	}
 
-	class ParserEmptyCellCommand : public ParserCommand
+	MoveableObjPosition GetPosition() const
 	{
-	public:
-		LineParseResult execute(size_t mapSize, int i) override
-		{
-			return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
-		}
-	};
+		return { position, ObjType::Goblin };
+	}
+};
 
-	class ParserGateCellCommand : public ParserCommand
+class ParserWarriorCellCommand : public ParserCommandWithPosition
+{
+public:
+	LineParseResult execute(size_t mapSize, int i) override
 	{
-	public:
-		LineParseResult execute(size_t mapSize, int i) override
-		{
-			return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Gate), false };
-		}
-	};
+		position = ConvertMapIndexPositionToPixelPosition(mapSize, i);
+		return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
+	}
 
-	class ParserTeleportCellCommand : public ParserCommand
+	MoveableObjPosition GetPosition() const
 	{
-	public:
-		LineParseResult execute(size_t mapSize, int i) override
-		{
-			return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Teleport), true };
-		}
-	};
+		return { position, ObjType::Warrior };
+	}
+};
 
-	class ParserCharacterCellCommand : public ParserCommandWithPosition
+class ParserDragonCellCommand : public ParserCommandWithPosition
+{
+public:
+	LineParseResult execute(size_t mapSize, int i) override
 	{
-	public:
-		LineParseResult execute(size_t mapSize, int i) override
-		{
-			position = ConvertMapIndexPositionToPixelPosition(mapSize, i);
-			return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
-		}
+		position = ConvertMapIndexPositionToPixelPosition(mapSize, i);
+		return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
+	}
 
-		MoveableObjPosition GetPosition() const
-		{
-			return { position, ObjType::Character };
-		}
-	};
-
-	class ParserGoblinCellCommand : public ParserCommandWithPosition
+	MoveableObjPosition GetPosition() const
 	{
-	public:
-		LineParseResult execute(size_t mapSize, int i) override
-		{
-			position = ConvertMapIndexPositionToPixelPosition(mapSize, i);
-			return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
-		}
-
-		MoveableObjPosition GetPosition() const
-		{
-			return { position, ObjType::Goblin };
-		}
-	};
-
-	class ParserWarriorCellCommand : public ParserCommandWithPosition
-	{
-	public:
-		LineParseResult execute(size_t mapSize, int i) override
-		{
-			position = ConvertMapIndexPositionToPixelPosition(mapSize, i);
-			return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
-		}
-
-		MoveableObjPosition GetPosition() const
-		{
-			return { position, ObjType::Warrior };
-		}
-	};
-
-	class ParserDragonCellCommand : public ParserCommandWithPosition
-	{
-	public:
-		LineParseResult execute(size_t mapSize, int i) override
-		{
-			position = ConvertMapIndexPositionToPixelPosition(mapSize, i);
-			return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Empty), true };
-		}
-
-		MoveableObjPosition GetPosition() const
-		{
-			return { position, ObjType::Dragon };
-		}
-	};
-}
+		return { position, ObjType::Dragon };
+	}
+};
 
 Parser::Parser(std::vector<std::vector<Cell>>& map, std::vector<std::vector<bool>>& rawMap)
 	: map(map), rawMap(rawMap)
@@ -123,6 +133,10 @@ Parser::Parser(std::vector<std::vector<Cell>>& map, std::vector<std::vector<bool
 	commands['G'] = std::make_unique<ParserGoblinCellCommand>();
 	commands['W'] = std::make_unique<ParserWarriorCellCommand>();
 	commands['D'] = std::make_unique<ParserDragonCellCommand>();
+}
+
+Parser::~Parser()
+{
 }
 
 void Parser::Parse(char command, int i)
@@ -141,7 +155,7 @@ void Parser::EndRow()
 {
 	map.push_back(row);
 	rawMap.push_back(rawRow);
-
+	
 	row.clear();
 	rawRow.clear();
 }

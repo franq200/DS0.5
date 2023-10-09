@@ -1,11 +1,9 @@
 #pragma once
-#include "Map.h"
+#include <map>
+#include <memory>
+#include "Cell.h"
 
-struct LineParseResult
-{
-	Cell cell;
-	bool isMoveableCell;
-};
+class ParserCommand;
 
 enum class ObjType
 {
@@ -21,20 +19,14 @@ struct MoveableObjPosition
 	ObjType type;
 };
 
-class ParserCommand
-{
-public:
-	virtual LineParseResult execute(size_t mapSize, int i) = 0;
-};
-
 class Parser
 {
 public:
 	Parser(std::vector<std::vector<Cell>>& map, std::vector<std::vector<bool>>& rawMap);
+	~Parser();
 	void Parse(char command, int i);
 	void EndRow();
 	std::vector<MoveableObjPosition> GetPositions() const;
-
 private:
 	std::map<char, std::unique_ptr<ParserCommand>> commands;
 	std::vector<std::vector<Cell>>& map;
