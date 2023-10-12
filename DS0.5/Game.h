@@ -4,6 +4,7 @@
 #include "Goblin.h"
 #include "Warrior.h"
 #include "Dragon.h"
+#include "MiniMap.h"
 #include <SFML/Graphics.hpp>
 
 
@@ -19,6 +20,8 @@ public:
 	void Init();
 	void Update();
 private:
+	void ViewInit();
+	void Move(sf::Vector2f moveValue);
 	void Events();
 	void LoadTextures();
 	void LoadMaps();
@@ -26,11 +29,13 @@ private:
 	void TryChangeMap();
 	void TryKillCharacter();
 	void Restart();
+	void DrawObjects();
 	void Draw();
 
 	sf::RenderWindow m_window;
 	Character m_character;
-
+	sf::View m_view;
+	MiniMap m_miniMap;
 	std::vector<std::unique_ptr<Map>> m_maps;
 	MapStates m_currentMap = MapStates::village;
 };

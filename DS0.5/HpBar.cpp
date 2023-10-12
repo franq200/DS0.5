@@ -29,7 +29,7 @@ void HpBar::ChangeHpLevel()
 void HpBar::Rescale()
 {
 	m_hpBar.setScale(m_hp / 100.f, 1.f);
-	m_hpBarBackground.setSize({ m_hpBar.getSize().x, 16.f});
+	m_hpBarBackground.setSize({ m_hpBar.getSize().x * m_hp / 100.f + 4.f, 16.f});
 }
 
 void HpBar::Draw(sf::RenderWindow& window)

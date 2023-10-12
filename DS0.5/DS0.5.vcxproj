@@ -171,6 +171,7 @@
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="HpBar.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MiniMap.cpp" />
     <ClCompile Include="Moveable.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Source.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="Helper.h" />
     <ClInclude Include="HpBar.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="MiniMap.h" />
     <ClInclude Include="Moveable.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="resource.h" />

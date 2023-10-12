@@ -8,6 +8,7 @@
 void Game::Init()
 {
 	m_window.create(sf::VideoMode(size::windowSizeX, size::windowSizeY), "SFML works!");
+	ViewInit();
 	LoadTextures();
 	LoadMaps();
 	m_character.Init(m_maps[static_cast<int>(MapStates::village)]->GetCharacterSpawnPos());
@@ -59,6 +60,21 @@ void Game::LoadMaps()
 	}
 }
 
+void Game::ViewInit()
+{
+	m_view.setSize(static_cast<float>(size::windowSizeX), static_cast<float>(size::windowSizeY));
+	m_view.setCenter(static_cast<float>(size::windowSizeX) / 2, static_cast<float>(size::windowSizeY) / 2);
+
+	m_miniMap.Init();
+}
+
+void Game::Move(sf::Vector2f moveValue)
+{
+	m_character.MakeMove(moveValue);
+	m_view.move(moveValue);
+	m_window.setView(m_view);
+}
+
 void Game::Events()
 {
 	sf::Event event;
@@ -72,9 +88,14 @@ void Game::Events()
 void Game::Draw()
 {
 	m_window.clear();
-	m_maps[static_cast<int>(m_currentMap)]->Draw(m_window);
-	m_character.DrawHpBar(m_window);
-	m_window.draw(m_character);
+	sf::Vector2f characterPos = m_character.getPosition();
+	m_view.setCenter(characterPos.x + size::cellSize, characterPos.y + size::cellSize/2);
+	m_window.setView(m_view);
+	DrawObjects();
+
+	m_miniMap.Update(characterPos);
+	m_miniMap.Draw(m_window);
+	DrawObjects();
 	m_window.display();
 }
 
@@ -89,20 +110,20 @@ void Game::TryMoveCharacter()
 		if (m_character.GetMoveClockAsMilliseconds() >= speed::character)
 		{
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextUp(), { CellState::Filled, CellState::Gate }))
-			{																																																	   
-				m_character.MakeMove({ 0.f, -character::moveRange });
+			{															
+				Move({ 0.f, -character::moveRange });
 			}																																																	   
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextLeft(), { CellState::Filled, CellState::Gate }))
-			{																																																	   																																							  																																									   
-				m_character.MakeMove({ -character::moveRange, 0.f });
+			{															
+				Move({ -character::moveRange, 0.f });
 			}																																																	   
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextDown(), { CellState::Filled, CellState::Gate }))
-			{																																																	   
-				m_character.MakeMove({ 0.f, character::moveRange });
+			{	
+				Move({ 0.f, character::moveRange });
 			}																																																	   
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextRight(), {CellState::Filled, CellState::Gate}))
 			{
-				m_character.MakeMove({ character::moveRange, 0.f });
+				Move({ character::moveRange, 0.f });
 			}
 		}
 	}
@@ -136,7 +157,6 @@ void Game::TryKillCharacter()
 
 void Game::Restart()
 {
-	//auto* dungeonMap = dynamic_cast<Dungeon*>(m_maps[static_cast<int>(MapStates::dungeon)].get());
 	m_character.Restart();
 	for (auto& map : m_maps)
 	{
@@ -144,4 +164,11 @@ void Game::Restart()
 	}
 
 	m_currentMap = MapStates::village;
+}
+
+void Game::DrawObjects()
+{
+	m_maps[static_cast<int>(m_currentMap)]->Draw(m_window);
+	m_character.DrawHpBar(m_window);
+	m_window.draw(m_character);
 }
