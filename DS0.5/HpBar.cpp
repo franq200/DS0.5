@@ -5,13 +5,9 @@ void HpBar::Init(const sf::Vector2f& characterPos, float hp)
 	m_hp = hp;
 	SetPosition(characterPos);
 
-	m_hpBarBackground.setSize({ 50.f, 16.f });
-	m_hpBarBackground.setFillColor(sf::Color(60, 50, 50, 160));
-	m_hpBarBackground.setScale(hp / 100.f, 1.f);
-
 	m_hpBar.setSize({ 46.f, 12.f });
 	m_hpBar.setFillColor(sf::Color(210, 50, 50, 230));
-	m_hpBar.setScale(hp / 100.f, 1.f);
+	m_hpBarBackground.setFillColor(sf::Color(60, 50, 50, 160));
 	Rescale();
 }
 

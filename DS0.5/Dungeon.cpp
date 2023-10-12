@@ -93,7 +93,7 @@ void Dungeon::DrawEnemies(sf::RenderWindow& window)
 	{
 		if (!enemy->IsDead())
 		{
-			enemy->DrawHpBar(window);
+			enemy->Draw(window);
 			window.draw(*enemy);
 		}
 	}

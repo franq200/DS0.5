@@ -15,9 +15,10 @@ bool Fightable::IsDead()
 	return m_hpBar.IsDead();
 }
 
-void Fightable::DrawHpBar(sf::RenderWindow& window)
+void Fightable::Draw(sf::RenderWindow& window)
 {
 	m_hpBar.Draw(window);
+	window.draw(*this);
 }
 
 void Fightable::SetHp(float newHp)

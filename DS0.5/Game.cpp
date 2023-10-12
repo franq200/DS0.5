@@ -72,7 +72,6 @@ void Game::Move(sf::Vector2f moveValue)
 {
 	m_character.MakeMove(moveValue);
 	m_view.move(moveValue);
-	m_window.setView(m_view);
 }
 
 void Game::Events()
@@ -94,7 +93,8 @@ void Game::Draw()
 	DrawObjects();
 
 	m_miniMap.Update(characterPos);
-	m_miniMap.Draw(m_window);
+	m_miniMap.DrawOutline(m_window);
+	m_miniMap.DrawView(m_window);
 	DrawObjects();
 	m_window.display();
 }
@@ -110,17 +110,17 @@ void Game::TryMoveCharacter()
 		if (m_character.GetMoveClockAsMilliseconds() >= speed::character)
 		{
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextUp(), { CellState::Filled, CellState::Gate }))
-			{															
+			{
 				Move({ 0.f, -character::moveRange });
-			}																																																	   
+			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextLeft(), { CellState::Filled, CellState::Gate }))
-			{															
+			{
 				Move({ -character::moveRange, 0.f });
-			}																																																	   
+			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextDown(), { CellState::Filled, CellState::Gate }))
-			{	
+			{
 				Move({ 0.f, character::moveRange });
-			}																																																	   
+			}
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextRight(), {CellState::Filled, CellState::Gate}))
 			{
 				Move({ character::moveRange, 0.f });
@@ -169,6 +169,5 @@ void Game::Restart()
 void Game::DrawObjects()
 {
 	m_maps[static_cast<int>(m_currentMap)]->Draw(m_window);
-	m_character.DrawHpBar(m_window);
-	m_window.draw(m_character);
+	m_character.Draw(m_window);
 }

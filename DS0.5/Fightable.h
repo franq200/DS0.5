@@ -8,7 +8,7 @@ public:
 	void LossHp(float lostHp);
 	void GainHp(float gainedHp);
 	bool IsDead();
-	void DrawHpBar(sf::RenderWindow& window);
+	void Draw(sf::RenderWindow& window);
 	void SetHp(float newHp);
 	virtual void UpdateHpBarPos() = 0;
 protected:
