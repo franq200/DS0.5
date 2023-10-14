@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "AStar.h"
 #include "Fightable.h"
 #include "Moveable.h"
 
@@ -20,10 +19,8 @@ protected:
 	sf::Vector2f m_spawnPos;
 	sf::Clock m_moveClock;
 	int m_movesCounter = 0;
-	std::vector<sf::Vector2f> m_path;
 	std::vector<sf::Vector2f> m_pathToCharacter;
 	bool m_isAttackClockRestarted = false;
 	float m_attackDamage = 0;
 private:
-	AStar m_aStar;
 };

@@ -17,7 +17,7 @@ void HpBar::SetPosition(const sf::Vector2f& characterPos)
 	m_hpBar.setPosition(characterPos.x + 2, characterPos.y + 52.f);
 }
 
-void HpBar::ChangeHpLevel()
+void HpBar::RescaleHp()
 {
 	m_hpBar.setScale(m_hp / 100.f, 1.f);
 }
@@ -42,17 +42,23 @@ bool HpBar::IsDead()
 void HpBar::LossHp(float lostHp)
 {
 	m_hp -= lostHp;
-	ChangeHpLevel();
+	RescaleHp();
 }
 
 void HpBar::GainHp(float gainedHp)
 {
 	m_hp += gainedHp;
-	ChangeHpLevel();
+	RescaleHp();
 }
 
 void HpBar::IncreaseMaxHp(float hpToIncrease)
 {
 	m_hp += hpToIncrease;
+	Rescale();
+}
+
+void HpBar::SetHp(float newHp)
+{
+	m_hp = newHp;
 	Rescale();
 }

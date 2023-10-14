@@ -37,10 +37,6 @@ void Game::LoadTextures()
 	isLoaded &= textures::walkCharacter3.loadFromFile("textures\\characters\\4.png");
 	isLoaded &= textures::walkCharacter4.loadFromFile("textures\\characters\\5.png");
 	isLoaded &= textures::goblin.loadFromFile("textures\\characters\\Goblin1.png");
-	isLoaded &= textures::walkGoblin1.loadFromFile("textures\\characters\\Goblin2.png");
-	isLoaded &= textures::walkGoblin2.loadFromFile("textures\\characters\\Goblin3.png");
-	isLoaded &= textures::walkGoblin3.loadFromFile("textures\\characters\\Goblin4.png");
-	isLoaded &= textures::walkGoblin4.loadFromFile("textures\\characters\\Goblin5.png");
 	isLoaded &= textures::warrior.loadFromFile("textures\\characters\\Warrior.png");
 	isLoaded &= textures::dragon.loadFromFile("textures\\characters\\Dragon.png");
 	if (!isLoaded)
@@ -133,16 +129,8 @@ void Game::TryChangeMap()
 {
 	if (m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.getPosition(), {CellState::Teleport}))
 	{
-		if (m_currentMap == MapStates::village)
-		{
-			m_currentMap = MapStates::dungeon;
-			m_character.setPosition(m_maps[static_cast<int>(m_currentMap)]->GetCharacterSpawnPos());
-		}
-		else
-		{
-			m_currentMap = MapStates::village;
-			m_character.setPosition(m_maps[static_cast<int>(m_currentMap)]->GetCharacterSpawnPos());
-		}
+		m_currentMap == MapStates::village ? m_currentMap = MapStates::dungeon : m_currentMap = MapStates::village;
+		m_character.Teleport(m_maps[static_cast<int>(m_currentMap)]->GetCharacterSpawnPos());
 	}
 }
 

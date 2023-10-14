@@ -1,5 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <optional>
+
+using DirectionResult = std::optional< std::vector<sf::Vector2f>>;
+using IndexPosition = std::pair<size_t, size_t>;
 
 namespace textures
 {
@@ -10,13 +14,7 @@ namespace textures
 	extern sf::Texture walkCharacter4;
 
 	extern sf::Texture goblin;
-	extern sf::Texture walkGoblin1;
-	extern sf::Texture walkGoblin2;
-	extern sf::Texture walkGoblin3;
-	extern sf::Texture walkGoblin4;
-	
 	extern sf::Texture warrior;
-
 	extern sf::Texture dragon;
 }
 
@@ -37,7 +35,7 @@ namespace enemy
 
 namespace position
 {
-	std::pair<std::size_t, std::size_t> GetMapIndexesFromPosition(const sf::Vector2f&);
+	IndexPosition GetMapIndexesFromPosition(const sf::Vector2f&);
 	sf::Vector2f GetPositionFromMapIndexes(const std::pair<std::size_t, std::size_t>&);
 
 	double CalculateDistance(std::pair<size_t, size_t> start, std::pair<size_t, size_t> end);

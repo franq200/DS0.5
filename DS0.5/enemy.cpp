@@ -1,6 +1,7 @@
 #include "enemy.h"
 #include "Helper.h"
 #include "Character.h"
+#include "AStar.h"
 
 void Enemy::TryKill(Character& character)
 {
@@ -37,14 +38,14 @@ void Enemy::MakeMove(const sf::Vector2f& characterPos, const std::vector<std::ve
 	{
 		if (m_movesCounter == 0)
 		{
-			m_path = m_aStar.FindShortestPath(position::GetMapIndexesFromPosition(characterPos), position::GetMapIndexesFromPosition(getPosition()), map);
+			m_pathToCharacter = aStar::FindShortestPath(position::GetMapIndexesFromPosition(characterPos), position::GetMapIndexesFromPosition(getPosition()), map);
 		}
-		if (!m_path.empty())
+		if (!m_pathToCharacter.empty())
 		{
-			sf::Vector2f movePos = position::GetPositionFromMapIndexes({ static_cast<size_t>(m_path[m_path.size() - 1].x), static_cast<size_t>(m_path[m_path.size() - 1].y) });
+			sf::Vector2f movePos = position::GetPositionFromMapIndexes({ static_cast<size_t>(m_pathToCharacter[m_pathToCharacter.size() - 1].x), static_cast<size_t>(m_pathToCharacter[m_pathToCharacter.size() - 1].y) });
 			setPosition(movePos);
 			UpdateHpBarPos();
-			m_path.pop_back();
+			m_pathToCharacter.pop_back();
 		}
 		if (m_movesCounter == 2)
 		{

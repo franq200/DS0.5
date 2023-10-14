@@ -2,6 +2,12 @@
 #include "Helper.h"
 #include "enemy.h"
 
+void Character::Teleport(const sf::Vector2f& newPosition)
+{
+	setPosition(newPosition);
+	m_hpBar.SetPosition(getPosition());
+}
+
 sf::Vector2f Character::getPosition() const
 {
 	sf::Vector2f pos = sf::Sprite::getPosition();
@@ -65,7 +71,8 @@ void Character::Restart()
 {
 	m_moveClock.restart();
 	setPosition(m_spawnPos);
-	m_hpBar.IncreaseMaxHp(character::defaultHp);
+	m_hpBar.SetHp(character::defaultHp);
+	m_hpBar.SetPosition(getPosition());
 }
 
 sf::Vector2f Character::GetNextUp() const

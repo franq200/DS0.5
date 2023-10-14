@@ -9,13 +9,7 @@ namespace textures
 	sf::Texture walkCharacter4;
 
 	sf::Texture goblin;
-	sf::Texture walkGoblin1;
-	sf::Texture walkGoblin2;
-	sf::Texture walkGoblin3;
-	sf::Texture walkGoblin4;
-
 	sf::Texture warrior;
-
 	sf::Texture dragon;
 }
 
@@ -36,7 +30,7 @@ namespace enemy
 
 namespace position
 {
-	std::pair<std::size_t, std::size_t> GetMapIndexesFromPosition(const sf::Vector2f& pos)
+	IndexPosition GetMapIndexesFromPosition(const sf::Vector2f& pos)
 	{
 		return { static_cast<size_t>(pos.x / size::cellSize), static_cast<size_t>(pos.y / size::cellSize) };
 	}
@@ -92,3 +86,7 @@ namespace character
 	float attackDamage = 20.f;
 }
 
+namespace aStar
+{
+
+}
