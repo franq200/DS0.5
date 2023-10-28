@@ -29,6 +29,17 @@ void Dungeon::Draw(sf::RenderWindow& window)
 
 void Dungeon::Restart()
 {
+	for (int x = 0; x < m_map.size(); x++)
+	{
+		for (int y = 0; y < m_map[x].size(); y++)
+		{
+			if (m_map[x][y].GetState() == CellState::OpenGate)
+			{
+				m_map[x][y].ChangeState(CellState::CloseGate);
+				m_rawMap[x][y] = false;
+			}
+		}
+	}
 	for (auto& enemy : m_enemies)
 	{
 		enemy->Restart();
@@ -41,7 +52,7 @@ void Dungeon::TryOpenGate(const std::vector<sf::Vector2f>& characterPositions)
 	{
 		for (auto nextPos : characterPositions)
 		{
-			if (auto collisionSquare = GetCollisionSquare(nextPos, { CellState::Gate }))
+			if (auto collisionSquare = GetCollisionSquare(nextPos, { CellState::CloseGate }))
 			{
 				auto [x, y] = collisionSquare.value();
 				Open(static_cast<int>(y), static_cast<int>(x));
@@ -150,25 +161,25 @@ void Dungeon::Init()
 
 void Dungeon::Open(int x, int y)
 {
-	m_map[x][y].ChangeState(CellState::Empty);
+	m_map[x][y].ChangeState(CellState::OpenGate);
 	m_rawMap[x][y] = true;
 	const auto [rX, rY] = position::Right(x, y);
-	if (m_map[rX][rY].GetState() == CellState::Gate)
+	if (m_map[rX][rY].GetState() == CellState::CloseGate)
 	{
 		Open(rX, rY);
 	}
 	const auto [lX, lY] = position::Left(x, y);
-	if (m_map[lX][lY].GetState() == CellState::Gate)
+	if (m_map[lX][lY].GetState() == CellState::CloseGate)
 	{
 		Open(lX, lY);
 	}
 	const auto [tX, tY] = position::Top(x, y);
-	if (m_map[tX][tY].GetState() == CellState::Gate)
+	if (m_map[tX][tY].GetState() == CellState::CloseGate)
 	{
 		Open(tX, tY);
 	}
 	const auto [bX, bY] = position::Bottom(x, y);
-	if (m_map[bX][bY].GetState() == CellState::Gate)
+	if (m_map[bX][bY].GetState() == CellState::CloseGate)
 	{
 		Open(bX, bY);
 	}

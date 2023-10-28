@@ -9,7 +9,6 @@ void Dragon::Init(const sf::Vector2f& spawnPos)
 	setScale(0.2f, 0.2f);
 	m_moveClock.restart();
 	setPosition(spawnPos);
-	m_hpBar.Init(getPosition(), enemy::defaultDragonHp);
 	m_attackDamage = 60.f;
 }
 
@@ -17,7 +16,7 @@ void Dragon::Restart()
 {
 	m_moveClock.restart();
 	setPosition(m_spawnPos);
-	m_hpBar.IncreaseMaxHp(enemy::defaultDragonHp);
+	m_hpBar.Init(getPosition(), enemy::defaultDragonHp);
 	m_movesCounter = 0;
 }
 

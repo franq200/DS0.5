@@ -49,7 +49,7 @@ class ParserGateCellCommand : public ParserCommand
 public:
 	LineParseResult execute(size_t mapSize, int i) override
 	{
-		return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Gate), false };
+		return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::CloseGate), false };
 	}
 };
 

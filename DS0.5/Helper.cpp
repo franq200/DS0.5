@@ -7,10 +7,11 @@ namespace textures
 	sf::Texture walkCharacter2;
 	sf::Texture walkCharacter3;
 	sf::Texture walkCharacter4;
-
 	sf::Texture goblin;
 	sf::Texture warrior;
 	sf::Texture dragon;
+	sf::Texture start;
+	sf::Texture exit;
 }
 
 namespace speed
@@ -38,13 +39,6 @@ namespace position
 	sf::Vector2f GetPositionFromMapIndexes(const std::pair<std::size_t, std::size_t>& mapIndexes)
 	{
 		return sf::Vector2f(mapIndexes.first * static_cast<float>(50), mapIndexes.second * static_cast<float>(50));
-	}
-
-	double CalculateDistance(std::pair<size_t, size_t> start, std::pair<size_t, size_t> end)
-	{
-		double xPos = static_cast<double>(start.first) - end.first;
-		double yPos = static_cast<double>(start.second) - end.second;
-		return std::abs(xPos) + std::abs(yPos);
 	}
 
 	std::pair<int, int> Left(int x, int y)
@@ -84,9 +78,4 @@ namespace character
 	float defaultHp = 100.f;
 	float moveRange = 10.f;
 	float attackDamage = 20.f;
-}
-
-namespace aStar
-{
-
 }

@@ -3,9 +3,9 @@
 
 struct AStarData
 {
-	double m_totalCost = std::numeric_limits<double>::max();
-	double m_moveCost = 0.0;
-	double m_distanceCost = std::numeric_limits<double>::max();
+	size_t m_totalCost = std::numeric_limits<size_t>::max();
+	size_t m_moveCost = 0;
+	size_t m_distanceCost = std::numeric_limits<size_t>::max();
 	IndexPosition m_parentPos = { std::numeric_limits<std::size_t>::max(), std::numeric_limits<std::size_t>::max() };
 	IndexPosition m_pos = { 0, 0 };
 
@@ -44,12 +44,27 @@ std::vector<sf::Vector2f> GetResult(std::vector<std::vector<AStarData>>& data, c
 	return result;
 }
 
+size_t CalculateDistance(IndexPosition start, IndexPosition end)
+{
+	int xPos = std::abs(static_cast<int>(start.first - end.first));
+	int yPos = std::abs(static_cast<int>(start.second - end.second));
+	return static_cast<size_t>(xPos + yPos);
+}
+
+bool IsStepPossible(const IndexPosition& currentPos, const AlgorithmCache& algorithmCache)
+{
+	bool isCurrentXPosCorrect = !(currentPos.first >= algorithmCache.aStarDataMap.size()) && !(currentPos.first < 0);
+	bool isCurrentYPosCorrect = !(currentPos.second >= algorithmCache.aStarDataMap[0].size()) && !(currentPos.second < 0);
+	bool isCellMoveable = algorithmCache.map[currentPos.second][currentPos.first];
+	return isCurrentXPosCorrect && isCurrentYPosCorrect && isCellMoveable;
+}
+
 bool IsTargetPathReady(AlgorithmCache& algorithmCache, const IndexPositions& indexPositions, const AStarData& currentData)
 {
 	IndexPosition currentPos = indexPositions.currentPos;
 	IndexPosition endPos = indexPositions.endPos;
 	IndexPosition movePos = indexPositions.movePos;
-	if (!(currentPos.first >= algorithmCache.aStarDataMap.size() || currentPos.first < 0 || currentPos.second >= algorithmCache.aStarDataMap[0].size() || currentPos.second < 0 || algorithmCache.map[currentPos.second][currentPos.first] == false))
+	if (IsStepPossible(currentPos, algorithmCache))
 	{
 		if (movePos == endPos)
 		{
@@ -58,11 +73,11 @@ bool IsTargetPathReady(AlgorithmCache& algorithmCache, const IndexPositions& ind
 		}
 		else
 		{
-			double lastCost = algorithmCache.aStarDataMap[movePos.first][movePos.second].m_totalCost;
-			if (currentData.m_moveCost + 1 + position::CalculateDistance(movePos, endPos) < lastCost)
+			size_t lastCost = algorithmCache.aStarDataMap[movePos.first][movePos.second].m_totalCost;
+			if (currentData.m_moveCost + CalculateDistance(movePos, endPos) + 1 < lastCost)
 			{
 				algorithmCache.aStarDataMap[movePos.first][movePos.second].m_moveCost = currentData.m_moveCost;
-				algorithmCache.aStarDataMap[movePos.first][movePos.second].m_distanceCost = position::CalculateDistance(movePos, endPos);
+				algorithmCache.aStarDataMap[movePos.first][movePos.second].m_distanceCost = CalculateDistance(movePos, endPos);
 				algorithmCache.aStarDataMap[movePos.first][movePos.second].m_totalCost = algorithmCache.aStarDataMap[movePos.first][movePos.second].m_moveCost + algorithmCache.aStarDataMap[movePos.first][movePos.second].m_distanceCost;
 				algorithmCache.aStarDataMap[movePos.first][movePos.second].m_parentPos = currentPos;
 
@@ -126,7 +141,7 @@ std::set<AStarData> CalculateFirstStep(const ObjectsIndexes& objectsIndexes, std
 {
 	const auto sourceXPos = objectsIndexes.sourceIndex.first;
 	const auto sourceYPos = objectsIndexes.sourceIndex.second;
-	aStarDataMap[sourceXPos][sourceYPos].m_distanceCost = position::CalculateDistance(objectsIndexes.targetIndex, objectsIndexes.sourceIndex);
+	aStarDataMap[sourceXPos][sourceYPos].m_distanceCost = CalculateDistance(objectsIndexes.targetIndex, objectsIndexes.sourceIndex);
 	aStarDataMap[sourceXPos][sourceYPos].m_totalCost = aStarDataMap[sourceXPos][sourceYPos].m_moveCost + aStarDataMap[sourceXPos][sourceYPos].m_distanceCost;
 
 	std::set <AStarData> openList;

@@ -70,6 +70,7 @@ int Character::GetMoveClockAsMilliseconds() const
 void Character::Restart()
 {
 	m_moveClock.restart();
+	setScale(character::defaultScale, character::defaultScale);
 	setPosition(m_spawnPos);
 	m_hpBar.SetHp(character::defaultHp);
 	m_hpBar.SetPosition(getPosition());

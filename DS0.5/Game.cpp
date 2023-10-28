@@ -10,20 +10,38 @@ void Game::Init()
 	m_window.create(sf::VideoMode(size::windowSizeX, size::windowSizeY), "SFML works!");
 	ViewInit();
 	LoadTextures();
-	LoadMaps();
-	m_character.Init(m_maps[static_cast<int>(MapStates::village)]->GetCharacterSpawnPos());
+	m_gameplay.Init();
+	m_menu.Init();
 }
 
 void Game::Update()
 {
+	Events();
 	while (m_window.isOpen())
 	{
-		std::unique_ptr<Map>& currentMap = m_maps[static_cast<int>(m_currentMap)];
-		currentMap->Update(m_character);
-		Events();
-		TryKillCharacter();
-		TryMoveCharacter();
-		TryChangeMap();
+		switch (m_gameState) 
+		{
+		case GameState::game:
+			if (!m_gameplay.Update(m_view))
+			{
+				Restart();
+			}
+			break;
+		case GameState::menu:
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				if (m_menu.Exit(m_window))
+				{
+					m_window.close();
+				}
+				else if (m_menu.Start(m_window))
+				{
+					m_gameState = GameState::game;
+				}
+			}
+			m_menu.Update(m_window);
+			break;
+		}
 		Draw();
 	}
 }
@@ -39,20 +57,11 @@ void Game::LoadTextures()
 	isLoaded &= textures::goblin.loadFromFile("textures\\characters\\Goblin1.png");
 	isLoaded &= textures::warrior.loadFromFile("textures\\characters\\Warrior.png");
 	isLoaded &= textures::dragon.loadFromFile("textures\\characters\\Dragon.png");
+	isLoaded &= textures::start.loadFromFile("textures\\start.png");
+	isLoaded &= textures::exit.loadFromFile("textures\\exit.png");
 	if (!isLoaded)
 	{
 		throw(std::exception("failed to load textures"));
-	}
-}
-
-void Game::LoadMaps()
-{
-	m_maps.resize(2);
-	m_maps[0] = std::make_unique<Village>();
-	m_maps[1] = std::make_unique<Dungeon>();
-	for (auto& map : m_maps)
-	{
-		map->MapInit();
 	}
 }
 
@@ -60,14 +69,6 @@ void Game::ViewInit()
 {
 	m_view.setSize(static_cast<float>(size::windowSizeX), static_cast<float>(size::windowSizeY));
 	m_view.setCenter(static_cast<float>(size::windowSizeX) / 2, static_cast<float>(size::windowSizeY) / 2);
-
-	m_miniMap.Init();
-}
-
-void Game::Move(sf::Vector2f moveValue)
-{
-	m_character.MakeMove(moveValue);
-	m_view.move(moveValue);
 }
 
 void Game::Events()
@@ -83,79 +84,16 @@ void Game::Events()
 void Game::Draw()
 {
 	m_window.clear();
-	sf::Vector2f characterPos = m_character.getPosition();
-	m_view.setCenter(characterPos.x + size::cellSize, characterPos.y + size::cellSize/2);
-	m_window.setView(m_view);
-	DrawObjects();
-
-	m_miniMap.Update(characterPos);
-	m_miniMap.DrawOutline(m_window);
-	m_miniMap.DrawView(m_window);
-	DrawObjects();
+	if (m_gameState == GameState::game)
+		m_gameplay.Draw(m_window, m_view);
+	else if (m_gameState == GameState::menu)
+		m_menu.Draw(m_window);
 	m_window.display();
 }
 
-void Game::TryMoveCharacter()
-{
-	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-	{
-		m_character.setTexture(textures::character);
-	}
-	else
-	{
-		if (m_character.GetMoveClockAsMilliseconds() >= speed::character)
-		{
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextUp(), { CellState::Filled, CellState::Gate }))
-			{
-				Move({ 0.f, -character::moveRange });
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextLeft(), { CellState::Filled, CellState::Gate }))
-			{
-				Move({ -character::moveRange, 0.f });
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextDown(), { CellState::Filled, CellState::Gate }))
-			{
-				Move({ 0.f, character::moveRange });
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextRight(), {CellState::Filled, CellState::Gate}))
-			{
-				Move({ character::moveRange, 0.f });
-			}
-		}
-	}
-}
-
-void Game::TryChangeMap()
-{
-	if (m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.getPosition(), {CellState::Teleport}))
-	{
-		m_currentMap == MapStates::village ? m_currentMap = MapStates::dungeon : m_currentMap = MapStates::village;
-		m_character.Teleport(m_maps[static_cast<int>(m_currentMap)]->GetCharacterSpawnPos());
-	}
-}
-
-void Game::TryKillCharacter()
-{
-	if (m_character.IsDead())
-	{
-		Restart();
-	}
-}
-
-
 void Game::Restart()
 {
-	m_character.Restart();
-	for (auto& map : m_maps)
-	{
-		map->Restart();
-	}
-
-	m_currentMap = MapStates::village;
-}
-
-void Game::DrawObjects()
-{
-	m_maps[static_cast<int>(m_currentMap)]->Draw(m_window);
-	m_character.Draw(m_window);
+	ViewInit();
+	m_window.setView(m_view);
+	m_gameState = GameState::menu;
 }
