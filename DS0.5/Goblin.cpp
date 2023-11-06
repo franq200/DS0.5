@@ -2,15 +2,9 @@
 #include "Helper.h"
 #include "Character.h"
 
-void Goblin::Init(const sf::Vector2f& spawnPos)
+Goblin::Goblin():
+	Enemy(20.f, textures::goblin, enemy::defaultGoblinHp, 0.5f)
 {
-	m_spawnPos = spawnPos;
-	setTexture(textures::goblin);
-	setScale(0.5, 0.5);
-	m_moveClock.restart();
-	setPosition(spawnPos);
-	m_hpBar.Init(getPosition(), enemy::defaultGoblinHp);
-	m_attackDamage = 20.f;
 }
 
 void Goblin::Restart()

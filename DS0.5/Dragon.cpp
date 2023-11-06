@@ -2,14 +2,9 @@
 #include "Helper.h"
 #include "Character.h"
 
-void Dragon::Init(const sf::Vector2f& spawnPos)
+Dragon::Dragon():
+	Enemy(60.f, textures::dragon, enemy::defaultDragonHp, 0.2f)
 {
-	m_spawnPos = spawnPos;
-	setTexture(textures::dragon);
-	setScale(0.2f, 0.2f);
-	m_moveClock.restart();
-	setPosition(spawnPos);
-	m_attackDamage = 60.f;
 }
 
 void Dragon::Restart()

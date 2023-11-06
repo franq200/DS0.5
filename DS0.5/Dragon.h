@@ -7,7 +7,7 @@ class Character;
 class Dragon : public Enemy
 {
 public:
-	void Init(const sf::Vector2f& spawnPos) override;
+	Dragon();
 	void Restart() override;
 private:
 	void Kill(Character& character) override;

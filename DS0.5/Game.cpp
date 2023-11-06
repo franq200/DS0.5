@@ -30,11 +30,11 @@ void Game::Update()
 		case GameState::menu:
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
-				if (m_menu.Exit(m_window))
+				if (m_menu.ShouldExit(m_window))
 				{
 					m_window.close();
 				}
-				else if (m_menu.Start(m_window))
+				else if (m_menu.ShouldStart(m_window))
 				{
 					m_gameState = GameState::game;
 				}

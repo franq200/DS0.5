@@ -7,7 +7,7 @@ class Character;
 class Goblin : public Enemy
 {
 public:
-	void Init(const sf::Vector2f& spawnPos) override;
+	Goblin();
 	void Restart() override;
 private:
 	void Kill(Character& character) override;

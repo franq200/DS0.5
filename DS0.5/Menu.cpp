@@ -19,12 +19,12 @@ void Menu::Update(const sf::RenderWindow& window)
 	}
 }
 
-bool Menu::Exit(const sf::RenderWindow& window)
+bool Menu::ShouldExit(const sf::RenderWindow& window)
 {
 	return m_buttons[1].IsMouseInRange(window);
 }
 
-bool Menu::Start(const sf::RenderWindow& window)
+bool Menu::ShouldStart(const sf::RenderWindow& window)
 {
 	return m_buttons[0].IsMouseInRange(window);
 }

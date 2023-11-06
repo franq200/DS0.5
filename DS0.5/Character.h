@@ -8,6 +8,7 @@ class Enemy;
 class Character : public Moveable, public Fightable
 {
 public:
+	Character();
 	void Teleport(const sf::Vector2f& newPosition);
 	sf::Vector2f getPosition() const;
 	bool IsAbleToAttack();

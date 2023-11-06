@@ -1,5 +1,10 @@
 #include "Fightable.h"
 
+Fightable::Fightable(float attackDamage, float startHp):
+	m_attackDamage(attackDamage), m_startHp(startHp)
+{
+}
+
 void Fightable::LossHp(float lostHp)
 {
 	m_hpBar.LossHp(lostHp);

@@ -3,6 +3,21 @@
 #include "Character.h"
 #include "AStar.h"
 
+Enemy::Enemy(float attackDamage, const sf::Texture& texture, float startHp, float scale):
+	Fightable(attackDamage, startHp), m_texture(texture), m_scale(scale)
+{
+}
+
+void Enemy::Init(const sf::Vector2f& spawnPos)
+{
+	m_spawnPos = spawnPos;
+	setTexture(m_texture);
+	setScale(m_scale, m_scale);
+	m_moveClock.restart();
+	setPosition(m_spawnPos);
+	m_hpBar.Init(getPosition(), m_startHp);
+}
+
 void Enemy::TryKill(Character& character)
 {
 	if (IsDead())

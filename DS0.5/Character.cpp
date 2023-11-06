@@ -2,6 +2,11 @@
 #include "Helper.h"
 #include "enemy.h"
 
+Character::Character():
+	Fightable(20.f, character::defaultHp)
+{
+}
+
 void Character::Teleport(const sf::Vector2f& newPosition)
 {
 	setPosition(newPosition);
@@ -39,8 +44,7 @@ void Character::Init(sf::Vector2f spawnPos)
 	setScale(character::defaultScale, character::defaultScale);
 	m_walkTextures = { textures::character, textures::walkCharacter1, textures::walkCharacter2, textures::walkCharacter3, textures::walkCharacter4 };
 	setPosition(m_spawnPos);
-	m_hpBar.Init(getPosition(), character::defaultHp);
-	m_attackDamage = 20.f;
+	m_hpBar.Init(getPosition(), m_startHp);
 }
 
 void Character::MakeMove(const sf::Vector2f& moveValue)

@@ -8,7 +8,8 @@ class Character;
 class Enemy : public Fightable, public Moveable
 {
 public:
-	virtual void Init(const sf::Vector2f& spawnPos) = 0;
+	Enemy(float attackDamage, const sf::Texture& texture, float startHp, float scale);
+	void Init(const sf::Vector2f& spawnPos);
 	virtual void Restart() = 0;
 	void TryKill(Character& character);
 	void Attack(Character& character);
@@ -21,6 +22,7 @@ protected:
 	int m_movesCounter = 0;
 	std::vector<sf::Vector2f> m_pathToCharacter;
 	bool m_isAttackClockRestarted = false;
-	float m_attackDamage = 0;
 private:
+	const sf::Texture& m_texture;
+	const float m_scale;
 };

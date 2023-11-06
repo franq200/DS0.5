@@ -2,15 +2,9 @@
 #include "Helper.h"
 #include "Character.h"
 
-void Warrior::Init(const sf::Vector2f& spawnPos)
+Warrior::Warrior():
+	Enemy(30.f, textures::warrior, enemy::defaultWarriorHp, 0.33f)
 {
-	m_spawnPos = spawnPos;
-	setTexture(textures::warrior);
-	setScale(0.33f, 0.33f);
-	m_moveClock.restart();
-	setPosition(spawnPos);
-	m_hpBar.Init(getPosition(), enemy::defaultWarriorHp);
-	m_attackDamage = 30.f;
 }
 
 void Warrior::Restart()
