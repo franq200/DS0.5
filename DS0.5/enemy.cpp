@@ -62,7 +62,7 @@ void Enemy::MakeMove(const sf::Vector2f& characterPos, const std::vector<std::ve
 			UpdateHpBarPos();
 			m_pathToCharacter.pop_back();
 		}
-		if (m_movesCounter == 2)
+		if (m_movesCounter == 5)
 		{
 			m_movesCounter = 0;
 		}

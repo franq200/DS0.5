@@ -1,8 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Helper.h"
-#include <optional>
-#include <set>
 
 namespace aStar
 {

@@ -1,5 +1,6 @@
 #include "AStar.h"
 #include <cassert>
+#include <set>
 
 struct AStarData
 {
@@ -9,7 +10,7 @@ struct AStarData
 	IndexPosition m_parentPos = { std::numeric_limits<std::size_t>::max(), std::numeric_limits<std::size_t>::max() };
 	IndexPosition m_pos = { 0, 0 };
 
-	bool operator<(const AStarData& first) const { return first.m_totalCost < m_totalCost; }
+	bool operator<(const AStarData& first) const { return first.m_totalCost > m_totalCost; }
 };
 
 struct ObjectsIndexes
@@ -21,7 +22,7 @@ struct ObjectsIndexes
 struct AlgorithmCache
 {
 	std::vector<std::vector<AStarData>>& aStarDataMap;
-	std::set <AStarData>& openList;
+	std::multiset <AStarData>& openList;
 	const std::vector<std::vector<bool>>& map;
 };
 
@@ -93,6 +94,7 @@ DirectionResult ChooseDirection(const AStarData& currentData, AlgorithmCache& al
 	IndexPosition currentPos = currentData.m_pos;
 
 	IndexPositions indexPositions{ objectsIndexes.targetIndex, { currentPos.first - 1, currentPos.second }, currentPos };
+	indexPositions.movePos = { currentPos.first - 1, currentPos.second };
 	if (IsTargetPathReady(algorithmCache, indexPositions, currentData))
 	{
 		return GetResult(algorithmCache.aStarDataMap, objectsIndexes);
@@ -137,14 +139,14 @@ std::vector<std::vector<AStarData>> CreateAStarDataMap(const std::vector<std::ve
 	return aStarDataMap;
 }
 
-std::set<AStarData> CalculateFirstStep(const ObjectsIndexes& objectsIndexes, std::vector<std::vector<AStarData>>& aStarDataMap)
+std::multiset<AStarData> CalculateFirstStep(const ObjectsIndexes& objectsIndexes, std::vector<std::vector<AStarData>>& aStarDataMap)
 {
 	const auto sourceXPos = objectsIndexes.sourceIndex.first;
 	const auto sourceYPos = objectsIndexes.sourceIndex.second;
 	aStarDataMap[sourceXPos][sourceYPos].m_distanceCost = CalculateDistance(objectsIndexes.targetIndex, objectsIndexes.sourceIndex);
 	aStarDataMap[sourceXPos][sourceYPos].m_totalCost = aStarDataMap[sourceXPos][sourceYPos].m_moveCost + aStarDataMap[sourceXPos][sourceYPos].m_distanceCost;
 
-	std::set <AStarData> openList;
+	std::multiset<AStarData> openList;
 	openList.insert(aStarDataMap[sourceXPos][sourceYPos]);
 	return openList;
 }
@@ -166,7 +168,7 @@ std::vector<sf::Vector2f> aStar::FindShortestPath(const IndexPosition& targetInd
 {
 	auto aStarDataMap = CreateAStarDataMap(map);
 	ObjectsIndexes objectsIndexes{ targetIndex, sourceIndex };
-	std::set <AStarData> openList = CalculateFirstStep(objectsIndexes, aStarDataMap);
+	std::multiset <AStarData> openList = CalculateFirstStep(objectsIndexes, aStarDataMap);
 
 	AlgorithmCache algorithmCache{ aStarDataMap, openList, map };
 	std::vector<sf::Vector2f> resultPath = {};
