@@ -8,7 +8,6 @@ int main()
     Game game;
     try
     {
-        game.Init();
         game.Update();
     }
     catch (const std::exception& e)

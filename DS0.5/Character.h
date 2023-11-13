@@ -25,11 +25,8 @@ public:
 	std::vector<sf::Vector2f> GetEveryPossibleMovement() const;
 private:
 	void Rotate(const sf::Vector2f& moveValue);
-	void WalkAnimation();
 	bool m_isAbleToAttack;
 	sf::Clock m_moveClock;
-	std::vector <sf::Texture> m_walkTextures;
-	int m_moveCounter = 0;
 	sf::Vector2f m_spawnPos;
 };
 

@@ -12,7 +12,6 @@ void Goblin::Restart()
 	m_moveClock.restart();
 	setPosition(m_spawnPos);
 	m_hpBar.Init(getPosition(), enemy::defaultGoblinHp);
-	m_movesCounter = 0;
 }
 
 void Goblin::Kill(Character& character)

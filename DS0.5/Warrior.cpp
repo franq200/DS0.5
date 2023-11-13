@@ -12,7 +12,6 @@ void Warrior::Restart()
 	m_moveClock.restart();
 	setPosition(m_spawnPos);
 	m_hpBar.Init(getPosition(), enemy::defaultWarriorHp);
-	m_movesCounter = 0;
 }
 
 void Warrior::Kill(Character& character)

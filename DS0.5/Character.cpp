@@ -3,7 +3,7 @@
 #include "enemy.h"
 
 Character::Character():
-	Fightable(20.f, character::defaultHp)
+	Fightable(20.f, character::defaultHp), Moveable({})
 {
 }
 
@@ -42,7 +42,7 @@ void Character::Init(sf::Vector2f spawnPos)
 	m_spawnPos = spawnPos;
 	setTexture(textures::character);
 	setScale(character::defaultScale, character::defaultScale);
-	m_walkTextures = { textures::character, textures::walkCharacter1, textures::walkCharacter2, textures::walkCharacter3, textures::walkCharacter4 };
+	Moveable::Init({ textures::character, textures::walkCharacter1, textures::walkCharacter2, textures::walkCharacter3, textures::walkCharacter4 });
 	setPosition(m_spawnPos);
 	m_hpBar.Init(getPosition(), m_startHp);
 }
@@ -129,16 +129,4 @@ void Character::Rotate(const sf::Vector2f& moveValue)
 			move(size::cellSize, 0.f);
 		}
 	}
-}
-
-void Character::WalkAnimation()
-{
-	setTexture(m_walkTextures[m_moveCounter]);
-	if (m_moveCounter == m_walkTextures.size() - 1)
-	{
-		setTexture(textures::walkCharacter4);
-		m_moveCounter = 0;
-		return;
-	}
-	m_moveCounter++;
 }

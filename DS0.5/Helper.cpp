@@ -60,7 +60,6 @@ namespace position
 	{
 		return std::pair<int, int>(x, y - 1);
 	}
-
 }
 
 namespace size

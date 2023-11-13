@@ -5,11 +5,11 @@
 #include "Village.h"
 #include "Dungeon.h"
 
-void Game::Init()
+Game::Game()
 {
+	LoadTextures();
 	m_window.create(sf::VideoMode(size::windowSizeX, size::windowSizeY), "SFML works!");
 	ViewInit();
-	LoadTextures();
 	m_gameplay.Init();
 	m_menu.Init();
 }

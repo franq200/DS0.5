@@ -89,13 +89,16 @@ void Dungeon::AttackOpponents(Character& character)
 
 void Dungeon::MakeEnemiesMove(const sf::Vector2f& characterPos)
 {
+	/*
 	for (auto& enemy : m_enemies)
 	{
 		if (!enemy->IsDead())
 		{
-			enemy->MakeMove(characterPos, m_rawMap);
+			enemy->PreparePathAndMove(characterPos, m_rawMap);
 		}
 	}
+	*/
+	m_enemies[1]->PreparePathAndMove(characterPos, m_rawMap);
 }
 
 void Dungeon::DrawEnemies(sf::RenderWindow& window)

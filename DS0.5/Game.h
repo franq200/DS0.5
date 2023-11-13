@@ -12,7 +12,7 @@ enum class GameState : uint8_t
 class Game
 {
 public:
-	void Init();
+	Game();
 	void Update();
 private:
 	void ViewInit();
