@@ -3,15 +3,15 @@
 #include "Character.h"
 #include "AStar.h"
 
-Enemy::Enemy(float attackDamage, const sf::Texture& texture, float startHp, float scale):
-	Fightable(attackDamage, startHp), m_texture(texture), m_scale(scale), Moveable({})
+Enemy::Enemy(float attackDamage, float startHp, float scale, const std::vector<sf::Texture>& textures):
+	Fightable(attackDamage, startHp), Moveable(textures, scale)
 {
 }
 
 void Enemy::Init(const sf::Vector2f& spawnPos)
 {
 	m_spawnPos = spawnPos;
-	setTexture(m_texture);
+	setTexture(m_walkTextures[0]);
 	setScale(m_scale, m_scale);
 	m_moveClock.restart();
 	setPosition(m_spawnPos);
@@ -51,34 +51,29 @@ void Enemy::PreparePathAndMove(const sf::Vector2f& characterPos, const std::vect
 {
 	if (m_moveClock.getElapsedTime().asMilliseconds() > speed::enemy/5)
 	{
-		if (m_isMoveDone)
+		if (m_movesCounter == 0)
 		{
 			m_pathToCharacter = aStar::FindShortestPath(position::GetMapIndexesFromPosition(characterPos), position::GetMapIndexesFromPosition(getPosition()), map);
 			if (!m_pathToCharacter.empty())
 			{
 				ChooseDirection();
-				m_isMoveDone = false;
+				Enemy::Move();
+				m_movesCounter++;
 			}
 		}
-		else if (!m_isMoveDone)
+		else
 		{
-			if (m_movesCounter == 5)
+			if (m_movesCounter == 4)
 			{
-				m_isMoveDone = true;
+				Enemy::Move();
 				m_movesCounter = 0;
 			}
 			else
 			{
-				Move();
+				Enemy::Move();
 				m_movesCounter++;
 			}
-			
-			//sf::Vector2f movePos = position::GetPositionFromMapIndexes({ static_cast<size_t>(m_pathToCharacter[m_pathToCharacter.size() - 1].x), static_cast<size_t>(m_pathToCharacter[m_pathToCharacter.size() - 1].y) });
-			//setPosition(movePos);
-			//UpdateHpBarPos();
-			//m_pathToCharacter.pop_back();
 		}
-		m_moveClock.restart();
 	}
 }
 
@@ -91,24 +86,29 @@ void Enemy::Move()
 {
 	switch (m_moveDirection)
 	{
-	case Right:
-		move(10.f, 0.f);
+	case Direction::Right:
+		Moveable::Move({ 10.f, 0.f });
+		UpdateHpBarPos();
 		break;
-	case Left:
-		move(-10.f, 0.f);
+	case Direction::Left:
+		Moveable::Move({ -10.f, 0.f });
+		UpdateHpBarPos();
 		break;
-	case Down:
-		move(0.f, 10.f);
+	case Direction::Down:
+		Moveable::Move({0.f, 10.f});
+		UpdateHpBarPos();
 		break;
-	case Up:
-		move(0.f, -10.f);
+	case Direction::Up:
+		Moveable::Move({0.f, -10.f});
+		UpdateHpBarPos();
+		break;
 	}
 }
 
 void Enemy::ChooseDirection()
 {
 	IndexPosition pos = position::GetMapIndexesFromPosition(getPosition());
-	if (m_pathToCharacter.front().y> pos.second)
+	if (m_pathToCharacter.back().y > pos.second)
 	{
 		m_moveDirection = Direction::Down;
 	}
@@ -116,11 +116,11 @@ void Enemy::ChooseDirection()
 	{
 		m_moveDirection = Direction::Up;
 	}
-	if (m_pathToCharacter.front().x> pos.first)
+	if (m_pathToCharacter.back().x > pos.first)
 	{
 		m_moveDirection = Direction::Right;
 	}
-	else if (m_pathToCharacter.front().x != pos.first)
+	else if (m_pathToCharacter.back().x != pos.first)
 	{
 		m_moveDirection = Direction::Left;
 	}

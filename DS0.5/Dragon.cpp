@@ -3,7 +3,7 @@
 #include "Character.h"
 
 Dragon::Dragon():
-	Enemy(60.f, textures::dragon, enemy::defaultDragonHp, 0.2f)
+	Enemy(60.f, enemy::defaultDragonHp, 0.2f, { textures::dragon })
 {
 }
 

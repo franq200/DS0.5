@@ -3,7 +3,7 @@
 #include "Fightable.h"
 #include "Moveable.h"
 
-enum Direction
+enum class Direction
 {
 	Left = 0,
 	Right,
@@ -16,7 +16,7 @@ class Character;
 class Enemy : public Fightable, public Moveable
 {
 public:
-	Enemy(float attackDamage, const sf::Texture& texture, float startHp, float scale);
+	Enemy(float attackDamage, float startHp, float scale, const std::vector<sf::Texture>& textures);
 	void Init(const sf::Vector2f& spawnPos);
 	virtual void Restart() = 0;
 	void TryKill(Character& character);
@@ -26,15 +26,10 @@ public:
 protected:
 	virtual void Kill(Character& character) = 0;
 	sf::Vector2f m_spawnPos;
-	sf::Clock m_moveClock;
 	std::vector<sf::Vector2f> m_pathToCharacter;
 	bool m_isAttackClockRestarted = false;
 private:
 	void Move();
 	void ChooseDirection();
-	bool m_isMoveDone = true;
-	const sf::Texture& m_texture;
-	const float m_scale;
 	Direction m_moveDirection;
-	int m_movesCounter = 0;
 };

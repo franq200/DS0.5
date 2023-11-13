@@ -81,7 +81,6 @@ bool Gameplay::TryKillCharacter()
 void Gameplay::Move(sf::Vector2f moveValue, sf::View& view)
 {
 	m_character.MakeMove(moveValue);
-	view.move(moveValue);
 }
 
 void Gameplay::DrawObjects(sf::RenderWindow& window)
@@ -109,6 +108,6 @@ void Gameplay::Draw(sf::RenderWindow& window, sf::View& view)
 
 	m_miniMap.Update(characterPos);
 	m_miniMap.DrawOutline(window);
-	m_miniMap.DrawView(window);
+	m_miniMap.SetView(window);
 	DrawObjects(window);
 }

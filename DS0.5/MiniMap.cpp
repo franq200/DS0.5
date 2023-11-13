@@ -23,7 +23,7 @@ void MiniMap::Draw(sf::RenderWindow& window)
 	window.draw(m_outline);
 }
 
-void MiniMap::DrawView(sf::RenderWindow& window)
+void MiniMap::SetView(sf::RenderWindow& window)
 {
 	window.setView(m_miniMap);
 }

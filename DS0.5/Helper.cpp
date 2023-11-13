@@ -7,7 +7,11 @@ namespace textures
 	sf::Texture walkCharacter2;
 	sf::Texture walkCharacter3;
 	sf::Texture walkCharacter4;
-	sf::Texture goblin;
+	sf::Texture goblin1;
+	sf::Texture goblin2;
+	sf::Texture goblin3;
+	sf::Texture goblin4;
+	sf::Texture goblin5;
 	sf::Texture warrior;
 	sf::Texture dragon;
 	sf::Texture start;

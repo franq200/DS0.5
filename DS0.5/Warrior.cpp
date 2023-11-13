@@ -3,7 +3,7 @@
 #include "Character.h"
 
 Warrior::Warrior():
-	Enemy(30.f, textures::warrior, enemy::defaultWarriorHp, 0.33f)
+	Enemy(30.f, enemy::defaultWarriorHp, 0.33f, {textures::warrior})
 {
 }
 

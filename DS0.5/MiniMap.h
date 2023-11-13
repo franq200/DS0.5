@@ -7,7 +7,7 @@ public:
 	void Init();
 	void Update(const sf::Vector2f& characterPos);
 	void Draw(sf::RenderWindow& window);
-	void DrawView(sf::RenderWindow& window);
+	void SetView(sf::RenderWindow& window);
 	void DrawOutline(sf::RenderWindow& window);
 private:
 	sf::View m_miniMap;

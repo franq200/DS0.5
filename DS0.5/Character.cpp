@@ -3,7 +3,7 @@
 #include "enemy.h"
 
 Character::Character():
-	Fightable(20.f, character::defaultHp), Moveable({})
+	Fightable(20.f, character::defaultHp), Moveable({ textures::character, textures::walkCharacter1, textures::walkCharacter2, textures::walkCharacter3, textures::walkCharacter4 }, character::defaultScale)
 {
 }
 
@@ -11,16 +11,6 @@ void Character::Teleport(const sf::Vector2f& newPosition)
 {
 	setPosition(newPosition);
 	m_hpBar.SetPosition(getPosition());
-}
-
-sf::Vector2f Character::getPosition() const
-{
-	sf::Vector2f pos = sf::Sprite::getPosition();
-	if (getScale().x < 0)
-	{
-		pos.x -= 50.f;
-	}
-	return pos;
 }
 
 bool Character::IsAbleToAttack()
@@ -49,11 +39,8 @@ void Character::Init(sf::Vector2f spawnPos)
 
 void Character::MakeMove(const sf::Vector2f& moveValue)
 {
-	WalkAnimation();
-	Rotate(moveValue);
-	move(moveValue);
+	Moveable::Move(moveValue);
 	UpdateHpBarPos();
-	m_moveClock.restart();
 }
 
 void Character::Attack(Enemy& enemy)
@@ -112,21 +99,4 @@ void Character::UpdateHpBarPos()
 std::vector<sf::Vector2f> Character::GetEveryPossibleMovement() const
 {
 	return { GetNextRight(), GetNextLeft(), GetNextUp(), GetNextDown()};
-}
-
-void Character::Rotate(const sf::Vector2f& moveValue)
-{
-	if (moveValue.x != 0)
-	{
-		if (moveValue.x == 10 && getScale().x < 0)
-		{
-			setScale(character::defaultScale, character::defaultScale);
-			move(-size::cellSize, 0.f);
-		}
-		else if (moveValue.x == -10 && getScale().x > 0)
-		{
-			setScale(-character::defaultScale, character::defaultScale);
-			move(size::cellSize, 0.f);
-		}
-	}
 }

@@ -9,6 +9,7 @@ Game::Game()
 {
 	LoadTextures();
 	m_window.create(sf::VideoMode(size::windowSizeX, size::windowSizeY), "SFML works!");
+	m_window.setFramerateLimit(60);
 	ViewInit();
 	m_gameplay.Init();
 	m_menu.Init();
@@ -54,7 +55,11 @@ void Game::LoadTextures()
 	isLoaded &= textures::walkCharacter2.loadFromFile("textures\\characters\\3.png");
 	isLoaded &= textures::walkCharacter3.loadFromFile("textures\\characters\\4.png");
 	isLoaded &= textures::walkCharacter4.loadFromFile("textures\\characters\\5.png");
-	isLoaded &= textures::goblin.loadFromFile("textures\\characters\\Goblin1.png");
+	isLoaded &= textures::goblin1.loadFromFile("textures\\characters\\Goblin1.png");
+	isLoaded &= textures::goblin2.loadFromFile("textures\\characters\\Goblin2.png");
+	isLoaded &= textures::goblin3.loadFromFile("textures\\characters\\Goblin3.png");
+	isLoaded &= textures::goblin4.loadFromFile("textures\\characters\\Goblin4.png");
+	isLoaded &= textures::goblin5.loadFromFile("textures\\characters\\Goblin5.png");
 	isLoaded &= textures::warrior.loadFromFile("textures\\characters\\Warrior.png");
 	isLoaded &= textures::dragon.loadFromFile("textures\\characters\\Dragon.png");
 	isLoaded &= textures::start.loadFromFile("textures\\start.png");

@@ -12,7 +12,11 @@ namespace textures
 	extern sf::Texture walkCharacter2;
 	extern sf::Texture walkCharacter3;
 	extern sf::Texture walkCharacter4;
-	extern sf::Texture goblin;
+	extern sf::Texture goblin1;
+	extern sf::Texture goblin2;
+	extern sf::Texture goblin3;
+	extern sf::Texture goblin4;
+	extern sf::Texture goblin5;
 	extern sf::Texture warrior;
 	extern sf::Texture dragon;
 	extern sf::Texture start;
