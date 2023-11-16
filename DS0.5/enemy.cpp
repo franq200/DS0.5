@@ -3,7 +3,7 @@
 #include "Character.h"
 #include "AStar.h"
 
-Enemy::Enemy(float attackDamage, float startHp, float scale, const std::vector<sf::Texture>& textures):
+Enemy::Enemy(float attackDamage, float startHp, float scale, const std::vector<std::reference_wrapper<sf::Texture>>& textures) :
 	Fightable(attackDamage, startHp), Moveable(textures, scale)
 {
 }
@@ -13,7 +13,6 @@ void Enemy::Init(const sf::Vector2f& spawnPos)
 	m_spawnPos = spawnPos;
 	setTexture(m_walkTextures[0]);
 	setScale(m_scale, m_scale);
-	m_moveClock.restart();
 	setPosition(m_spawnPos);
 	m_hpBar.Init(getPosition(), m_startHp);
 }
@@ -49,30 +48,27 @@ void Enemy::Attack(Character& character)
 
 void Enemy::PreparePathAndMove(const sf::Vector2f& characterPos, const std::vector<std::vector<bool>>& map)
 {
-	if (m_moveClock.getElapsedTime().asMilliseconds() > speed::enemy/5)
+	if (m_movesCounter == 0)
 	{
-		if (m_movesCounter == 0)
+		m_pathToCharacter = aStar::FindShortestPath(position::GetMapIndexesFromPosition(characterPos), position::GetMapIndexesFromPosition(getPosition()), map);
+		if (!m_pathToCharacter.empty())
 		{
-			m_pathToCharacter = aStar::FindShortestPath(position::GetMapIndexesFromPosition(characterPos), position::GetMapIndexesFromPosition(getPosition()), map);
-			if (!m_pathToCharacter.empty())
-			{
-				ChooseDirection();
-				Enemy::Move();
-				m_movesCounter++;
-			}
+			ChooseDirection();
+			Enemy::Move();
+			m_movesCounter++;
+		}
+	}
+	else
+	{
+		if (m_movesCounter == 4)
+		{
+			Enemy::Move();
+			m_movesCounter = 0;
 		}
 		else
 		{
-			if (m_movesCounter == 4)
-			{
-				Enemy::Move();
-				m_movesCounter = 0;
-			}
-			else
-			{
-				Enemy::Move();
-				m_movesCounter++;
-			}
+			Enemy::Move();
+			m_movesCounter++;
 		}
 	}
 }
@@ -95,11 +91,11 @@ void Enemy::Move()
 		UpdateHpBarPos();
 		break;
 	case Direction::Down:
-		Moveable::Move({0.f, 10.f});
+		Moveable::Move({ 0.f, 10.f });
 		UpdateHpBarPos();
 		break;
 	case Direction::Up:
-		Moveable::Move({0.f, -10.f});
+		Moveable::Move({ 0.f, -10.f });
 		UpdateHpBarPos();
 		break;
 	}

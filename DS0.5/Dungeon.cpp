@@ -18,7 +18,6 @@ void Dungeon::Update(Character& character)
 	TryOpenGate(character.GetEveryPossibleMovement());
 	AttackCharacter(character);
 	AttackOpponents(character);
-	MakeEnemiesMove(character.getPosition());
 }
 
 void Dungeon::Draw(sf::RenderWindow& window)

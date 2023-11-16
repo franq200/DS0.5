@@ -16,7 +16,7 @@ class Character;
 class Enemy : public Fightable, public Moveable
 {
 public:
-	Enemy(float attackDamage, float startHp, float scale, const std::vector<sf::Texture>& textures);
+	Enemy(float attackDamage, float startHp, float scale, const std::vector<std::reference_wrapper<sf::Texture>>& textures);
 	void Init(const sf::Vector2f& spawnPos);
 	virtual void Restart() = 0;
 	void TryKill(Character& character);

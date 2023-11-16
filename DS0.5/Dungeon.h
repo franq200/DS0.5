@@ -13,11 +13,11 @@ public:
 	void Update(Character& character) override;
 	void Draw(sf::RenderWindow& window) override;
 	void Restart() override;
+	virtual void MakeEnemiesMove(const sf::Vector2f& characterPos) override;
 private:
 	void TryOpenGate(const std::vector<sf::Vector2f>& characterPositions);
 	void AttackCharacter(Character& character);
 	void AttackOpponents(Character& character);
-	void MakeEnemiesMove(const sf::Vector2f& characterPos);
 	void DrawEnemies(sf::RenderWindow& window);
 	void LoadMap() override;
 	void Init() override;

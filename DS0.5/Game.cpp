@@ -7,7 +7,7 @@
 
 Game::Game()
 {
-	LoadTextures();
+	//LoadTextures();
 	m_window.create(sf::VideoMode(size::windowSizeX, size::windowSizeY), "SFML works!");
 	m_window.setFramerateLimit(60);
 	ViewInit();
@@ -17,10 +17,10 @@ Game::Game()
 
 void Game::Update()
 {
-	Events();
 	while (m_window.isOpen())
 	{
-		switch (m_gameState) 
+		Events();
+		switch (m_gameState)
 		{
 		case GameState::game:
 			if (!m_gameplay.Update(m_view))

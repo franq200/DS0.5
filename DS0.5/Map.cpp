@@ -65,6 +65,10 @@ std::optional<std::pair<float, float>> Map::GetCollisionSquare(const sf::Vector2
 	return std::nullopt;
 }
 
+void Map::MakeEnemiesMove(const sf::Vector2f& characterPos)
+{
+}
+
 void Map::DrawMap(sf::RenderWindow& window)
 {
 	for (int i = 0; i < m_map.size(); ++i)

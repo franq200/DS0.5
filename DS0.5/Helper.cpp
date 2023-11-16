@@ -21,7 +21,7 @@ namespace textures
 namespace speed
 {
 	float character = 100.f;
-	float enemy = 600.f;
+	float enemy = 500.f;
 	float enemyAttackSpeed = 700.f;
 	float characterAttackSpeed = 300.f;
 }

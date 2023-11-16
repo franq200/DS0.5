@@ -24,9 +24,11 @@ private:
 	void Move(sf::Vector2f moveValue, sf::View& view);
 	void DrawObjects(sf::RenderWindow& window);
 	void Restart();
+
 	Character m_character;
 	MiniMap m_miniMap;
 	std::vector<std::unique_ptr<Map>> m_maps;
 	MapStates m_currentMap = MapStates::village;
+	sf::Clock m_moveClock;
 };
 

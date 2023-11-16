@@ -13,7 +13,12 @@ bool Gameplay::Update(sf::View& view)
 {
 	std::unique_ptr<Map>& currentMap = m_maps[static_cast<int>(m_currentMap)];
 	currentMap->Update(m_character);
-	TryMoveCharacter(view);
+	if (m_moveClock.getElapsedTime() >= sf::milliseconds(100))
+	{
+		TryMoveCharacter(view);
+		currentMap->MakeEnemiesMove(m_character.getPosition());
+		m_moveClock.restart();
+	}
 	TryChangeMap();
 	return !TryKillCharacter();
 }
@@ -37,24 +42,21 @@ void Gameplay::TryMoveCharacter(sf::View& view)
 	}
 	else
 	{
-		if (m_character.GetMoveClockAsMilliseconds() >= speed::character)
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextUp(), { CellState::Filled, CellState::CloseGate }))
 		{
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextUp(), { CellState::Filled, CellState::CloseGate }))
-			{
-				Move({ 0.f, -character::moveRange }, view);
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextLeft(), { CellState::Filled, CellState::CloseGate }))
-			{
-				Move({ -character::moveRange, 0.f }, view);
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextDown(), { CellState::Filled, CellState::CloseGate }))
-			{
-				Move({ 0.f, character::moveRange }, view);
-			}
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextRight(), { CellState::Filled, CellState::CloseGate }))
-			{
-				Move({ character::moveRange, 0.f }, view);
-			}
+			Move({ 0.f, -character::moveRange }, view);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextLeft(), { CellState::Filled, CellState::CloseGate }))
+		{
+			Move({ -character::moveRange, 0.f }, view);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextDown(), { CellState::Filled, CellState::CloseGate }))
+		{
+			Move({ 0.f, character::moveRange }, view);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextRight(), { CellState::Filled, CellState::CloseGate }))
+		{
+			Move({ character::moveRange, 0.f }, view);
 		}
 	}
 }
@@ -97,6 +99,7 @@ void Gameplay::Restart()
 		map->Restart();
 	}
 	m_currentMap = MapStates::village;
+	m_moveClock.restart();
 }
 
 void Gameplay::Draw(sf::RenderWindow& window, sf::View& view)

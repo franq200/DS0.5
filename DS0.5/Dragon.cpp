@@ -9,7 +9,6 @@ Dragon::Dragon():
 
 void Dragon::Restart()
 {
-	m_moveClock.restart();
 	setPosition(m_spawnPos);
 	m_hpBar.Init(getPosition(), enemy::defaultDragonHp);
 }

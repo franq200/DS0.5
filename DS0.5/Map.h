@@ -16,6 +16,7 @@ public:
 	virtual void Restart() = 0;
 	const sf::Vector2f& GetCharacterSpawnPos() const;
 	std::optional<std::pair<float, float>> GetCollisionSquare(const sf::Vector2f& posAfterMove, const std::vector<CellState>& forbiddenStates);
+	virtual void MakeEnemiesMove(const sf::Vector2f& characterPos);
 protected:
 	virtual void LoadMap() = 0;
 	virtual void Init() = 0;

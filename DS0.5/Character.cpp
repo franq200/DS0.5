@@ -32,7 +32,6 @@ void Character::Init(sf::Vector2f spawnPos)
 	m_spawnPos = spawnPos;
 	setTexture(textures::character);
 	setScale(character::defaultScale, character::defaultScale);
-	Moveable::Init({ textures::character, textures::walkCharacter1, textures::walkCharacter2, textures::walkCharacter3, textures::walkCharacter4 });
 	setPosition(m_spawnPos);
 	m_hpBar.Init(getPosition(), m_startHp);
 }
@@ -53,14 +52,8 @@ void Character::Attack(Enemy& enemy)
 	}
 }
 
-int Character::GetMoveClockAsMilliseconds() const
-{
-	return m_moveClock.getElapsedTime().asMilliseconds();
-}
-
 void Character::Restart()
 {
-	m_moveClock.restart();
 	setScale(character::defaultScale, character::defaultScale);
 	setPosition(m_spawnPos);
 	m_hpBar.SetHp(character::defaultHp);
