@@ -14,6 +14,7 @@ protected:
 	const std::vector<std::reference_wrapper<sf::Texture>> m_walkTextures;
 	const float m_scale;
 	int m_movesCounter = 0;
+	sf::Vector2f m_size;
 private:
 	int m_animationCounter = 0;
 };

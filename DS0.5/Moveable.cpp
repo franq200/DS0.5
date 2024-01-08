@@ -32,12 +32,12 @@ void Moveable::Rotate(const sf::Vector2f& moveValue)
 	if (moveValue.x > 0 && getScale().x < 0)
 	{
 		setScale(m_scale, m_scale);
-		move(-size::cellSize, 0.f);
+		move(-m_size.x , 0.f);
 	}
 	else if (moveValue.x < 0 && getScale().x > 0)
 	{
 		setScale(-m_scale, m_scale);
-		move(size::cellSize, 0.f);
+		move(m_size.x, 0.f);
 	}
 }
 

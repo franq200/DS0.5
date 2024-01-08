@@ -8,7 +8,6 @@ class Warrior : public Enemy
 {
 public:
 	Warrior();
-	void Restart() override;
 private:
 	void Kill(Character& character) override;
 };

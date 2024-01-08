@@ -18,7 +18,7 @@ class Enemy : public Fightable, public Moveable
 public:
 	Enemy(float attackDamage, float startHp, float scale, const std::vector<std::reference_wrapper<sf::Texture>>& textures);
 	void Init(const sf::Vector2f& spawnPos);
-	virtual void Restart() = 0;
+	void Restart();
 	void TryKill(Character& character);
 	void Attack(Character& character);
 	void PreparePathAndMove(const sf::Vector2f& characterPos, const std::vector<std::vector<bool>>& map);

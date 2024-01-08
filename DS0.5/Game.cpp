@@ -7,7 +7,7 @@
 
 Game::Game()
 {
-	//LoadTextures();
+	LoadTextures();
 	m_window.create(sf::VideoMode(size::windowSizeX, size::windowSizeY), "SFML works!");
 	m_window.setFramerateLimit(60);
 	ViewInit();
@@ -64,6 +64,10 @@ void Game::LoadTextures()
 	isLoaded &= textures::dragon.loadFromFile("textures\\characters\\Dragon.png");
 	isLoaded &= textures::start.loadFromFile("textures\\start.png");
 	isLoaded &= textures::exit.loadFromFile("textures\\exit.png");
+	isLoaded &= textures::grass.loadFromFile("textures\\grass.jpg");
+	isLoaded &= textures::rocks.loadFromFile("textures\\rocks.jpg");
+	isLoaded &= textures::wall.loadFromFile("textures\\wall.jpg");
+	isLoaded &= textures::dirt.loadFromFile("textures\\dirt.jpg");
 	if (!isLoaded)
 	{
 		throw(std::exception("failed to load textures"));

@@ -14,7 +14,13 @@ void Enemy::Init(const sf::Vector2f& spawnPos)
 	setTexture(m_walkTextures[0]);
 	setScale(m_scale, m_scale);
 	setPosition(m_spawnPos);
-	m_hpBar.Init(getPosition(), m_startHp);
+	m_hpBar.Init(getPosition(), m_startHp, static_cast<uint16_t>(m_size.x));
+}
+
+void Enemy::Restart()
+{
+	setPosition(m_spawnPos);
+	m_hpBar.Restart(getPosition(), m_startHp);
 }
 
 void Enemy::TryKill(Character& character)
@@ -75,7 +81,7 @@ void Enemy::PreparePathAndMove(const sf::Vector2f& characterPos, const std::vect
 
 void Enemy::UpdateHpBarPos()
 {
-	m_hpBar.SetPosition(getPosition());
+	m_hpBar.SetPosition(Moveable::getPosition());
 }
 
 void Enemy::Move()
@@ -103,7 +109,7 @@ void Enemy::Move()
 
 void Enemy::ChooseDirection()
 {
-	IndexPosition pos = position::GetMapIndexesFromPosition(getPosition());
+	IndexPosition pos = position::GetMapIndexesFromPosition(Moveable::getPosition());
 	if (m_pathToCharacter.back().y > pos.second)
 	{
 		m_moveDirection = Direction::Down;

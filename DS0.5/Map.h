@@ -11,15 +11,16 @@ class Map
 {
 public:
 	virtual void MapInit() = 0;
-	virtual void Update(Character& character) = 0;
+	virtual void Update(Character& character);
 	virtual void Draw(sf::RenderWindow& window) = 0;
-	virtual void Restart() = 0;
+	virtual void Restart();
 	const sf::Vector2f& GetCharacterSpawnPos() const;
 	std::optional<std::pair<float, float>> GetCollisionSquare(const sf::Vector2f& posAfterMove, const std::vector<CellState>& forbiddenStates);
 	virtual void MakeEnemiesMove(const sf::Vector2f& characterPos);
 protected:
 	virtual void LoadMap() = 0;
-	virtual void Init() = 0;
+	virtual void Init();
+	virtual void SetTextures() = 0;
 	void DrawMap(sf::RenderWindow& window);
 
 	bool IsCollisionWithCell(const sf::Vector2f& cellPos, const sf::Vector2f& characterPos);

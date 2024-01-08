@@ -37,6 +37,14 @@ std::vector<sf::Vector2f> prepareOccupiedPositionsByCharacter(const sf::Vector2f
 	return characterPositions;
 }
 
+void Map::Update(Character& character)
+{
+}
+
+void Map::Restart()
+{
+}
+
 const sf::Vector2f& Map::GetCharacterSpawnPos() const
 {
 	return m_characterSpawnPos;
@@ -66,6 +74,10 @@ std::optional<std::pair<float, float>> Map::GetCollisionSquare(const sf::Vector2
 }
 
 void Map::MakeEnemiesMove(const sf::Vector2f& characterPos)
+{
+}
+
+void Map::Init()
 {
 }
 

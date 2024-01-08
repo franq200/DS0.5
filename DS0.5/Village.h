@@ -6,11 +6,8 @@ class Village : public Map
 {
 public:
 	void MapInit() override;
-	void Update(Character& character) override;
 	void Draw(sf::RenderWindow& window) override;
-	void Restart() override;
 private:
+	void SetTextures() override;
 	void LoadMap() override;
-	void Init() override;
 };
-

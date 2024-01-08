@@ -6,6 +6,12 @@ m_state(state)
 {
 	setSize({size::cellSize, size::cellSize});
 	setPosition(pos);
+}
+
+void Cell::SetTextures(const Textures& textures)
+{
+	m_textures.ground = textures.ground;
+	m_textures.wall = textures.wall;
 	SetTexture();
 }
 
@@ -25,10 +31,10 @@ void Cell::SetTexture()
 	switch (m_state)
 	{
 	case CellState::Empty:
-		setFillColor(sf::Color::Green);
+		setTexture(&(m_textures.ground));
 		break;
 	case CellState::Filled:
-		setFillColor(sf::Color::Red);
+		setTexture(&(m_textures.wall));
 		break;
 	case CellState::Teleport:
 		setFillColor(sf::Color::Blue);
@@ -37,6 +43,6 @@ void Cell::SetTexture()
 		setFillColor(sf::Color::Yellow);
 		break;
 	case CellState::OpenGate:
-		setFillColor(sf::Color::Green);
+		setTexture(&textures::dirt);
 	}
 }

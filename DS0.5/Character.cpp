@@ -5,6 +5,7 @@
 Character::Character():
 	Fightable(20.f, character::defaultHp), Moveable({ textures::character, textures::walkCharacter1, textures::walkCharacter2, textures::walkCharacter3, textures::walkCharacter4 }, character::defaultScale)
 {
+	m_size = { 50.f, 50.f };
 }
 
 void Character::Teleport(const sf::Vector2f& newPosition)
@@ -33,7 +34,7 @@ void Character::Init(sf::Vector2f spawnPos)
 	setTexture(textures::character);
 	setScale(character::defaultScale, character::defaultScale);
 	setPosition(m_spawnPos);
-	m_hpBar.Init(getPosition(), m_startHp);
+	m_hpBar.Init(getPosition(), m_startHp, static_cast<uint16_t>(textures::character.getSize().x*character::defaultScale));
 }
 
 void Character::MakeMove(const sf::Vector2f& moveValue)

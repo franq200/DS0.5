@@ -16,6 +16,10 @@ namespace textures
 	sf::Texture dragon;
 	sf::Texture start;
 	sf::Texture exit;
+	sf::Texture grass;
+	sf::Texture rocks;
+	sf::Texture wall;
+	sf::Texture dirt;
 }
 
 namespace speed
@@ -24,13 +28,6 @@ namespace speed
 	float enemy = 500.f;
 	float enemyAttackSpeed = 700.f;
 	float characterAttackSpeed = 300.f;
-}
-
-namespace enemy
-{
-	const float defaultGoblinHp = 100.f;
-	const float defaultWarriorHp = 110.f;
-	const float defaultDragonHp = 250.f;
 }
 
 namespace position
@@ -42,7 +39,7 @@ namespace position
 
 	sf::Vector2f GetPositionFromMapIndexes(const std::pair<std::size_t, std::size_t>& mapIndexes)
 	{
-		return sf::Vector2f(mapIndexes.first * static_cast<float>(50), mapIndexes.second * static_cast<float>(50));
+		return sf::Vector2f(mapIndexes.first * static_cast<float>(size::cellSize), mapIndexes.second * static_cast<float>(size::cellSize));
 	}
 
 	std::pair<int, int> Left(int x, int y)
@@ -80,5 +77,4 @@ namespace character
 	float defaultScale = 0.25f;
 	float defaultHp = 100.f;
 	float moveRange = 10.f;
-	float attackDamage = 20.f;
 }

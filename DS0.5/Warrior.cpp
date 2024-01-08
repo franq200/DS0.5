@@ -3,14 +3,9 @@
 #include "Character.h"
 
 Warrior::Warrior():
-	Enemy(30.f, enemy::defaultWarriorHp, 0.33f, {textures::warrior})
+	Enemy(30.f, 110.f, 0.33f, {textures::warrior})
 {
-}
-
-void Warrior::Restart()
-{
-	setPosition(m_spawnPos);
-	m_hpBar.Init(getPosition(), enemy::defaultWarriorHp);
+	m_size = { 50.f, 50.f };
 }
 
 void Warrior::Kill(Character& character)

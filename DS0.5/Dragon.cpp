@@ -3,14 +3,9 @@
 #include "Character.h"
 
 Dragon::Dragon():
-	Enemy(60.f, enemy::defaultDragonHp, 0.2f, { textures::dragon })
+	Enemy(60.f, 250.f, 0.2f, { textures::dragon })
 {
-}
-
-void Dragon::Restart()
-{
-	setPosition(m_spawnPos);
-	m_hpBar.Init(getPosition(), enemy::defaultDragonHp);
+	m_size = { 100.f, 60.f };
 }
 
 void Dragon::Kill(Character& character)

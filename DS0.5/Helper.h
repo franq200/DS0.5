@@ -21,6 +21,10 @@ namespace textures
 	extern sf::Texture dragon;
 	extern sf::Texture start;
 	extern sf::Texture exit;
+	extern sf::Texture grass;
+	extern sf::Texture rocks;
+	extern sf::Texture wall;
+	extern sf::Texture dirt;
 }
 
 namespace speed
@@ -29,13 +33,6 @@ namespace speed
 	extern float enemy;
 	extern float enemyAttackSpeed;
 	extern float characterAttackSpeed;
-}
-
-namespace enemy
-{
-	extern const float defaultGoblinHp;
-	extern const float defaultWarriorHp;
-	extern const float defaultDragonHp;
 }
 
 namespace position
@@ -63,5 +60,4 @@ namespace character
 	extern float defaultScale;
 	extern float defaultHp;
 	extern float moveRange;
-	extern float attackDamage;
 }

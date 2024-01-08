@@ -19,6 +19,7 @@ private:
 	void AttackCharacter(Character& character);
 	void AttackOpponents(Character& character);
 	void DrawEnemies(sf::RenderWindow& window);
+	void SetTextures() override;
 	void LoadMap() override;
 	void Init() override;
 	void Open(int x, int y);

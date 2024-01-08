@@ -8,7 +8,6 @@ class Goblin : public Enemy
 {
 public:
 	Goblin();
-	void Restart() override;
 private:
 	void Kill(Character& character) override;
 };
