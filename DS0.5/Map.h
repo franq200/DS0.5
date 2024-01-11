@@ -15,15 +15,14 @@ public:
 	virtual void Draw(sf::RenderWindow& window) = 0;
 	virtual void Restart();
 	const sf::Vector2f& GetCharacterSpawnPos() const;
-	std::optional<std::pair<float, float>> GetCollisionSquare(const sf::Vector2f& posAfterMove, const std::vector<CellState>& forbiddenStates);
+	std::optional<std::pair<float, float>> GetCollisionSquare(const sf::Vector2f& posAfterMove, const std::vector<CellState>& forbiddenStates) const;
 	virtual void MakeEnemiesMove(const sf::Vector2f& characterPos);
 protected:
 	virtual void LoadMap() = 0;
 	virtual void Init();
-	virtual void SetTextures() = 0;
 	void DrawMap(sf::RenderWindow& window);
 
-	bool IsCollisionWithCell(const sf::Vector2f& cellPos, const sf::Vector2f& characterPos);
+	bool IsCollisionWithCell(const sf::Vector2f& cellPos, const sf::Vector2f& characterPos) const;
 	std::vector<std::vector<Cell>> m_map;
 	sf::Vector2f m_characterSpawnPos;
 	std::vector<std::vector<bool>> m_rawMap;

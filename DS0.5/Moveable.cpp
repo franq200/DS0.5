@@ -1,9 +1,10 @@
 #include "Moveable.h"
 #include "Helper.h"
 
-Moveable::Moveable(const std::vector<std::reference_wrapper<sf::Texture>>& walkTextures, float scale) :
-	m_walkTextures(walkTextures), m_scale(scale)
+Moveable::Moveable(const std::vector<std::reference_wrapper<sf::Texture>>& walkTextures, float scale, float moveDistance) :
+	m_walkTextures(walkTextures), m_scale(scale), m_moveDistance(moveDistance)
 {
+	m_movesToAnimate = static_cast<uint8_t>(10 / m_moveDistance);
 }
 
 sf::Vector2f Moveable::getPosition() const
@@ -43,7 +44,18 @@ void Moveable::Rotate(const sf::Vector2f& moveValue)
 
 void Moveable::Move(const sf::Vector2f& moveValue)
 {
-	WalkAnimation();
+	if (m_movesCounter >= m_movesToAnimate)
+	{
+		WalkAnimation();
+		m_movesCounter = 0;
+	}
 	Rotate(moveValue);
 	move(moveValue);
+	m_movesCounter++;
+}
+
+void Moveable::SetSpeed(float speedPercent)
+{
+	m_moveDistance *= speedPercent;
+	m_movesToAnimate = static_cast<uint8_t>(10 / m_moveDistance);
 }

@@ -3,14 +3,6 @@
 #include "Fightable.h"
 #include "Moveable.h"
 
-enum class Direction
-{
-	Left = 0,
-	Right,
-	Down,
-	Up
-};
-
 class Character;
 
 class Enemy : public Fightable, public Moveable

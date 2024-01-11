@@ -7,7 +7,6 @@ void Village::MapInit()
 {
 	LoadMap();
 	Init();
-	SetTextures();
 }
 
 void Village::Draw(sf::RenderWindow& window)
@@ -15,23 +14,12 @@ void Village::Draw(sf::RenderWindow& window)
 	DrawMap(window);
 }
 
-void Village::SetTextures()
-{
-	for (int i = 0; i < m_map.size(); i++)
-	{
-		for (int j = 0; j < m_map[i].size(); j++)
-		{
-			m_map[i][j].SetTextures({ textures::wall, textures::grass });
-		}
-	}
-}
-
 void Village::LoadMap()
 {
 	std::ifstream file("maps\\map.txt");
 	std::string line;
 
-	Parser parser;
+	Parser parser({textures::wall, textures::grass});
 	while (getline(file, line))
 	{
 		std::vector<Cell> row;

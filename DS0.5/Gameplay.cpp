@@ -13,7 +13,7 @@ bool Gameplay::Update(sf::View& view)
 {
 	std::unique_ptr<Map>& currentMap = m_maps[static_cast<int>(m_currentMap)];
 	currentMap->Update(m_character);
-	if (m_moveClock.getElapsedTime() >= sf::milliseconds(100))
+	if (m_moveClock.getElapsedTime() >= sf::milliseconds(20))
 	{
 		TryMoveCharacter(view);
 		currentMap->MakeEnemiesMove(m_character.getPosition());
@@ -36,28 +36,69 @@ void Gameplay::LoadMaps()
 
 void Gameplay::TryMoveCharacter(sf::View& view)
 {
-	if (!sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	bool shouldMoveLeft = sf::Keyboard::isKeyPressed(sf::Keyboard::A) && m_character.IsLeftMovePossible(m_maps[static_cast<int>(m_currentMap)].get());
+	bool shouldMoveRight = sf::Keyboard::isKeyPressed(sf::Keyboard::D) && m_character.IsRightMovePossible(m_maps[static_cast<int>(m_currentMap)].get());
+	bool shouldMoveDown = sf::Keyboard::isKeyPressed(sf::Keyboard::S) && m_character.IsDownMovePossible(m_maps[static_cast<int>(m_currentMap)].get());
+	bool shouldMoveUp = sf::Keyboard::isKeyPressed(sf::Keyboard::W) && m_character.IsUpMovePossible(m_maps[static_cast<int>(m_currentMap)].get());
+
+	if (!shouldMoveUp && !shouldMoveDown && !shouldMoveRight && !shouldMoveLeft)
 	{
 		m_character.setTexture(textures::character);
 	}
 	else
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextUp(), { CellState::Filled, CellState::CloseGate }))
+		sf::Vector2f moveVector;
+		if (shouldMoveUp)
 		{
-			Move({ 0.f, -character::moveRange }, view);
+			if ((shouldMoveLeft || shouldMoveRight))
+			{
+				if (!m_character.IsSlowed())
+				{
+					m_character.SetSpeed(0.5);
+				}
+			}
+			else if (m_character.IsSlowed())
+			{
+				m_character.SetSpeed(2.0);
+			}
+			moveVector.y = m_character.GetMoveDistance() * (-1);
+			//Move({ 0.f, m_character.GetMoveDistance()*(-1)}, view);
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextLeft(), { CellState::Filled, CellState::CloseGate }))
+		if (shouldMoveDown)
 		{
-			Move({ -character::moveRange, 0.f }, view);
+			if ((shouldMoveLeft || shouldMoveRight))
+			{
+				if (!m_character.IsSlowed())
+				{
+					m_character.SetSpeed(0.5);
+				}
+			}
+			else if (m_character.IsSlowed())
+			{
+				m_character.SetSpeed(2.0);
+			}
+			moveVector.y = m_character.GetMoveDistance();
+			//Move({ 0.f, m_character.GetMoveDistance() }, view);
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextDown(), { CellState::Filled, CellState::CloseGate }))
+		if (shouldMoveLeft)
 		{
-			Move({ 0.f, character::moveRange }, view);
+			if (m_character.IsSlowed() && !(shouldMoveUp || shouldMoveDown))
+			{
+				m_character.SetSpeed(2.0);
+			}
+			moveVector.x = m_character.GetMoveDistance() * (-1);
+			//Move({ m_character.GetMoveDistance()*(-1), 0.f}, view);
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetNextRight(), { CellState::Filled, CellState::CloseGate }))
+		if (shouldMoveRight)
 		{
-			Move({ character::moveRange, 0.f }, view);
+			if (m_character.IsSlowed() && !(shouldMoveUp || shouldMoveDown))
+			{
+				m_character.SetSpeed(2.0);
+			}
+			moveVector.x = m_character.GetMoveDistance();
+			//Move({ m_character.GetMoveDistance(), 0.f }, view);
 		}
+		Move(moveVector, view);
 	}
 }
 

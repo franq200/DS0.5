@@ -20,6 +20,8 @@ namespace textures
 	sf::Texture rocks;
 	sf::Texture wall;
 	sf::Texture dirt;
+	sf::Texture gate;
+	sf::Texture teleport;
 }
 
 namespace speed
@@ -76,5 +78,4 @@ namespace character
 	float damageScaling = 1.f;
 	float defaultScale = 0.25f;
 	float defaultHp = 100.f;
-	float moveRange = 10.f;
 }

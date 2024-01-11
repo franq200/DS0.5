@@ -50,7 +50,7 @@ const sf::Vector2f& Map::GetCharacterSpawnPos() const
 	return m_characterSpawnPos;
 }
 
-std::optional<std::pair<float, float>> Map::GetCollisionSquare(const sf::Vector2f& posAfterMove, const std::vector<CellState>& forbiddenStates)
+std::optional<std::pair<float, float>> Map::GetCollisionSquare(const sf::Vector2f& posAfterMove, const std::vector<CellState>& forbiddenStates) const
 {
 	auto [xInt, yInt] = position::GetMapIndexesFromPosition({ posAfterMove.x, posAfterMove.y });
 	float x = static_cast<float>(xInt);
@@ -92,7 +92,7 @@ void Map::DrawMap(sf::RenderWindow& window)
 	}
 }
 
-bool Map::IsCollisionWithCell(const sf::Vector2f& cellPos, const sf::Vector2f& characterPos)
+bool Map::IsCollisionWithCell(const sf::Vector2f& cellPos, const sf::Vector2f& characterPos) const
 {
 	return (std::abs(characterPos.x - cellPos.x) <= size::cellSize && std::abs(characterPos.y - cellPos.y) <= size::cellSize);
 }

@@ -11,7 +11,6 @@ void Dungeon::MapInit()
 {
 	LoadMap();
 	Init();
-	SetTextures();
 }
 
 void Dungeon::Update(Character& character)
@@ -35,7 +34,7 @@ void Dungeon::Restart()
 		{
 			if (m_map[x][y].GetState() == CellState::OpenGate)
 			{
-				m_map[x][y].ChangeState(CellState::CloseGate);
+				m_map[x][y].SetCellClosed();
 				m_rawMap[x][y] = false;
 			}
 		}
@@ -110,23 +109,12 @@ void Dungeon::DrawEnemies(sf::RenderWindow& window)
 	}
 }
 
-void Dungeon::SetTextures()
-{
-	for (int i = 0; i < m_map.size(); i++)
-	{
-		for (int j = 0; j < m_map[i].size(); j++)
-		{
-			m_map[i][j].SetTextures({ textures::wall, textures::rocks });
-		}
-	}
-}
-
 void Dungeon::LoadMap()
 {
 	std::ifstream file("maps\\dungeon1.txt");
 	std::string line;
-
-	Parser parser;
+	Parser parser({ textures::wall, textures::rocks });
+	//DungeonParser parser({&textures::dungeonWall, &textures::dugeonGround});
 	while (getline(file, line))
 	{
 		for (int i = 0; i < line.size(); ++i)
@@ -172,7 +160,7 @@ void Dungeon::Init()
 
 void Dungeon::Open(int x, int y)
 {
-	m_map[x][y].ChangeState(CellState::OpenGate);
+	m_map[x][y].SetCellOpen();
 	m_rawMap[x][y] = true;
 	const auto [rX, rY] = position::Right(x, y);
 	if (m_map[rX][rY].GetState() == CellState::CloseGate)

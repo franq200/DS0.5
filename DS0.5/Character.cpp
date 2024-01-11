@@ -1,9 +1,11 @@
 #include "Character.h"
 #include "Helper.h"
 #include "enemy.h"
+#include "Map.h"
 
 Character::Character():
-	Fightable(20.f, character::defaultHp), Moveable({ textures::character, textures::walkCharacter1, textures::walkCharacter2, textures::walkCharacter3, textures::walkCharacter4 }, character::defaultScale)
+	Fightable(20.f, character::defaultHp), 
+	Moveable({ textures::character, textures::walkCharacter1, textures::walkCharacter2, textures::walkCharacter3, textures::walkCharacter4 }, character::defaultScale, 3.f)
 {
 	m_size = { 50.f, 50.f };
 }
@@ -61,28 +63,48 @@ void Character::Restart()
 	m_hpBar.SetPosition(getPosition());
 }
 
+bool Character::IsRightMovePossible(const Map* map) const
+{
+	return !map->GetCollisionSquare(GetNextRight(), { CellState::Filled, CellState::CloseGate });
+}
+
+bool Character::IsUpMovePossible(const Map* map) const
+{
+	return !map->GetCollisionSquare(GetNextUp(), { CellState::Filled, CellState::CloseGate });
+}
+
+bool Character::IsDownMovePossible(const Map* map) const
+{
+	return !map->GetCollisionSquare(GetNextDown(), { CellState::Filled, CellState::CloseGate });
+}
+
+bool Character::IsLeftMovePossible(const Map* map) const
+{
+	return !map->GetCollisionSquare(GetNextLeft(), { CellState::Filled, CellState::CloseGate });
+}
+
 sf::Vector2f Character::GetNextUp() const
 {
 	sf::Vector2f pos = getPosition();
-	return { pos.x, pos.y - character::moveRange};
+	return { pos.x, pos.y - m_moveDistance};
 }
 
 sf::Vector2f Character::GetNextDown() const
 {
 	sf::Vector2f pos = getPosition();
-	return { pos.x, pos.y + character::moveRange };
+	return { pos.x, pos.y + m_moveDistance };
 }
 
 sf::Vector2f Character::GetNextLeft() const
 {
 	sf::Vector2f pos = getPosition();
-	return { pos.x - character::moveRange, pos.y};
+	return { pos.x - m_moveDistance, pos.y};
 }
 
 sf::Vector2f Character::GetNextRight() const
 {
 	sf::Vector2f pos = getPosition();
-	return { pos.x + character::moveRange, pos.y};
+	return { pos.x + m_moveDistance, pos.y};
 }
 
 void Character::UpdateHpBarPos()
@@ -90,7 +112,22 @@ void Character::UpdateHpBarPos()
 	m_hpBar.SetPosition(getPosition());
 }
 
+void Character::SetSpeed(float speedPercent)
+{
+	Moveable::SetSpeed(speedPercent);
+}
+
 std::vector<sf::Vector2f> Character::GetEveryPossibleMovement() const
 {
 	return { GetNextRight(), GetNextLeft(), GetNextUp(), GetNextDown()};
+}
+
+bool Character::IsSlowed()
+{
+	return m_moveDistance < 3;
+}
+
+float Character::GetMoveDistance() const
+{
+	return m_moveDistance;
 }

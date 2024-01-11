@@ -20,10 +20,10 @@ private:
 	void LoadMaps();
 	void TryMoveCharacter(sf::View& view);
 	void TryChangeMap();
-	bool TryKillCharacter();
 	void Move(sf::Vector2f moveValue, sf::View& view);
 	void DrawObjects(sf::RenderWindow& window);
 	void Restart();
+	bool TryKillCharacter();
 
 	Character m_character;
 	MiniMap m_miniMap;

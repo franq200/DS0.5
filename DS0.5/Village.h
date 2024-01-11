@@ -8,6 +8,5 @@ public:
 	void MapInit() override;
 	void Draw(sf::RenderWindow& window) override;
 private:
-	void SetTextures() override;
 	void LoadMap() override;
 };

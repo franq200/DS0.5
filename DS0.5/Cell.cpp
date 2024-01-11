@@ -1,18 +1,12 @@
 #include "Cell.h"
 #include "Helper.h"
 
-Cell::Cell(const sf::Vector2f& pos, const CellState& state) :
+Cell::Cell(const sf::Vector2f& pos, const CellState& state, const sf::Texture* texture) :
 m_state(state)
 {
+	setTexture(texture);
 	setSize({size::cellSize, size::cellSize});
 	setPosition(pos);
-}
-
-void Cell::SetTextures(const Textures& textures)
-{
-	m_textures.ground = textures.ground;
-	m_textures.wall = textures.wall;
-	SetTexture();
 }
 
 CellState Cell::GetState() const
@@ -20,29 +14,14 @@ CellState Cell::GetState() const
 	return m_state;
 }
 
-void Cell::ChangeState(CellState newState)
+void Cell::SetCellOpen()
 {
-	m_state = newState;
-	SetTexture();
+	m_state = CellState::OpenGate;
+	setTexture(&textures::dirt);
 }
 
-void Cell::SetTexture()
+void Cell::SetCellClosed()
 {
-	switch (m_state)
-	{
-	case CellState::Empty:
-		setTexture(&(m_textures.ground));
-		break;
-	case CellState::Filled:
-		setTexture(&(m_textures.wall));
-		break;
-	case CellState::Teleport:
-		setFillColor(sf::Color::Blue);
-		break;
-	case CellState::CloseGate:
-		setFillColor(sf::Color::Yellow);
-		break;
-	case CellState::OpenGate:
-		setTexture(&textures::dirt);
-	}
+	m_state = CellState::CloseGate;
+	setTexture(&textures::gate);
 }

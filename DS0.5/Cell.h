@@ -2,12 +2,6 @@
 #include <SFML/Graphics.hpp>
 #include "Helper.h"
 
-struct Textures
-{
-	sf::Texture wall;
-	sf::Texture ground;
-};
-
 enum class CellState : uint8_t
 {
 	Empty = 0,
@@ -21,12 +15,10 @@ class Cell : public sf::RectangleShape
 {
 public:
 	Cell() = default;
-	Cell(const sf::Vector2f& pos, const CellState& state);
-	void SetTextures(const Textures& textures);
+	Cell(const sf::Vector2f& pos, const CellState& state, const sf::Texture* texture);
 	CellState GetState() const;
-	void ChangeState(CellState newState);
+	void SetCellOpen();
+	void SetCellClosed();
 private:
-	void SetTexture();
 	CellState m_state;
-	Textures m_textures;
 };

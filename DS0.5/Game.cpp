@@ -68,6 +68,8 @@ void Game::LoadTextures()
 	isLoaded &= textures::rocks.loadFromFile("textures\\rocks.jpg");
 	isLoaded &= textures::wall.loadFromFile("textures\\wall.jpg");
 	isLoaded &= textures::dirt.loadFromFile("textures\\dirt.jpg");
+	isLoaded &= textures::teleport.loadFromFile("textures\\teleport.jpg");
+	isLoaded &= textures::gate.loadFromFile("textures\\gate.jpg");
 	if (!isLoaded)
 	{
 		throw(std::exception("failed to load textures"));

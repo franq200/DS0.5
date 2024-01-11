@@ -4,7 +4,7 @@
 #include "AStar.h"
 
 Enemy::Enemy(float attackDamage, float startHp, float scale, const std::vector<std::reference_wrapper<sf::Texture>>& textures) :
-	Fightable(attackDamage, startHp), Moveable(textures, scale)
+	Fightable(attackDamage, startHp), Moveable(textures, scale, 2.f)
 {
 }
 
@@ -61,21 +61,11 @@ void Enemy::PreparePathAndMove(const sf::Vector2f& characterPos, const std::vect
 		{
 			ChooseDirection();
 			Enemy::Move();
-			m_movesCounter++;
 		}
 	}
 	else
 	{
-		if (m_movesCounter == 4)
-		{
-			Enemy::Move();
-			m_movesCounter = 0;
-		}
-		else
-		{
-			Enemy::Move();
-			m_movesCounter++;
-		}
+		Enemy::Move();
 	}
 }
 
@@ -89,19 +79,19 @@ void Enemy::Move()
 	switch (m_moveDirection)
 	{
 	case Direction::Right:
-		Moveable::Move({ 10.f, 0.f });
+		Moveable::Move({ m_moveDistance, 0.f });
 		UpdateHpBarPos();
 		break;
 	case Direction::Left:
-		Moveable::Move({ -10.f, 0.f });
+		Moveable::Move({ m_moveDistance*(-1), 0.f});
 		UpdateHpBarPos();
 		break;
 	case Direction::Down:
-		Moveable::Move({ 0.f, 10.f });
+		Moveable::Move({ 0.f, m_moveDistance });
 		UpdateHpBarPos();
 		break;
 	case Direction::Up:
-		Moveable::Move({ 0.f, -10.f });
+		Moveable::Move({ 0.f, m_moveDistance * (-1) });
 		UpdateHpBarPos();
 		break;
 	}

@@ -25,6 +25,8 @@ namespace textures
 	extern sf::Texture rocks;
 	extern sf::Texture wall;
 	extern sf::Texture dirt;
+	extern sf::Texture gate;
+	extern sf::Texture teleport;
 }
 
 namespace speed
@@ -59,5 +61,4 @@ namespace character
 	extern float damageScaling;
 	extern float defaultScale;
 	extern float defaultHp;
-	extern float moveRange;
 }
