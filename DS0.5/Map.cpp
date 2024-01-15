@@ -37,7 +37,7 @@ std::vector<sf::Vector2f> prepareOccupiedPositionsByCharacter(const sf::Vector2f
 	return characterPositions;
 }
 
-void Map::Update(Character& character)
+void Map::Update(Character&)
 {
 }
 
@@ -53,27 +53,27 @@ const sf::Vector2f& Map::GetCharacterSpawnPos() const
 std::optional<std::pair<float, float>> Map::GetCollisionSquare(const sf::Vector2f& posAfterMove, const std::vector<CellState>& forbiddenStates) const
 {
 	auto [xInt, yInt] = position::GetMapIndexesFromPosition({ posAfterMove.x, posAfterMove.y });
-	float x = static_cast<float>(xInt);
-	float y = static_cast<float>(yInt);
+	float xIndex = static_cast<float>(xInt);
+	float yIndex = static_cast<float>(yInt);
 
-	std::vector<sf::Vector2f> characterPositions = prepareOccupiedPositionsByCharacter(posAfterMove, x, y);
+	std::vector<sf::Vector2f> characterPositions = prepareOccupiedPositionsByCharacter(posAfterMove, xIndex, yIndex);
 	
-	for (const auto[x, y] : characterPositions)
+	for (const auto[xCharacterPos, yCharacterPos] : characterPositions)
 	{ 
-		CellState cellState = m_map[static_cast<int>(y)][static_cast<int>(x)].GetState();
+		CellState cellState = m_map[static_cast<int>(yCharacterPos)][static_cast<int>(xCharacterPos)].GetState();
 		if (std::any_of(forbiddenStates.begin(), forbiddenStates.end(), [cellState](auto state) {return cellState == state; }))
 		{
-			bool isCollision = IsCollisionWithCell({x * size::cellSize, y * size::cellSize}, posAfterMove);
+			bool isCollision = IsCollisionWithCell({xCharacterPos * size::cellSize, yCharacterPos * size::cellSize}, posAfterMove);
 			if (isCollision)
 			{
-				return std::make_optional < std::pair<float, float>>(x, y);
+				return std::make_optional < std::pair<float, float>>(xCharacterPos, yCharacterPos);
 			}
 		}
 	}
 	return std::nullopt;
 }
 
-void Map::MakeEnemiesMove(const sf::Vector2f& characterPos)
+void Map::MakeEnemiesMove(const sf::Vector2f&)
 {
 }
 

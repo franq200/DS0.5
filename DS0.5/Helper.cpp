@@ -24,14 +24,6 @@ namespace textures
 	sf::Texture teleport;
 }
 
-namespace speed
-{
-	float character = 100.f;
-	float enemy = 500.f;
-	float enemyAttackSpeed = 700.f;
-	float characterAttackSpeed = 300.f;
-}
-
 namespace position
 {
 	IndexPosition GetMapIndexesFromPosition(const sf::Vector2f& pos)
@@ -76,6 +68,4 @@ namespace character
 {
 	float damageTakenScaling = 1.f;
 	float damageScaling = 1.f;
-	float defaultScale = 0.25f;
-	float defaultHp = 100.f;
 }

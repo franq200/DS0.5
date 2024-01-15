@@ -3,9 +3,8 @@
 #include "Character.h"
 
 Warrior::Warrior():
-	Enemy(30.f, 110.f, 0.33f, {textures::warrior})
+	Enemy(Damage(30.f), Hp(110.f), 0.33f, AttackRange(50.f), AttackSpeed(700.f), {textures::warrior})
 {
-	m_size = { 50.f, 50.f };
 }
 
 void Warrior::Kill(Character& character)

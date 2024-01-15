@@ -29,14 +29,6 @@ namespace textures
 	extern sf::Texture teleport;
 }
 
-namespace speed
-{
-	extern float character;
-	extern float enemy;
-	extern float enemyAttackSpeed;
-	extern float characterAttackSpeed;
-}
-
 namespace position
 {
 	IndexPosition GetMapIndexesFromPosition(const sf::Vector2f&);
@@ -59,6 +51,4 @@ namespace character
 {
 	extern float damageTakenScaling;
 	extern float damageScaling;
-	extern float defaultScale;
-	extern float defaultHp;
 }

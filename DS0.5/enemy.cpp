@@ -3,8 +3,8 @@
 #include "Character.h"
 #include "AStar.h"
 
-Enemy::Enemy(float attackDamage, float startHp, float scale, const std::vector<std::reference_wrapper<sf::Texture>>& textures) :
-	Fightable(attackDamage, startHp), Moveable(textures, scale, 2.f)
+Enemy::Enemy(Damage attackDamage, Hp startHp, float scale, AttackRange attackRange, AttackSpeed attackSpeed, const std::vector<std::reference_wrapper<sf::Texture>>& textures) :
+	Fightable(attackDamage, startHp, attackRange, attackSpeed), Moveable(textures, scale, 2)
 {
 }
 
@@ -14,7 +14,7 @@ void Enemy::Init(const sf::Vector2f& spawnPos)
 	setTexture(m_walkTextures[0]);
 	setScale(m_scale, m_scale);
 	setPosition(m_spawnPos);
-	m_hpBar.Init(getPosition(), m_startHp, static_cast<uint16_t>(m_size.x));
+	m_hpBar.Init(getPosition(), m_startHp, CalculateSize());
 }
 
 void Enemy::Restart()
@@ -33,14 +33,14 @@ void Enemy::TryKill(Character& character)
 
 void Enemy::Attack(Character& character)
 {
-	if (IsOpponentInRange(character.getPosition()))
+	if (IsOpponentInRange(character.Moveable::getPosition(), Moveable::getPosition()))
 	{
 		if (!m_isAttackClockRestarted)
 		{
 			m_attackClock.restart();
 			m_isAttackClockRestarted = true;
 		}
-		if (m_attackClock.getElapsedTime().asMilliseconds() >= speed::enemyAttackSpeed)
+		if (m_attackClock.getElapsedTime().asMilliseconds() >= m_attackSpeed)
 		{
 			m_attackClock.restart();
 			character.LossHp(m_attackDamage * character::damageTakenScaling);
@@ -54,7 +54,7 @@ void Enemy::Attack(Character& character)
 
 void Enemy::PreparePathAndMove(const sf::Vector2f& characterPos, const std::vector<std::vector<bool>>& map)
 {
-	if (m_movesCounter == 0)
+	if (m_movesCounter == 0 )
 	{
 		m_pathToCharacter = aStar::FindShortestPath(position::GetMapIndexesFromPosition(characterPos), position::GetMapIndexesFromPosition(getPosition()), map);
 		if (!m_pathToCharacter.empty())
@@ -79,22 +79,19 @@ void Enemy::Move()
 	switch (m_moveDirection)
 	{
 	case Direction::Right:
-		Moveable::Move({ m_moveDistance, 0.f });
-		UpdateHpBarPos();
+		Moveable::Move({ static_cast<float>(m_moveDistance), 0.f });
 		break;
 	case Direction::Left:
-		Moveable::Move({ m_moveDistance*(-1), 0.f});
-		UpdateHpBarPos();
+		Moveable::Move({ static_cast<float>(m_moveDistance) *(-1), 0.f});
 		break;
 	case Direction::Down:
-		Moveable::Move({ 0.f, m_moveDistance });
-		UpdateHpBarPos();
+		Moveable::Move({ 0.f, static_cast<float>(m_moveDistance) });
 		break;
 	case Direction::Up:
-		Moveable::Move({ 0.f, m_moveDistance * (-1) });
-		UpdateHpBarPos();
+		Moveable::Move({ 0.f, static_cast<float>(m_moveDistance) * (-1) });
 		break;
 	}
+	UpdateHpBarPos();
 }
 
 void Enemy::ChooseDirection()

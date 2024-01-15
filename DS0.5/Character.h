@@ -17,8 +17,7 @@ public:
 	void Attack(Enemy& enemy);
 	void Restart();
 	void UpdateHpBarPos() override;
-	void SetSpeed(float speedPercent);
-	float GetMoveDistance() const;
+	int GetMoveDistance() const;
 	std::vector<sf::Vector2f> GetEveryPossibleMovement() const;
 	bool IsSlowed();
 	bool IsLeftMovePossible(const Map* map) const;

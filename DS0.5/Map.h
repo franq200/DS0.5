@@ -10,6 +10,7 @@ class Character;
 class Map
 {
 public:
+	virtual ~Map() = default;
 	virtual void MapInit() = 0;
 	virtual void Update(Character& character);
 	virtual void Draw(sf::RenderWindow& window) = 0;

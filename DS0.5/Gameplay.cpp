@@ -19,7 +19,7 @@ bool Gameplay::Update(sf::View& view)
 		currentMap->MakeEnemiesMove(m_character.getPosition());
 		m_moveClock.restart();
 	}
-	TryChangeMap();
+	TryChangeMap(view);
 	return !TryKillCharacter();
 }
 
@@ -48,66 +48,28 @@ void Gameplay::TryMoveCharacter(sf::View& view)
 	else
 	{
 		sf::Vector2f moveVector;
-		if (shouldMoveUp)
+		if ((shouldMoveLeft || shouldMoveRight) && (shouldMoveDown || shouldMoveUp))
 		{
-			if ((shouldMoveLeft || shouldMoveRight))
-			{
-				if (!m_character.IsSlowed())
-				{
-					m_character.SetSpeed(0.5);
-				}
-			}
-			else if (m_character.IsSlowed())
-			{
-				m_character.SetSpeed(2.0);
-			}
-			moveVector.y = m_character.GetMoveDistance() * (-1);
-			//Move({ 0.f, m_character.GetMoveDistance()*(-1)}, view);
+			m_character.SetSpeed(2);
 		}
-		if (shouldMoveDown)
+		else
 		{
-			if ((shouldMoveLeft || shouldMoveRight))
-			{
-				if (!m_character.IsSlowed())
-				{
-					m_character.SetSpeed(0.5);
-				}
-			}
-			else if (m_character.IsSlowed())
-			{
-				m_character.SetSpeed(2.0);
-			}
-			moveVector.y = m_character.GetMoveDistance();
-			//Move({ 0.f, m_character.GetMoveDistance() }, view);
+			m_character.SetSpeed(3);
 		}
-		if (shouldMoveLeft)
-		{
-			if (m_character.IsSlowed() && !(shouldMoveUp || shouldMoveDown))
-			{
-				m_character.SetSpeed(2.0);
-			}
-			moveVector.x = m_character.GetMoveDistance() * (-1);
-			//Move({ m_character.GetMoveDistance()*(-1), 0.f}, view);
-		}
-		if (shouldMoveRight)
-		{
-			if (m_character.IsSlowed() && !(shouldMoveUp || shouldMoveDown))
-			{
-				m_character.SetSpeed(2.0);
-			}
-			moveVector.x = m_character.GetMoveDistance();
-			//Move({ m_character.GetMoveDistance(), 0.f }, view);
-		}
+		moveVector.x = shouldMoveLeft ? m_character.GetMoveDistance() * (-1.f) : shouldMoveRight ? m_character.GetMoveDistance() * 1.f : 0;
+		moveVector.y = shouldMoveUp ? m_character.GetMoveDistance() * (-1.f) : shouldMoveDown ? m_character.GetMoveDistance() * 1.f : 0;
 		Move(moveVector, view);
 	}
 }
 
-void Gameplay::TryChangeMap()
+void Gameplay::TryChangeMap(sf::View& view)
 {
 	if (m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.getPosition(), { CellState::Teleport }))
 	{
 		m_currentMap == MapStates::village ? m_currentMap = MapStates::dungeon : m_currentMap = MapStates::village;
 		m_character.Teleport(m_maps[static_cast<int>(m_currentMap)]->GetCharacterSpawnPos());
+		sf::Vector2f characterPos = m_character.getPosition();
+		view.setCenter(characterPos.x + size::cellSize, characterPos.y + size::cellSize / 2);
 	}
 }
 
@@ -124,6 +86,7 @@ bool Gameplay::TryKillCharacter()
 void Gameplay::Move(sf::Vector2f moveValue, sf::View& view)
 {
 	m_character.MakeMove(moveValue);
+	view.move(moveValue);
 }
 
 void Gameplay::DrawObjects(sf::RenderWindow& window)
@@ -146,7 +109,7 @@ void Gameplay::Restart()
 void Gameplay::Draw(sf::RenderWindow& window, sf::View& view)
 {
 	sf::Vector2f characterPos = m_character.getPosition();
-	view.setCenter(characterPos.x + size::cellSize, characterPos.y + size::cellSize / 2);
+	//view.setCenter(characterPos.x + size::cellSize, characterPos.y + size::cellSize / 2);
 	window.setView(view);
 	DrawObjects(window);
 

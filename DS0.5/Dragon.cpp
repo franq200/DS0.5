@@ -3,9 +3,8 @@
 #include "Character.h"
 
 Dragon::Dragon():
-	Enemy(60.f, 250.f, 0.2f, { textures::dragon })
+	Enemy(Damage(60.f), Hp(250.f), 0.2f, AttackRange(90.f), AttackSpeed(700.f), { textures::dragon })
 {
-	m_size = { 100.f, 60.f };
 }
 
 void Dragon::Kill(Character& character)

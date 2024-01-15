@@ -1,7 +1,7 @@
 #include "Fightable.h"
 
-Fightable::Fightable(float attackDamage, float startHp):
-	m_attackDamage(attackDamage), m_startHp(startHp)
+Fightable::Fightable(Damage attackDamage, Hp startHp, AttackRange attackRange, AttackSpeed attackSpeed):
+	m_attackDamage(attackDamage), m_startHp(startHp), m_attackRange(attackRange), m_attackSpeed(attackSpeed)
 {
 }
 
@@ -31,8 +31,7 @@ void Fightable::SetHp(float newHp)
 	m_hpBar.IncreaseMaxHp(newHp);
 }
 
-bool Fightable::IsOpponentInRange(const sf::Vector2f& opponentPos)
+bool Fightable::IsOpponentInRange(const sf::Vector2f& opponentPos, const sf::Vector2f& pos)
 {
-	sf::Vector2f pos = getPosition();
-	return (std::abs(pos.x - opponentPos.x) <= 60 && std::abs(pos.y - opponentPos.y) <= 60);
+	return (std::abs(pos.x - opponentPos.x) <= m_attackRange && std::abs(pos.y - opponentPos.y) <= m_attackRange);
 }

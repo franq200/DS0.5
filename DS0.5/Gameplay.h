@@ -19,7 +19,7 @@ public:
 private:
 	void LoadMaps();
 	void TryMoveCharacter(sf::View& view);
-	void TryChangeMap();
+	void TryChangeMap(sf::View& view);
 	void Move(sf::Vector2f moveValue, sf::View& view);
 	void DrawObjects(sf::RenderWindow& window);
 	void Restart();

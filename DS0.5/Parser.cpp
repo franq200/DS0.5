@@ -15,6 +15,7 @@ struct LineParseResult
 class ParserCommand
 {
 public:
+	virtual ~ParserCommand() = default;
 	virtual LineParseResult execute(uint16_t mapSize, int i, const Textures& textures) = 0;
 };
 
@@ -47,7 +48,7 @@ public:
 class ParserGateCellCommand : public ParserCommand
 {
 public:
-	LineParseResult execute(uint16_t mapSize, int i, const Textures& textures) override
+	LineParseResult execute(uint16_t mapSize, int i, const Textures&) override
 	{
 		return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::CloseGate, &textures::gate), false };
 	}
@@ -56,7 +57,7 @@ public:
 class ParserTeleportCellCommand : public ParserCommand
 {
 public:
-	LineParseResult execute(uint16_t mapSize, int i, const Textures& textures) override
+	LineParseResult execute(uint16_t mapSize, int i, const Textures&) override
 	{
 		return { Cell({ ConvertMapIndexPositionToPixelPosition(mapSize, i) }, CellState::Teleport, &textures::teleport), true };
 	}

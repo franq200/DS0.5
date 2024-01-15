@@ -62,14 +62,14 @@ void Game::LoadTextures()
 	isLoaded &= textures::goblin5.loadFromFile("textures\\characters\\Goblin5.png");
 	isLoaded &= textures::warrior.loadFromFile("textures\\characters\\Warrior.png");
 	isLoaded &= textures::dragon.loadFromFile("textures\\characters\\Dragon.png");
-	isLoaded &= textures::start.loadFromFile("textures\\start.png");
-	isLoaded &= textures::exit.loadFromFile("textures\\exit.png");
-	isLoaded &= textures::grass.loadFromFile("textures\\grass.jpg");
-	isLoaded &= textures::rocks.loadFromFile("textures\\rocks.jpg");
-	isLoaded &= textures::wall.loadFromFile("textures\\wall.jpg");
-	isLoaded &= textures::dirt.loadFromFile("textures\\dirt.jpg");
-	isLoaded &= textures::teleport.loadFromFile("textures\\teleport.jpg");
-	isLoaded &= textures::gate.loadFromFile("textures\\gate.jpg");
+	isLoaded &= textures::start.loadFromFile("textures\\menu\\start.png");
+	isLoaded &= textures::exit.loadFromFile("textures\\menu\\exit.png");
+	isLoaded &= textures::grass.loadFromFile("textures\\map\\grass.jpg");
+	isLoaded &= textures::rocks.loadFromFile("textures\\map\\rocks.jpg");
+	isLoaded &= textures::wall.loadFromFile("textures\\map\\wall.jpg");
+	isLoaded &= textures::dirt.loadFromFile("textures\\map\\dirt.jpg");
+	isLoaded &= textures::teleport.loadFromFile("textures\\map\\teleport.jpg");
+	isLoaded &= textures::gate.loadFromFile("textures\\map\\gate.jpg");
 	if (!isLoaded)
 	{
 		throw(std::exception("failed to load textures"));

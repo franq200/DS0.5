@@ -4,10 +4,9 @@
 #include "Map.h"
 
 Character::Character():
-	Fightable(20.f, character::defaultHp), 
-	Moveable({ textures::character, textures::walkCharacter1, textures::walkCharacter2, textures::walkCharacter3, textures::walkCharacter4 }, character::defaultScale, 3.f)
+	Fightable(Damage(20.f), Hp(100.f), AttackRange(55.f), AttackSpeed(300.f)), 
+	Moveable({ textures::character, textures::walkCharacter1, textures::walkCharacter2, textures::walkCharacter3, textures::walkCharacter4 }, 0.25f, 3)
 {
-	m_size = { 50.f, 50.f };
 }
 
 void Character::Teleport(const sf::Vector2f& newPosition)
@@ -33,10 +32,10 @@ bool Character::IsAbleToAttack()
 void Character::Init(sf::Vector2f spawnPos)
 {
 	m_spawnPos = spawnPos;
+	setScale(m_scale, m_scale);
 	setTexture(textures::character);
-	setScale(character::defaultScale, character::defaultScale);
 	setPosition(m_spawnPos);
-	m_hpBar.Init(getPosition(), m_startHp, static_cast<uint16_t>(textures::character.getSize().x*character::defaultScale));
+	m_hpBar.Init(getPosition(), m_startHp, CalculateSize());
 }
 
 void Character::MakeMove(const sf::Vector2f& moveValue)
@@ -47,7 +46,7 @@ void Character::MakeMove(const sf::Vector2f& moveValue)
 
 void Character::Attack(Enemy& enemy)
 {
-	if (IsOpponentInRange(enemy.getPosition()))
+	if (IsOpponentInRange(enemy.Moveable::getPosition(), Moveable::getPosition()))
 	{
 		m_isAbleToAttack = false;
 		enemy.LossHp(m_attackDamage);
@@ -112,11 +111,6 @@ void Character::UpdateHpBarPos()
 	m_hpBar.SetPosition(getPosition());
 }
 
-void Character::SetSpeed(float speedPercent)
-{
-	Moveable::SetSpeed(speedPercent);
-}
-
 std::vector<sf::Vector2f> Character::GetEveryPossibleMovement() const
 {
 	return { GetNextRight(), GetNextLeft(), GetNextUp(), GetNextDown()};
@@ -127,7 +121,7 @@ bool Character::IsSlowed()
 	return m_moveDistance < 3;
 }
 
-float Character::GetMoveDistance() const
+int Character::GetMoveDistance() const
 {
 	return m_moveDistance;
 }
