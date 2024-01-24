@@ -3,6 +3,7 @@
 #include "MiniMap.h"
 #include <vector>
 #include "Map.h"
+#include "HpBar.h"
 
 enum class MapStates : uint8_t
 {
@@ -25,7 +26,7 @@ private:
 	void Restart();
 	bool TryKillCharacter();
 
-	Character m_character;
+	Character m_character{std::make_unique<HpBar>()};
 	MiniMap m_miniMap;
 	std::vector<std::unique_ptr<Map>> m_maps;
 	MapStates m_currentMap = MapStates::village;

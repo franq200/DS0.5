@@ -46,9 +46,3 @@ namespace size
 	extern int windowSizeX;
 	extern int windowSizeY;
 }
-
-namespace character
-{
-	extern float damageTakenScaling;
-	extern float damageScaling;
-}

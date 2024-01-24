@@ -3,8 +3,8 @@
 #include "enemy.h"
 #include "Map.h"
 
-Character::Character():
-	Fightable(Damage(20.f), Hp(100.f), AttackRange(55.f), AttackSpeed(300.f)), 
+Character::Character(std::unique_ptr<IHpBar> hpBar):
+	Fightable(Damage(20.f), Hp(100.f), AttackRange(55.f), AttackSpeed(300.f), std::move(hpBar)),
 	Moveable({ textures::character, textures::walkCharacter1, textures::walkCharacter2, textures::walkCharacter3, textures::walkCharacter4 }, 0.25f, 3)
 {
 }
@@ -12,7 +12,7 @@ Character::Character():
 void Character::Teleport(const sf::Vector2f& newPosition)
 {
 	setPosition(newPosition);
-	m_hpBar.SetPosition(getPosition());
+	m_hpBar->SetPosition(getPosition());
 }
 
 bool Character::IsAbleToAttack()
@@ -35,7 +35,7 @@ void Character::Init(sf::Vector2f spawnPos)
 	setScale(m_scale, m_scale);
 	setTexture(textures::character);
 	setPosition(m_spawnPos);
-	m_hpBar.Init(getPosition(), m_startHp, CalculateSize());
+	m_hpBar->Init(getPosition(), m_startHp, CalculateSize());
 }
 
 void Character::MakeMove(const sf::Vector2f& moveValue)
@@ -56,10 +56,10 @@ void Character::Attack(Enemy& enemy)
 
 void Character::Restart()
 {
-	setScale(character::defaultScale, character::defaultScale);
+	setScale(m_scale, m_scale);
 	setPosition(m_spawnPos);
-	m_hpBar.SetHp(character::defaultHp);
-	m_hpBar.SetPosition(getPosition());
+	m_hpBar->SetHp(m_startHp);
+	m_hpBar->SetPosition(getPosition());
 }
 
 bool Character::IsRightMovePossible(const Map* map) const
@@ -108,7 +108,7 @@ sf::Vector2f Character::GetNextRight() const
 
 void Character::UpdateHpBarPos()
 {
-	m_hpBar.SetPosition(getPosition());
+	m_hpBar->SetPosition(getPosition());
 }
 
 std::vector<sf::Vector2f> Character::GetEveryPossibleMovement() const

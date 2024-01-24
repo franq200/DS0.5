@@ -63,9 +63,3 @@ namespace size
 	int windowSizeX = 1500;
 	int windowSizeY = 750;
 }
-
-namespace character
-{
-	float damageTakenScaling = 1.f;
-	float damageScaling = 1.f;
-}

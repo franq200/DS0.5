@@ -160,7 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AStar.cpp" />
-    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Buttons.cpp" />
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Dragon.cpp" />
@@ -175,6 +175,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MiniMap.cpp" />
+    <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Moveable.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Source.cpp" />
@@ -183,7 +184,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AStar.h" />
-    <ClInclude Include="Button.h" />
+    <ClInclude Include="Buttons.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Dragon.h" />
@@ -198,6 +199,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MiniMap.h" />
+    <ClInclude Include="Mouse.h" />
     <ClInclude Include="Moveable.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="resource.h" />

@@ -2,13 +2,13 @@
 #include "Helper.h"
 #include "Character.h"
 
-Warrior::Warrior():
-	Enemy(Damage(30.f), Hp(110.f), 0.33f, AttackRange(50.f), AttackSpeed(700.f), {textures::warrior})
+Warrior::Warrior(std::unique_ptr<HpBar> hpBar):
+	Enemy(Damage(30.f), Hp(110.f), 0.33f, AttackRange(50.f), AttackSpeed(700.f), {textures::warrior}, std::move(hpBar))
 {
 }
 
 void Warrior::Kill(Character& character)
 {
-	character::damageScaling = 1.3f;
+	character.SetDamegeGivenScaling(1.3f);
 	character.SetHp(130.f);
 }

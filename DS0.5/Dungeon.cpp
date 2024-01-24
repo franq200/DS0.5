@@ -150,9 +150,9 @@ void Dungeon::LoadMap()
 
 void Dungeon::Init()
 {
-	m_enemies.push_back(std::make_unique<Goblin>());
-	m_enemies.push_back(std::make_unique<Warrior>());
-	m_enemies.push_back(std::make_unique<Dragon>());
+	m_enemies.push_back(std::make_unique<Goblin>(std::make_unique<HpBar>()));
+	m_enemies.push_back(std::make_unique<Warrior>(std::make_unique<HpBar>()));
+	m_enemies.push_back(std::make_unique<Dragon>(std::make_unique<HpBar>()));
 	m_enemies[0]->Init(m_goblinSpawnPos);
 	m_enemies[1]->Init(m_warriorSpawnPos);
 	m_enemies[2]->Init(m_dragonSpawnPos);

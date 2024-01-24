@@ -3,8 +3,8 @@
 #include "Character.h"
 #include "AStar.h"
 
-Enemy::Enemy(Damage attackDamage, Hp startHp, float scale, AttackRange attackRange, AttackSpeed attackSpeed, const std::vector<std::reference_wrapper<sf::Texture>>& textures) :
-	Fightable(attackDamage, startHp, attackRange, attackSpeed), Moveable(textures, scale, 2)
+Enemy::Enemy(Damage attackDamage, Hp startHp, float scale, AttackRange attackRange, AttackSpeed attackSpeed, const std::vector<std::reference_wrapper<sf::Texture>>& textures, std::unique_ptr<HpBar> hpBar) :
+	Fightable(attackDamage, startHp, attackRange, attackSpeed, std::move(hpBar)), Moveable(textures, scale, 2)
 {
 }
 
@@ -14,13 +14,13 @@ void Enemy::Init(const sf::Vector2f& spawnPos)
 	setTexture(m_walkTextures[0]);
 	setScale(m_scale, m_scale);
 	setPosition(m_spawnPos);
-	m_hpBar.Init(getPosition(), m_startHp, CalculateSize());
+	m_hpBar->Init(getPosition(), m_startHp, CalculateSize());
 }
 
 void Enemy::Restart()
 {
 	setPosition(m_spawnPos);
-	m_hpBar.Restart(getPosition(), m_startHp);
+	m_hpBar->Restart(getPosition(), m_startHp);
 }
 
 void Enemy::TryKill(Character& character)
@@ -43,7 +43,7 @@ void Enemy::Attack(Character& character)
 		if (m_attackClock.getElapsedTime().asMilliseconds() >= m_attackSpeed)
 		{
 			m_attackClock.restart();
-			character.LossHp(m_attackDamage * character::damageTakenScaling);
+			character.LossHp(m_attackDamage * character.GetDamageTakenScaling());
 		}
 	}
 	else if (m_isAttackClockRestarted)
@@ -71,7 +71,7 @@ void Enemy::PreparePathAndMove(const sf::Vector2f& characterPos, const std::vect
 
 void Enemy::UpdateHpBarPos()
 {
-	m_hpBar.SetPosition(Moveable::getPosition());
+	m_hpBar->SetPosition(Moveable::getPosition());
 }
 
 void Enemy::Move()
