@@ -4,6 +4,7 @@
 
 class MouseMock : public IMouse
 {
-	MOCK_METHOD(bool, isButtonPressed, (Button button), ());
+public:
+	MOCK_METHOD(bool, IsLeftButtonPressed, (), (override));
 };
 

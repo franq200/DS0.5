@@ -3,7 +3,7 @@
 #include "Character.h"
 #include "AStar.h"
 
-Enemy::Enemy(Damage attackDamage, Hp startHp, float scale, AttackRange attackRange, AttackSpeed attackSpeed, const std::vector<std::reference_wrapper<sf::Texture>>& textures, std::unique_ptr<HpBar> hpBar) :
+Enemy::Enemy(Damage attackDamage, Hp startHp, float scale, AttackRange attackRange, AttackSpeed attackSpeed, const std::vector<std::reference_wrapper<sf::Texture>>& textures, std::unique_ptr<IHpBar> hpBar) :
 	Fightable(attackDamage, startHp, attackRange, attackSpeed, std::move(hpBar)), Moveable(textures, scale, 2)
 {
 }

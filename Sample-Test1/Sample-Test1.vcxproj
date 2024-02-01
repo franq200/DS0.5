@@ -113,6 +113,7 @@
     <ClCompile Include="..\DS0.5\HpBar.cpp" />
     <ClCompile Include="..\DS0.5\Map.cpp" />
     <ClCompile Include="..\DS0.5\Moveable.cpp" />
+    <ClCompile Include="..\DS0.5\Warrior.cpp" />
     <ClCompile Include="..\packages\gmock.1.11.0\lib\native\src\gtest\src\gtest_main.cc" />
     <ClCompile Include="HpBarMock.cpp" />
     <ClCompile Include="MouseMock.cpp" />

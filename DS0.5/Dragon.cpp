@@ -2,7 +2,7 @@
 #include "Helper.h"
 #include "Character.h"
 
-Dragon::Dragon(std::unique_ptr<HpBar> hpBar):
+Dragon::Dragon(std::unique_ptr<IHpBar> hpBar):
 	Enemy(Damage(60.f), Hp(250.f), 0.2f, AttackRange(90.f), AttackSpeed(700.f), { textures::dragon }, std::move(hpBar))
 {
 }

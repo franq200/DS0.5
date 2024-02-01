@@ -7,7 +7,7 @@ class Character;
 class Warrior : public Enemy
 {
 public:
-	Warrior(std::unique_ptr<HpBar> hpBar);
+	Warrior(std::unique_ptr<IHpBar> hpBar);
 private:
 	void Kill(Character& character) override;
 };

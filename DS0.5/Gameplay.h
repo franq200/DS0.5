@@ -26,7 +26,7 @@ private:
 	void Restart();
 	bool TryKillCharacter();
 
-	Character m_character{std::make_unique<HpBar>()};
+	Character m_character{std::make_unique<HpBar>(), std::make_unique<Mouse>()};
 	MiniMap m_miniMap;
 	std::vector<std::unique_ptr<Map>> m_maps;
 	MapStates m_currentMap = MapStates::village;

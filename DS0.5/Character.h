@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Moveable.h"
 #include "Fightable.h"
+#include "Mouse.h"
 
 class Map;
 class Enemy;
@@ -9,7 +10,7 @@ class Enemy;
 class Character : public Moveable, public Fightable
 {
 public:
-	Character(std::unique_ptr<IHpBar> hpBar);
+	Character(std::unique_ptr<IHpBar> hpBar, std::unique_ptr<IMouse> mouse);
 	void Teleport(const sf::Vector2f& newPosition);
 	bool IsAbleToAttack();
 	void Init(sf::Vector2f spawnPos);
@@ -29,7 +30,8 @@ private:
 	sf::Vector2f GetNextDown() const;
 	sf::Vector2f GetNextLeft() const;
 	sf::Vector2f GetNextRight() const;
-	bool m_isAbleToAttack;
+	bool m_isAbleToAttack = true;
 	sf::Vector2f m_spawnPos;
+	std::unique_ptr<IMouse> m_mouse;
 };
 

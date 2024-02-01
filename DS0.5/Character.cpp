@@ -3,9 +3,10 @@
 #include "enemy.h"
 #include "Map.h"
 
-Character::Character(std::unique_ptr<IHpBar> hpBar):
+Character::Character(std::unique_ptr<IHpBar> hpBar, std::unique_ptr<IMouse> mouse) :
 	Fightable(Damage(20.f), Hp(100.f), AttackRange(55.f), AttackSpeed(300.f), std::move(hpBar)),
-	Moveable({ textures::character, textures::walkCharacter1, textures::walkCharacter2, textures::walkCharacter3, textures::walkCharacter4 }, 0.25f, 3)
+	Moveable({ textures::character, textures::walkCharacter1, textures::walkCharacter2, textures::walkCharacter3, textures::walkCharacter4 }, 0.25f, 3),
+	m_mouse(std::move(mouse))
 {
 }
 
@@ -17,11 +18,12 @@ void Character::Teleport(const sf::Vector2f& newPosition)
 
 bool Character::IsAbleToAttack()
 {
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_isAbleToAttack)
+	const bool isClickedAttack = m_mouse->IsLeftButtonPressed();
+	if (isClickedAttack && m_isAbleToAttack)
 	{
 		return true;
 	}
-	else if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && !m_isAbleToAttack)
+	else if (!isClickedAttack && !m_isAbleToAttack)
 	{
 		m_isAbleToAttack = true;
 		return false;
