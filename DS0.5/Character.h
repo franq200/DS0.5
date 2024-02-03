@@ -10,7 +10,7 @@ class Enemy;
 class Character : public Moveable, public Fightable
 {
 public:
-	Character(std::unique_ptr<IHpBar> hpBar, std::unique_ptr<IMouse> mouse);
+	Character(std::unique_ptr<IHpBar> hpBar, std::unique_ptr<IMouse> mouse, std::unique_ptr<IClock> clock);
 	void Teleport(const sf::Vector2f& newPosition);
 	bool IsAbleToAttack();
 	void Init(sf::Vector2f spawnPos);

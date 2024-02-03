@@ -1,7 +1,7 @@
 #include "Fightable.h"
 
-Fightable::Fightable(Damage attackDamage, Hp startHp, AttackRange attackRange, AttackSpeed attackSpeed, std::unique_ptr<IHpBar> hpBar):
-	m_attackDamage(attackDamage), m_startHp(startHp), m_attackRange(attackRange), m_attackSpeed(attackSpeed), m_hpBar(std::move(hpBar))
+Fightable::Fightable(Damage attackDamage, Hp startHp, AttackRange attackRange, AttackSpeed attackSpeed, std::unique_ptr<IHpBar> hpBar, std::unique_ptr<IClock> clock):
+	m_attackDamage(attackDamage), m_startHp(startHp), m_attackRange(attackRange), m_attackSpeed(attackSpeed), m_hpBar(std::move(hpBar)), m_attackClock(std::move(clock))
 {
 }
 

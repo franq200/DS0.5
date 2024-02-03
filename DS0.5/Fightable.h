@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "HpBar.h"
+#include "IClock.h"
 
 using Hp = float;
 using Damage = float;
@@ -11,7 +12,7 @@ using DamageScale = float;
 class Fightable : public virtual sf::Sprite
 {
 public:
-	explicit Fightable(Damage attackDamage, Hp startHp, AttackRange attackRange, AttackSpeed attackSpeed, std::unique_ptr<IHpBar> hpBar);
+	explicit Fightable(Damage attackDamage, Hp startHp, AttackRange attackRange, AttackSpeed attackSpeed, std::unique_ptr<IHpBar> hpBar, std::unique_ptr<IClock> clock);
 	void LossHp(float lostHp);
 	void GainHp(float gainedHp);
 	bool IsDead();
@@ -23,7 +24,7 @@ public:
 	DamageScale GetDamageTakenScaling() const;
 protected:
 	bool IsOpponentInRange(const sf::Vector2f& opponentPos, const sf::Vector2f& pos);
-	sf::Clock m_attackClock;
+	std::unique_ptr<IClock> m_attackClock;
 	std::unique_ptr<IHpBar> m_hpBar = nullptr;
 	DamageScale m_damageTakenScaling = 1.f;
 	DamageScale m_damageGivenScaling = 1.f;

@@ -163,6 +163,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="Clock.cpp" />
     <ClCompile Include="Dragon.cpp" />
     <ClCompile Include="Dungeon.cpp" />
     <ClCompile Include="enemy.cpp" />
@@ -172,6 +173,7 @@
     <ClCompile Include="Goblin.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="HpBar.cpp" />
+    <ClCompile Include="IClock.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MiniMap.cpp" />
@@ -187,6 +189,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Character.h" />
+    <ClInclude Include="Clock.h" />
     <ClInclude Include="Dragon.h" />
     <ClInclude Include="Dungeon.h" />
     <ClInclude Include="enemy.h" />
@@ -196,6 +199,7 @@
     <ClInclude Include="Goblin.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="HpBar.h" />
+    <ClInclude Include="IClock.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MiniMap.h" />

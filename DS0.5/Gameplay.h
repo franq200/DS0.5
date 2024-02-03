@@ -4,6 +4,7 @@
 #include <vector>
 #include "Map.h"
 #include "HpBar.h"
+#include "Clock.h"
 
 enum class MapStates : uint8_t
 {
@@ -25,8 +26,7 @@ private:
 	void DrawObjects(sf::RenderWindow& window);
 	void Restart();
 	bool TryKillCharacter();
-
-	Character m_character{std::make_unique<HpBar>(), std::make_unique<Mouse>()};
+	Character m_character{std::make_unique<HpBar>(), std::make_unique<Mouse>(), std::make_unique<Clock>()};
 	MiniMap m_miniMap;
 	std::vector<std::unique_ptr<Map>> m_maps;
 	MapStates m_currentMap = MapStates::village;

@@ -2,8 +2,8 @@
 #include "Helper.h"
 #include "Character.h"
 
-Goblin::Goblin(std::unique_ptr<IHpBar> hpBar):
-	Enemy(Damage(20.f), Hp(100.f), 0.5f, AttackRange(45.f), AttackSpeed(700.f), {textures::goblin1, textures::goblin2, textures::goblin3, textures::goblin4, textures::goblin5}, std::move(hpBar))
+Goblin::Goblin(std::unique_ptr<IHpBar> hpBar, std::unique_ptr<IClock> clock):
+	Enemy(Damage(20.f), Hp(100.f), 0.5f, AttackRange(45.f), AttackSpeed(700.f), {textures::goblin1, textures::goblin2, textures::goblin3, textures::goblin4, textures::goblin5}, std::move(hpBar), std::move(clock))
 {
 }
 

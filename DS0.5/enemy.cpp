@@ -3,8 +3,8 @@
 #include "Character.h"
 #include "AStar.h"
 
-Enemy::Enemy(Damage attackDamage, Hp startHp, float scale, AttackRange attackRange, AttackSpeed attackSpeed, const std::vector<std::reference_wrapper<sf::Texture>>& textures, std::unique_ptr<IHpBar> hpBar) :
-	Fightable(attackDamage, startHp, attackRange, attackSpeed, std::move(hpBar)), Moveable(textures, scale, 2)
+Enemy::Enemy(Damage attackDamage, Hp startHp, float scale, AttackRange attackRange, AttackSpeed attackSpeed, const std::vector<std::reference_wrapper<sf::Texture>>& textures, std::unique_ptr<IHpBar> hpBar, std::unique_ptr<IClock> clock) :
+	Fightable(attackDamage, startHp, attackRange, attackSpeed, std::move(hpBar), std::move(clock)), Moveable(textures, scale, 2)
 {
 }
 
@@ -37,12 +37,12 @@ void Enemy::Attack(Character& character)
 	{
 		if (!m_isAttackClockRestarted)
 		{
-			m_attackClock.restart();
+			m_attackClock->RestartClock();
 			m_isAttackClockRestarted = true;
 		}
-		if (m_attackClock.getElapsedTime().asMilliseconds() >= m_attackSpeed)
+		else if (static_cast<AttackSpeed>(m_attackClock->GetElapsedTimeAsMilliseconds()) >= m_attackSpeed)
 		{
-			m_attackClock.restart();
+			m_attackClock->RestartClock();
 			character.LossHp(m_attackDamage * character.GetDamageTakenScaling());
 		}
 	}
