@@ -2,6 +2,9 @@
 #include "Helper.h"
 #include "Character.h"
 #include "AStar.h"
+#include "IClock.h"
+#include "ICharacter.h"
+#include "HpBar.h"
 
 Enemy::Enemy(Damage attackDamage, Hp startHp, float scale, AttackRange attackRange, AttackSpeed attackSpeed, const std::vector<std::reference_wrapper<sf::Texture>>& textures, std::unique_ptr<IHpBar> hpBar, std::unique_ptr<IClock> clock) :
 	Fightable(attackDamage, startHp, attackRange, attackSpeed, std::move(hpBar), std::move(clock)), Moveable(textures, scale, 2)
@@ -23,7 +26,7 @@ void Enemy::Restart()
 	m_hpBar->Restart(getPosition(), m_startHp);
 }
 
-void Enemy::TryKill(Character& character)
+void Enemy::TryKill(ICharacter& character)
 {
 	if (IsDead())
 	{
@@ -31,7 +34,7 @@ void Enemy::TryKill(Character& character)
 	}
 }
 
-void Enemy::Attack(Character& character)
+void Enemy::Attack(ICharacter& character)
 {
 	if (IsOpponentInRange(character.Moveable::getPosition(), Moveable::getPosition()))
 	{

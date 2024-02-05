@@ -83,7 +83,7 @@ protected:
 
 TEST_F(WarriorTest, InitTest)
 {
-	EXPECT_CALL(*hpBarMock, Init(testing::_, testing::_, testing::_)).Times(testing::AtLeast(1));
+	EXPECT_CALL(*hpBarMock, Init(testing::_, testing::_, testing::_));
 	Warrior warrior = createSut();
 	warrior.Init({ 100.f, 100.f });
 }

@@ -1,4 +1,6 @@
 #include "Fightable.h"
+#include "IClock.h"
+#include "HpBar.h"
 
 Fightable::Fightable(Damage attackDamage, Hp startHp, AttackRange attackRange, AttackSpeed attackSpeed, std::unique_ptr<IHpBar> hpBar, std::unique_ptr<IClock> clock):
 	m_attackDamage(attackDamage), m_startHp(startHp), m_attackRange(attackRange), m_attackSpeed(attackSpeed), m_hpBar(std::move(hpBar)), m_attackClock(std::move(clock))
@@ -36,7 +38,7 @@ void Fightable::SetDamegeTakenScaling(DamageScale scale)
 	m_damageTakenScaling = scale;
 }
 
-void Fightable::SetDamegeGivenScaling(DamageScale scale)
+void Fightable::SetDamageGivenScaling(DamageScale scale)
 {
 	m_damageGivenScaling = scale;
 }

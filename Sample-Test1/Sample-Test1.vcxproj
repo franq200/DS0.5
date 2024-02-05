@@ -111,6 +111,7 @@
     <ClCompile Include="..\DS0.5\Fightable.cpp" />
     <ClCompile Include="..\DS0.5\Helper.cpp" />
     <ClCompile Include="..\DS0.5\HpBar.cpp" />
+    <ClCompile Include="..\DS0.5\ICharacter.cpp" />
     <ClCompile Include="..\DS0.5\Map.cpp" />
     <ClCompile Include="..\DS0.5\Moveable.cpp" />
     <ClCompile Include="..\DS0.5\Warrior.cpp" />

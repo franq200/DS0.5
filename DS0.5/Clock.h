@@ -5,8 +5,8 @@
 class Clock : public IClock
 {
 public:
-	void RestartClock();
-	float GetElapsedTimeAsMilliseconds();
+	void RestartClock() override;
+	float GetElapsedTimeAsMilliseconds() override;
 private:
 	sf::Clock m_clock;
 };

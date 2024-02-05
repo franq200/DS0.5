@@ -173,7 +173,10 @@
     <ClCompile Include="Goblin.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="HpBar.cpp" />
+    <ClCompile Include="ICharacter.cpp" />
     <ClCompile Include="IClock.cpp" />
+    <ClCompile Include="IFightable.cpp" />
+    <ClCompile Include="IMoveable.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MiniMap.cpp" />
@@ -199,7 +202,10 @@
     <ClInclude Include="Goblin.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="HpBar.h" />
+    <ClInclude Include="ICharacter.h" />
     <ClInclude Include="IClock.h" />
+    <ClInclude Include="IFightable.h" />
+    <ClInclude Include="IMoveable.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MiniMap.h" />

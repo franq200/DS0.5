@@ -6,6 +6,7 @@
 #include <map>
 #include "Parser.h"
 #include "Clock.h"
+#include "HpBar.h"
 
 
 void Dungeon::MapInit()
