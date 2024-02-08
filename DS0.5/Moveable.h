@@ -15,7 +15,7 @@ class Moveable : public virtual sf::Sprite
 {
 public:
 	Moveable(const std::vector<std::reference_wrapper<sf::Texture>>& walkTextures, float scale, int moveDistance);
-	sf::Vector2f getPosition() const;
+	virtual sf::Vector2f getPosition() const;
 	void SetSpeed(int newSpeed);
 protected:
 	void WalkAnimation();

@@ -4,6 +4,7 @@
 #include "MouseMock.h"
 #include "ClockMock.h"
 #include "../DS0.5/Warrior.h"
+#include "CharacterMock.h"
 
 class BasicDsTests : public testing::Test
 {
@@ -101,12 +102,11 @@ TEST_F(WarriorTest, AttackTest)
 	EXPECT_CALL(*clockMock, GetElapsedTimeAsMilliseconds()).Times(testing::AtLeast(1)).WillRepeatedly(testing::Return(700.f));
 	Warrior warrior = createSut();
 	warrior.Init({ 100.f, 100.f });
-
 	std::unique_ptr<testing::NiceMock<HpBarMock>> hpBarMockCharacter{ std::make_unique<testing::NiceMock<HpBarMock>>() };
 	std::unique_ptr<testing::NiceMock<ClockMock>> clockMockCharacter{ std::make_unique<testing::NiceMock<ClockMock>>() };
-	Character character(std::move(hpBarMockCharacter), std::move(mouseMock), std::move(clockMockCharacter));
-	character.Init({ 100.f, 100.f });
+	CharacterMock characterMock(std::move(hpBarMockCharacter), std::move(clockMockCharacter));
+	ON_CALL(characterMock, getPosition()).WillByDefault(testing::Return(sf::Vector2f{ 100.f, 100.f }));//Times(testing::AtLeast(1)).WillRepeatedly(testing::Return(sf::Vector2f{100.f, 100.f}));
 
-	warrior.Attack(character);
-	warrior.Attack(character);
+	warrior.Attack(characterMock);
+	warrior.Attack(characterMock);
 }
