@@ -12,6 +12,5 @@ class HpBarMock : public IHpBar
 		MOCK_METHOD(bool, IsDead, (), (override));
 		MOCK_METHOD(void, LossHp, (float lostHp), (override));
 		MOCK_METHOD(void, GainHp, (float gainedHp), (override));
-		MOCK_METHOD(void, IncreaseMaxHp, (float newHp), (override));
-		MOCK_METHOD(void, SetHp, (float newHp), (override));
+		MOCK_METHOD(void, SetNewMaxHp, (float newHp), (override));
 };

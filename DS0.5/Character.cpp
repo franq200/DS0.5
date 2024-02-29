@@ -14,7 +14,7 @@ Character::Character(std::unique_ptr<IHpBar> hpBar, std::unique_ptr<IMouse> mous
 void Character::Teleport(const sf::Vector2f& newPosition)
 {
 	setPosition(newPosition);
-	m_hpBar->SetPosition(getPosition());
+	m_hpBar->SetPosition(GetPositionWithRotate());
 }
 
 bool Character::IsAbleToAttack()
@@ -38,7 +38,7 @@ void Character::Init(sf::Vector2f spawnPos)
 	setScale(m_scale, m_scale);
 	setTexture(textures::character);
 	setPosition(m_spawnPos);
-	m_hpBar->Init(getPosition(), m_startHp, CalculateSize());
+	m_hpBar->Init(GetPositionWithRotate(), m_startHp, CalculateSize(), HpBarPosition::LeftTopCorner);
 }
 
 void Character::MakeMove(const sf::Vector2f& moveValue)
@@ -49,7 +49,7 @@ void Character::MakeMove(const sf::Vector2f& moveValue)
 
 void Character::Attack(Enemy& enemy)
 {
-	if (IsOpponentInRange(enemy.Moveable::getPosition(), Moveable::getPosition()))
+	if (IsOpponentInRange(enemy.Moveable::GetPositionWithRotate(), Moveable::GetPositionWithRotate()))
 	{
 		m_isAbleToAttack = false;
 		enemy.LossHp(m_attackDamage);
@@ -61,8 +61,8 @@ void Character::Restart()
 {
 	setScale(m_scale, m_scale);
 	setPosition(m_spawnPos);
-	m_hpBar->SetHp(m_startHp);
-	m_hpBar->SetPosition(getPosition());
+	m_hpBar->SetNewMaxHp(m_startHp);
+	m_hpBar->SetPosition(GetPositionWithRotate());
 }
 
 bool Character::IsRightMovePossible(const Map* map) const
@@ -87,31 +87,31 @@ bool Character::IsLeftMovePossible(const Map* map) const
 
 sf::Vector2f Character::GetNextUp() const
 {
-	sf::Vector2f pos = getPosition();
+	sf::Vector2f pos = GetPositionWithRotate();
 	return { pos.x, pos.y - m_moveDistance};
 }
 
 sf::Vector2f Character::GetNextDown() const
 {
-	sf::Vector2f pos = getPosition();
+	sf::Vector2f pos = GetPositionWithRotate();
 	return { pos.x, pos.y + m_moveDistance };
 }
 
 sf::Vector2f Character::GetNextLeft() const
 {
-	sf::Vector2f pos = getPosition();
+	sf::Vector2f pos = GetPositionWithRotate();
 	return { pos.x - m_moveDistance, pos.y};
 }
 
 sf::Vector2f Character::GetNextRight() const
 {
-	sf::Vector2f pos = getPosition();
+	sf::Vector2f pos = GetPositionWithRotate();
 	return { pos.x + m_moveDistance, pos.y};
 }
 
 void Character::UpdateHpBarPos()
 {
-	m_hpBar->SetPosition(getPosition());
+	m_hpBar->SetPosition(GetPositionWithRotate());
 }
 
 std::vector<sf::Vector2f> Character::GetEveryPossibleMovement() const

@@ -30,7 +30,7 @@ void Fightable::Draw(sf::RenderWindow& window)
 
 void Fightable::SetHp(float newHp)
 {
-	m_hpBar->IncreaseMaxHp(newHp);
+	m_hpBar->SetNewMaxHp(newHp);
 }
 
 void Fightable::SetDamegeTakenScaling(DamageScale scale)

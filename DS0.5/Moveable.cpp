@@ -7,7 +7,7 @@ Moveable::Moveable(const std::vector<std::reference_wrapper<sf::Texture>>& walkT
 	m_movesToAnimate = static_cast<uint8_t>(10 / m_moveDistance);
 }
 
-sf::Vector2f Moveable::getPosition() const
+sf::Vector2f Moveable::GetPositionWithRotate() const
 {
 	sf::Vector2f pos = sf::Sprite::getPosition();
 	if (getScale().x < 0)

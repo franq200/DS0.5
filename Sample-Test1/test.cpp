@@ -30,8 +30,8 @@ TEST_F(CharacterTests, CharacterPositionAfterTeleportTest) {
 	auto sut = createSut();
 	sut.Teleport({ 162.f, 170.f });
 
-	EXPECT_EQ(sut.getPosition().x, 162.f);
-	EXPECT_EQ(sut.getPosition().y, 170.f);
+	EXPECT_EQ(sut.GetPositionWithRotate().x, 162.f);
+	EXPECT_EQ(sut.GetPositionWithRotate().y, 170.f);
 }
 
 TEST_F(CharacterTests, MouseIsButtonPressedTest)
@@ -52,7 +52,7 @@ TEST_F(CharacterTests, MouseIsButtonPressedTest)
 
 	//given
 	Warrior warrior(std::move(warriorHpBarMock), std::move(clockMock));
-	warrior.Init(sut.getPosition());
+	warrior.Init(sut.GetPositionWithRotate());
 	//when
 	sut.Attack(warrior);
 	const bool attackIsForbidden = sut.IsAbleToAttack();
@@ -105,8 +105,44 @@ TEST_F(WarriorTest, AttackTest)
 	std::unique_ptr<testing::NiceMock<HpBarMock>> hpBarMockCharacter{ std::make_unique<testing::NiceMock<HpBarMock>>() };
 	std::unique_ptr<testing::NiceMock<ClockMock>> clockMockCharacter{ std::make_unique<testing::NiceMock<ClockMock>>() };
 	CharacterMock characterMock(std::move(hpBarMockCharacter), std::move(clockMockCharacter));
-	ON_CALL(characterMock, getPosition()).WillByDefault(testing::Return(sf::Vector2f{ 100.f, 100.f }));//Times(testing::AtLeast(1)).WillRepeatedly(testing::Return(sf::Vector2f{100.f, 100.f}));
+	characterMock.setPosition({100.f, 100.f});
+	//EXPECT_CALL(characterMock, GetPositionWithRotate()).Times(testing::AtLeast(1)).WillRepeatedly(testing::Return(sf::Vector2f{100.f, 100.f}));
 
 	warrior.Attack(characterMock);
 	warrior.Attack(characterMock);
+}
+
+TEST_F(WarriorTest, LossHpTest)
+{
+	EXPECT_CALL(*hpBarMock, LossHp(testing::_)).Times(testing::AtLeast(1));
+	Warrior warrior = createSut();
+	warrior.LossHp(10.f);
+}
+
+TEST_F(WarriorTest, GainHpTest)
+{
+	EXPECT_CALL(*hpBarMock, GainHp(testing::_)).Times(testing::AtLeast(1));
+	Warrior warrior = createSut();
+	warrior.GainHp(10.f);
+}
+
+TEST_F(WarriorTest, IsDeadTest)
+{
+	EXPECT_CALL(*hpBarMock, IsDead()).Times(testing::AtLeast(1));
+	Warrior warrior = createSut();
+	EXPECT_EQ(warrior.IsDead(), false);
+}
+
+TEST_F(WarriorTest, DrawTest)
+{
+	EXPECT_CALL(*hpBarMock, IsDead()).Times(testing::AtLeast(1));
+	Warrior warrior = createSut();
+	EXPECT_EQ(warrior.IsDead(), false);
+}
+
+TEST_F(WarriorTest, SetHpTest)
+{
+	EXPECT_CALL(*hpBarMock, SetNewMaxHp(testing::_)).Times(testing::AtLeast(1));
+	Warrior warrior = createSut();
+	warrior.SetHp(100.f);
 }

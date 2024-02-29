@@ -16,7 +16,7 @@ bool Gameplay::Update(sf::View& view)
 	if (m_moveClock.getElapsedTime() >= sf::milliseconds(20))
 	{
 		TryMoveCharacter(view);
-		currentMap->MakeEnemiesMove(m_character.getPosition());
+		currentMap->MakeEnemiesMove(m_character.GetPositionWithRotate());
 		m_moveClock.restart();
 	}
 	TryChangeMap(view);
@@ -64,11 +64,11 @@ void Gameplay::TryMoveCharacter(sf::View& view)
 
 void Gameplay::TryChangeMap(sf::View& view)
 {
-	if (m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.getPosition(), { CellState::Teleport }))
+	if (m_maps[static_cast<int>(m_currentMap)]->GetCollisionSquare(m_character.GetPositionWithRotate(), { CellState::Teleport }))
 	{
 		m_currentMap == MapStates::village ? m_currentMap = MapStates::dungeon : m_currentMap = MapStates::village;
 		m_character.Teleport(m_maps[static_cast<int>(m_currentMap)]->GetCharacterSpawnPos());
-		sf::Vector2f characterPos = m_character.getPosition();
+		sf::Vector2f characterPos = m_character.GetPositionWithRotate();
 		view.setCenter(characterPos.x + size::cellSize, characterPos.y + size::cellSize / 2);
 	}
 }
@@ -108,7 +108,7 @@ void Gameplay::Restart()
 
 void Gameplay::Draw(sf::RenderWindow& window, sf::View& view)
 {
-	sf::Vector2f characterPos = m_character.getPosition();
+	sf::Vector2f characterPos = m_character.GetPositionWithRotate();
 	//view.setCenter(characterPos.x + size::cellSize, characterPos.y + size::cellSize / 2);
 	window.setView(view);
 	DrawObjects(window);

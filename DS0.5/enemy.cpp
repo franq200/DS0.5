@@ -17,13 +17,13 @@ void Enemy::Init(const sf::Vector2f& spawnPos)
 	setTexture(m_walkTextures[0]);
 	setScale(m_scale, m_scale);
 	setPosition(m_spawnPos);
-	m_hpBar->Init(getPosition(), m_startHp, CalculateSize());
+	m_hpBar->Init(GetPositionWithRotate(), m_startHp, CalculateSize(), HpBarPosition::underCharacter);
 }
 
 void Enemy::Restart()
 {
 	setPosition(m_spawnPos);
-	m_hpBar->Restart(getPosition(), m_startHp);
+	m_hpBar->Restart(GetPositionWithRotate(), m_startHp);
 }
 
 void Enemy::TryKill(ICharacter& character)
@@ -36,7 +36,7 @@ void Enemy::TryKill(ICharacter& character)
 
 void Enemy::Attack(ICharacter& character)
 {
-	if (IsOpponentInRange(character.Moveable::getPosition(), Moveable::getPosition()))
+	if (IsOpponentInRange(character.Moveable::GetPositionWithRotate(), Moveable::GetPositionWithRotate()))
 	{
 		if (!m_isAttackClockRestarted)
 		{
@@ -57,9 +57,9 @@ void Enemy::Attack(ICharacter& character)
 
 void Enemy::PreparePathAndMove(const sf::Vector2f& characterPos, const std::vector<std::vector<bool>>& map)
 {
-	if (m_movesCounter == 0 )
+	if (m_movesCounter == 0)
 	{
-		m_pathToCharacter = aStar::FindShortestPath(position::GetMapIndexesFromPosition(characterPos), position::GetMapIndexesFromPosition(getPosition()), map);
+		m_pathToCharacter = aStar::FindShortestPath(position::GetMapIndexesFromPosition(characterPos), position::GetMapIndexesFromPosition(GetPositionWithRotate()), map);
 		if (!m_pathToCharacter.empty())
 		{
 			ChooseDirection();
@@ -74,7 +74,7 @@ void Enemy::PreparePathAndMove(const sf::Vector2f& characterPos, const std::vect
 
 void Enemy::UpdateHpBarPos()
 {
-	m_hpBar->SetPosition(Moveable::getPosition());
+	m_hpBar->SetPosition(Moveable::GetPositionWithRotate());
 }
 
 void Enemy::Move()
@@ -99,7 +99,7 @@ void Enemy::Move()
 
 void Enemy::ChooseDirection()
 {
-	IndexPosition pos = position::GetMapIndexesFromPosition(Moveable::getPosition());
+	IndexPosition pos = position::GetMapIndexesFromPosition(Moveable::GetPositionWithRotate());
 	if (m_pathToCharacter.back().y > pos.second)
 	{
 		m_moveDirection = Direction::Down;

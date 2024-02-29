@@ -1,7 +1,8 @@
 #include "HpBar.h"
 
-void HpBar::Init(const sf::Vector2f& characterPos, float hp, const sf::Vector2f& characterSize)
+void HpBar::Init(const sf::Vector2f& characterPos, float hp, const sf::Vector2f& characterSize, const HpBarPosition& hpBarPos)
 {
+	m_hpBarRelativePosition = hpBarPos;
 	m_characterSize = characterSize;
 	m_hp = hp;
 	m_hpBar.setSize({ m_hp / 100.f*46.f, 12.f });
@@ -21,9 +22,14 @@ void HpBar::Restart(const sf::Vector2f& characterPos, float hp)
 
 void HpBar::SetPosition(const sf::Vector2f& characterPos)
 {
-	int hpBarDifference = static_cast<int>(m_hpBar.getSize().x - m_characterSize.x)/2;
-	m_hpBar.setPosition(characterPos.x - hpBarDifference + 2, characterPos.y + m_characterSize.y + 2);
-	m_hpBarBackground.setPosition(m_hpBar.getPosition().x - 2, characterPos.y + m_characterSize.y);
+	if (m_hpBarRelativePosition == HpBarPosition::LeftTopCorner)
+	{
+		SetLeftTopCornerPos();
+	}
+	else
+	{
+		SetUnderCharacter(characterPos);
+	}
 }
 
 void HpBar::RescaleHp()
@@ -60,14 +66,21 @@ void HpBar::GainHp(float gainedHp)
 	RescaleHp();
 }
 
-void HpBar::IncreaseMaxHp(float newHp)
+void HpBar::SetNewMaxHp(float newHp)
 {
 	m_hp = newHp;
 	Rescale();
 }
 
-void HpBar::SetHp(float newHp)
+void HpBar::SetLeftTopCornerPos()
 {
-	m_hp = newHp;
-	Rescale();
+	m_hpBarBackground.setPosition({ 0.f, 0.f });
+	m_hpBar.setPosition({2.f, 2.f});
+}
+
+void HpBar::SetUnderCharacter(const sf::Vector2f& characterPos)
+{
+	int hpBarDifference = static_cast<int>(m_hpBar.getSize().x - m_characterSize.x) / 2;
+	m_hpBar.setPosition(characterPos.x - hpBarDifference + 2, characterPos.y + m_characterSize.y + 2);
+	m_hpBarBackground.setPosition(m_hpBar.getPosition().x - 2, characterPos.y + m_characterSize.y);
 }

@@ -24,6 +24,6 @@ public:
 	MOCK_METHOD(bool, IsUpMovePossible, (const Map* map), (const override));
 	MOCK_METHOD(bool, IsDownMovePossible, (const Map* map), (const override));
 	MOCK_METHOD(void, UpdateHpBarPos, (), (override));
-	MOCK_METHOD(sf::Vector2f, getPosition, (), (const));
+	MOCK_METHOD(sf::Vector2f, GetPositionWithRotate, (), (const override));
 };
 
